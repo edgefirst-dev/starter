@@ -10,6 +10,10 @@ compatibility_flags = ["nodejs_compat"]
 
 dev.port = 3000
 
+# We recommend to use Smart Placement so your Worker and D1 instance are near
+[placement]
+mode = "smart"
+
 [observability]
 enabled = true
 head_sampling_rate = 1
