@@ -16,10 +16,10 @@ export default defineConfig({
 			client: {
 				specifiers: [/^node:/, "@edgefirst-dev/core"],
 				files: [
-					"~/repositories/**/*",
-					"~/clients/**/*",
-					"~/entities/**/*",
-					"~/servies/**/*",
+					"app:repositories/**/*",
+					"app:clients/**/*",
+					"app:entities/**/*",
+					"app:servies/**/*",
 				],
 			},
 			server: {
