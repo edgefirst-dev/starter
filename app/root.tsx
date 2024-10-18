@@ -1,6 +1,6 @@
+import type * as Route from "types:+types.root";
 import type { ReactNode } from "react";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
-import type * as Route from "./+types.root";
 
 import "./assets/tailwind.css";
 
