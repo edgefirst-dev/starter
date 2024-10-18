@@ -19,7 +19,7 @@ jobs:
       - name: Run migrations
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          accountId: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           preCommands: |
             npm run db:migrate ${{ secrets.CLOUDFLARE_DATABASE_NAME }}
