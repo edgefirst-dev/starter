@@ -10,7 +10,7 @@ compatibility_flags = ["nodejs_compat"]
 
 dev.port = 3000
 
-assets = { directory = "./public/", binding = "ASSETS" }
+assets = { directory = "./build/client", binding = "ASSETS" }
 
 # To be able to use assets in your Worker, Smart placement needs to be off
 [placement]
