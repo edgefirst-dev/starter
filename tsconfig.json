@@ -1,0 +1,9 @@
+{
+  "extends": "@total-typescript/tsconfig/bundler/no-dom/app",
+  "include": ["worker.ts"],
+  "exclude": ["**/*.test.ts"],
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "types": ["@total-typescript/ts-reset", "@cloudflare/workers-types"]
+  }
+}
