@@ -4,6 +4,9 @@
   "exclude": ["**/*.test.ts"],
   "compilerOptions": {
     "jsx": "react-jsx",
-    "types": ["@total-typescript/ts-reset", "@cloudflare/workers-types"]
+    "types": ["@total-typescript/ts-reset", "@cloudflare/workers-types"],
+    "paths": {
+      "db:schema": ["./db/schema.ts"]
+    }
   }
 }
