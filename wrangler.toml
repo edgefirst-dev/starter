@@ -13,3 +13,9 @@ dev.port = 3000
 [observability]
 enabled = true
 head_sampling_rate = 1
+
+[[d1_databases]]
+binding = "DB"
+database_name = "stack-db"
+database_id = "e746a19d-d890-4321-9c30-5167828540a2"
+migrations_dir = "./db/migrations"
