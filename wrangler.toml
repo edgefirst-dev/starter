@@ -33,3 +33,14 @@ id = "1473f4ea43174ad5853a017f8fde1f37"
 [[r2_buckets]]
 binding = "FS"
 bucket_name = "stack-blob"
+
+[[queues.producers]]
+queue = "edgefirst-queue"
+binding = "QUEUE"
+
+[[queues.consumers]]
+queue = "edgefirst-queue"
+
+# Uncomment to add a cron trigger
+# [triggers]
+# crons = ["*/3 * * * *"]
