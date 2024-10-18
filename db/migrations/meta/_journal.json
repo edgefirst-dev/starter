@@ -1,0 +1,13 @@
+{
+	"version": "7",
+	"dialect": "sqlite",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "6",
+			"when": 1729234194481,
+			"tag": "20241018064954_amused_iron_fist",
+			"breakpoints": true
+		}
+	]
+}
