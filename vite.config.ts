@@ -1,8 +1,33 @@
 import { reactRouter } from "@react-router/dev/vite";
+import { cloudflareDevProxy } from "@react-router/dev/vite/cloudflare";
+import tailwind from "@tailwindcss/vite";
 import { defineConfig } from "vite";
+import { denyImports } from "vite-env-only";
+import { cjsInterop } from "vite-plugin-cjs-interop";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+	build: { cssMinify: process.env.NODE_ENV === "production", sourcemap: true },
 	server: { port: 3000 },
-	plugins: [tsconfigPaths(), reactRouter()],
+	plugins: [
+		tsconfigPaths(),
+		cjsInterop({ dependencies: ["bcrypt"] }),
+		denyImports({
+			client: {
+				specifiers: [/^node:/, "@edgefirst-dev/core"],
+				files: [
+					"~/repositories/**/*",
+					"~/clients/**/*",
+					"~/entities/**/*",
+					"~/servies/**/*",
+				],
+			},
+			server: {
+				files: ["**/.client/*", "**/*.client.*"],
+			},
+		}),
+		cloudflareDevProxy(),
+		reactRouter(),
+		tailwind(),
+	],
 });
