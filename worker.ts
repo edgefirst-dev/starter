@@ -22,13 +22,11 @@ export default bootstrap(
 
 		async onSchedule() {
 			let users = await orm().query.users.findMany();
-			console.log("Count of users", users.length);
 		},
 
 		async onQueue(batch) {
 			for (let message of batch.messages) {
 				let users = await orm().query.users.findMany();
-				console.log("Count of users", users.length);
 				message.ack();
 			}
 		},

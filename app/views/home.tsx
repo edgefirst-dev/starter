@@ -3,7 +3,6 @@ import type * as Route from "types:views/+types.home";
 import { json } from "react-router";
 
 export async function loader() {
-	console.log("Users", await new UsersRepository().findAll());
 	return json(null);
 }
 
