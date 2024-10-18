@@ -23,3 +23,11 @@ binding = "DB"
 database_name = "stack-db"
 database_id = "e746a19d-d890-4321-9c30-5167828540a2"
 migrations_dir = "./db/migrations"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "1473f4ea43174ad5853a017f8fde1f37"
+
+[[r2_buckets]]
+binding = "FS"
+bucket_name = "stack-blob"
