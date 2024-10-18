@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import type * as Route from "./+types.root";
 
+import "./assets/tailwind.css";
+
 export function Layout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en">
@@ -11,7 +13,7 @@ export function Layout({ children }: { children: ReactNode }) {
 				<Meta />
 				<Links />
 			</head>
-			<body>
+			<body className="m-8">
 				{children}
 				<ScrollRestoration />
 				<Scripts />
