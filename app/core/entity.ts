@@ -1,7 +1,7 @@
 import { StringParser } from "app:lib/string-parser";
 import { Data } from "@edgefirst-dev/data";
 import { ObjectParser } from "@edgefirst-dev/data/parser";
-import { Table } from "drizzle-orm";
+import type { Table } from "drizzle-orm";
 import { dasherize, underscore } from "inflected";
 
 /**

@@ -3,10 +3,10 @@ import type { Team } from "app:entities/team";
 import type { User } from "app:entities/user";
 
 import { Password } from "app:lib/password";
-import { CredentialsRepository } from "app:repositories/credentials";
-import { MembershipsRepository } from "app:repositories/memberships";
-import { TeamsRepository } from "app:repositories/teams";
-import { UsersRepository } from "app:repositories/users";
+import { CredentialsRepository } from "app:repositories.server/credentials";
+import { MembershipsRepository } from "app:repositories.server/memberships";
+import { TeamsRepository } from "app:repositories.server/teams";
+import { UsersRepository } from "app:repositories.server/users";
 import { Email } from "@edgefirst-dev/email";
 
 /**

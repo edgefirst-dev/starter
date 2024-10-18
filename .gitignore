@@ -1,6 +1,7 @@
 # Folders
 /node_modules
 /.cache
+/.react-router
 /.wrangler
 /coverage
 /build
