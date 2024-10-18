@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@edgefirst-dev/core": "^0.0.27",
+    "@paralleldrive/cuid2": "^2.2.2",
     "drizzle-orm": "^0.35.1"
   },
   "devDependencies": {
@@ -20,6 +21,7 @@
     "@cloudflare/workers-types": "4.20241011.0",
     "@total-typescript/ts-reset": "^0.6.1",
     "@total-typescript/tsconfig": "^1.0.4",
+    "dotenv": "^16.4.5",
     "drizzle-kit": "^0.26.2",
     "typescript": "^5.6.3",
     "wrangler": "^3.81.0"
