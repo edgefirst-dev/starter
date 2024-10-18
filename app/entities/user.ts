@@ -1,5 +1,5 @@
+import { TableEntity } from "app:core/entity";
 import { Email } from "@edgefirst-dev/email";
-import { TableEntity } from "~/core/entity";
 
 export class User extends TableEntity {
 	get email() {

@@ -1,9 +1,13 @@
+import { Repository } from "app:core/repository";
+import { User } from "app:entities/user";
 import { users } from "db:schema";
 import { eq } from "drizzle-orm";
-import { Repository } from "~/core/repository";
-import { User } from "~/entities/user";
 
 export class UsersRepository extends Repository {
+	async findAll() {
+		return User.fromMany(await this.db.select().from(users).execute());
+	}
+
 	async findById(id: User["id"]) {
 		return User.fromMany(
 			await this.db

@@ -1,8 +1,8 @@
+import { StringParser } from "app:lib/string-parser";
 import { Data } from "@edgefirst-dev/data";
 import { ObjectParser } from "@edgefirst-dev/data/parser";
 import { Table } from "drizzle-orm";
 import { dasherize, underscore } from "inflected";
-import { StringParser } from "~/lib/string-parser";
 
 /**
  * An entity represents a single object in the domain model.

@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
+import { GravatarProfile } from "app:entities/gravatar-profile";
 import { Email } from "@edgefirst-dev/email";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/native";
-import { GravatarProfile } from "~/entities/gravatar-profile";
 import { Gravatar } from "./gravatar";
 
 mock.module("@edgefirst-dev/core", () => {

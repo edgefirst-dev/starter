@@ -1,8 +1,8 @@
+import { GravatarProfile } from "app:entities/gravatar-profile";
 import { APIClient } from "@edgefirst-dev/api-client";
 import { env } from "@edgefirst-dev/core";
 import { ObjectParser } from "@edgefirst-dev/data/parser";
 import type { Email } from "@edgefirst-dev/email";
-import { GravatarProfile } from "~/entities/gravatar-profile";
 
 export class Gravatar extends APIClient {
 	constructor() {

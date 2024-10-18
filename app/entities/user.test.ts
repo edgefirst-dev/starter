@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import type { users } from "db:schema";
 
-import type { CUID } from "~/lib/string-parser";
+import type { CUID } from "app:lib/string-parser";
 import { User } from "./user";
 
 describe(User.name, () => {

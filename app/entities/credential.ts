@@ -1,6 +1,6 @@
-import { TableEntity } from "~/core/entity";
-import type { Password } from "~/lib/password";
-import { StringParser } from "~/lib/string-parser";
+import { TableEntity } from "app:core/entity";
+import type { Password } from "app:lib/password";
+import { StringParser } from "app:lib/string-parser";
 
 export class Credential extends TableEntity {
 	get userId() {

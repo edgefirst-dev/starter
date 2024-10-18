@@ -1,5 +1,5 @@
+import { UsersRepository } from "app:repositories/users";
 import type { Email } from "@edgefirst-dev/email";
-import { UsersRepository } from "~/repositories/users";
 
 /**
  * Verifies a user's email address by setting the `emailVerifiedAt` field.

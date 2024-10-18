@@ -1,5 +1,5 @@
-import { Entity } from "~/core/entity";
-import { StringParser } from "~/lib/string-parser";
+import { Entity } from "app:core/entity";
+import { StringParser } from "app:lib/string-parser";
 
 export class Session extends Entity {
 	get userId() {

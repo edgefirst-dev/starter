@@ -1,7 +1,8 @@
+import { UsersRepository } from "app:repositories/users";
+import schema from "db:schema";
+
 import { orm, queue, request } from "@edgefirst-dev/core";
 import { bootstrap } from "@edgefirst-dev/core/worker";
-
-import schema from "db:schema";
 
 export default bootstrap(
 	{ orm: { schema }, rateLimit: { limit: 1000, period: 60 } },
@@ -11,11 +12,11 @@ export default bootstrap(
 				delay: 60,
 			});
 
-			let result = await orm().query.users.findMany();
+			let users = await new UsersRepository().findAll();
 			let url = new URL(request().url);
 
 			return new Response(
-				`Hello from ${url.pathname}; Users "${result.length}"`,
+				`Hello from ${url.pathname}; Users "${users.length}"`,
 				{ status: 200, statusText: "OK" },
 			);
 		},

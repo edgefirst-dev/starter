@@ -1,6 +1,6 @@
+import { UsersRepository } from "app:repositories/users";
 import type { Email } from "@edgefirst-dev/email";
 import { encodeBase32 } from "@oslojs/encoding";
-import { UsersRepository } from "~/repositories/users";
 
 /**
  * Initiates a password recovery process by generating a one-time password (OTP).

@@ -1,8 +1,8 @@
+import { Repository } from "app:core/repository";
+import { Membership } from "app:entities/membership";
+import type { User } from "app:entities/user";
 import { memberships } from "db:schema";
 import { eq } from "drizzle-orm";
-import { Repository } from "~/core/repository";
-import { Membership } from "~/entities/membership";
-import type { User } from "~/entities/user";
 
 export class MembershipsRepository extends Repository {
 	async create(

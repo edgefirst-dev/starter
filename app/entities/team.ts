@@ -1,4 +1,4 @@
-import { TableEntity } from "~/core/entity";
+import { TableEntity } from "app:core/entity";
 
 export class Team extends TableEntity {
 	get name() {

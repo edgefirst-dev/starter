@@ -10,7 +10,7 @@
 		],
 		"paths": {
 			"db:schema": ["./db/schema.ts"],
-			"~/*": ["./app/*"]
+			"app:*": ["./app/*"]
 		}
 	}
 }

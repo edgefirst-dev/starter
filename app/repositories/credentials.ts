@@ -1,7 +1,7 @@
+import { Repository } from "app:core/repository";
+import { Credential } from "app:entities/credential";
 import { credentials } from "db:schema";
 import { eq } from "drizzle-orm";
-import { Repository } from "~/core/repository";
-import { Credential } from "~/entities/credential";
 
 export class CredentialsRepository extends Repository {
 	async create(

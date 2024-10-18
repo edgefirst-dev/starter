@@ -1,13 +1,13 @@
-import type { Membership } from "~/entities/membership";
-import type { Team } from "~/entities/team";
-import type { User } from "~/entities/user";
+import type { Membership } from "app:entities/membership";
+import type { Team } from "app:entities/team";
+import type { User } from "app:entities/user";
 
+import { Password } from "app:lib/password";
+import { CredentialsRepository } from "app:repositories/credentials";
+import { MembershipsRepository } from "app:repositories/memberships";
+import { TeamsRepository } from "app:repositories/teams";
+import { UsersRepository } from "app:repositories/users";
 import { Email } from "@edgefirst-dev/email";
-import { Password } from "~/lib/password";
-import { CredentialsRepository } from "~/repositories/credentials";
-import { MembershipsRepository } from "~/repositories/memberships";
-import { TeamsRepository } from "~/repositories/teams";
-import { UsersRepository } from "~/repositories/users";
 
 /**
  * Logs in a user by verifying the provided email and password.

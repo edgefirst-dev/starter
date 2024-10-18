@@ -1,5 +1,5 @@
-import { TableEntity } from "~/core/entity";
-import { StringParser } from "~/lib/string-parser";
+import { TableEntity } from "app:core/entity";
+import { StringParser } from "app:lib/string-parser";
 
 export class Membership extends TableEntity {
 	get teamId() {

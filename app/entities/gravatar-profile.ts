@@ -1,6 +1,6 @@
+import { Entity } from "app:core/entity";
 import { ObjectParser } from "@edgefirst-dev/data/parser";
 import { Email } from "@edgefirst-dev/email";
-import { Entity } from "~/core/entity";
 
 export class GravatarProfile extends Entity {
 	constructor(parser: ObjectParser) {
