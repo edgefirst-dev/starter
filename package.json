@@ -15,8 +15,11 @@
 		"dev:quality": "biome check .",
 		"dev:quality:fix": "biome check . --write --unsafe",
 
-		"db:migrate": "drizzle-kit generate --config drizzle.config.ts && wrangler d1 migrations apply",
-		"postdb:generate": "npm run dev:quality:fix"
+		"predb:migrate:local": "drizzle-kit generate --config drizzle.config.ts",
+		"db:migrate:local": "npm run db:migrate -- --local",
+		"postdb:migrate:local": "npm run dev:quality:fix",
+
+		"db:migrate": "wrangler d1 migrations apply"
 	},
 	"dependencies": {
 		"@edgefirst-dev/core": "^0.0.27",
