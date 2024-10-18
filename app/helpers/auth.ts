@@ -1,7 +1,7 @@
 import { unauthorized } from "app:helpers/response";
 import { getSession } from "app:helpers/session";
 import { Cookies } from "app:lib/cookies";
-import { UsersRepository } from "app:repositories/users";
+import { UsersRepository } from "app:repositories.server/users";
 import { redirect } from "react-router";
 
 export async function authenticate(request: Request, returnTo?: string) {

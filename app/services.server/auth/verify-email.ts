@@ -1,4 +1,4 @@
-import { UsersRepository } from "app:repositories/users";
+import { UsersRepository } from "app:repositories.server/users";
 import type { Email } from "@edgefirst-dev/email";
 
 /**
