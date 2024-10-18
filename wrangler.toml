@@ -14,9 +14,9 @@ dev.port = 3000
 [placement]
 mode = "smart"
 
+# Enable Observability to get logs of your Worker
 [observability]
 enabled = true
-head_sampling_rate = 1
 
 [[d1_databases]]
 binding = "DB"
