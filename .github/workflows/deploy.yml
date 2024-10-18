@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  deploy:
+    name: "Deploy to Cloudflare Workers"
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm ci
+      - run: npm run build
+
+      - name: Run migrations
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          accountId: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          preCommands: |
+            npm run db:migrate ${{ secrets.CLOUDFLARE_DATABASE_NAME }}
