@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: npm ci
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
 
       - name: Run migrations
         uses: cloudflare/wrangler-action@v3
@@ -22,4 +22,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           preCommands: |
-            npm run db:migrate ${{ secrets.CLOUDFLARE_DATABASE_NAME }} --remote
+            bun run db:migrate ${{ secrets.CLOUDFLARE_DATABASE_NAME }} --remote
