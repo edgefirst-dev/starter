@@ -1,24 +1,23 @@
-import { UsersRepository } from "app:repositories/users";
 import schema from "db:schema";
 
-import { orm, queue, request } from "@edgefirst-dev/core";
+import { orm, queue } from "@edgefirst-dev/core";
 import { bootstrap } from "@edgefirst-dev/core/worker";
+import { createRequestHandler } from "react-router";
 
 export default bootstrap(
 	{ orm: { schema }, rateLimit: { limit: 1000, period: 60 } },
 	{
-		async onRequest() {
-			queue().enqueue("count:users", {
-				delay: 60,
-			});
-
-			let users = await new UsersRepository().findAll();
-			let url = new URL(request().url);
-
-			return new Response(
-				`Hello from ${url.pathname}; Users "${users.length}"`,
-				{ status: 200, statusText: "OK" },
+		// @ts-expect-error
+		async onRequest(request) {
+			let handler = createRequestHandler(
+				() => import("./build/server/index.js"),
+				"production",
 			);
+
+			queue().enqueue("count:users", { delay: 60 });
+
+			// @ts-expect-error
+			return await handler(request);
 		},
 
 		async onSchedule() {
@@ -42,6 +41,7 @@ declare module "@edgefirst-dev/core" {
 		QUEUE: Queue;
 		// 👇 Env variables
 		GRAVATAR_API_TOKEN: string;
+		SESSION_SECRET: string;
 	}
 
 	type Schema = typeof schema;
