@@ -20,8 +20,11 @@ export class StringParser extends Parser<string> {
 	}
 
 	url(): URL {
-		if (URL.canParse(this.value)) return new URL(this.value);
-		throw new Error(`Expected a valid URL, but got ${this.value}`);
+		try {
+			return new URL(this.value);
+		} catch {
+			throw new Error(`Expected a valid URL, but got ${this.value}`);
+		}
 	}
 
 	datetime() {
