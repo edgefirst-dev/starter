@@ -7,7 +7,9 @@ export default bootstrap(
 	{ orm: { schema }, rateLimit: { limit: 1000, period: 60 } },
 	{
 		async onRequest() {
-			queue().enqueue("count:users");
+			queue().enqueue("count:users", {
+				delay: 60 * 1000,
+			});
 
 			let result = await orm().query.users.findMany();
 			let url = new URL(request().url);
