@@ -12,9 +12,9 @@ dev.port = 3000
 
 assets = { directory = "./public/", binding = "ASSETS" }
 
-# We recommend to use Smart Placement so your Worker and D1 instance are near
+# To be able to use assets in your Worker, Smart placement needs to be off
 [placement]
-mode = "smart"
+mode = "off"
 
 # Enable Observability to get logs of your Worker
 [observability]
