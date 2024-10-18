@@ -10,6 +10,8 @@ compatibility_flags = ["nodejs_compat"]
 
 dev.port = 3000
 
+assets = { directory = "./public/", binding = "ASSETS" }
+
 # We recommend to use Smart Placement so your Worker and D1 instance are near
 [placement]
 mode = "smart"
