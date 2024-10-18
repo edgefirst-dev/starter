@@ -1,0 +1,25 @@
+{
+  "name": "@edgefirst-dev/starter-worker",
+  "description": "A starter template for Edge-first applications",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "start": "wrangler dev"
+  },
+  "dependencies": {
+    "@edgefirst-dev/core": "^0.0.26"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@cloudflare/workers-types": "4.20241011.0",
+    "@total-typescript/ts-reset": "^0.6.1",
+    "@total-typescript/tsconfig": "^1.0.4",
+    "typescript": "^5.6.3",
+    "wrangler": "^3.81.0"
+  }
+}
