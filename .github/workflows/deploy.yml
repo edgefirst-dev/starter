@@ -22,4 +22,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           preCommands: |
-            npm run db:migrate ${{ secrets.CLOUDFLARE_DATABASE_NAME }}
+            npm run db:migrate ${{ secrets.CLOUDFLARE_DATABASE_NAME }} --remote
