@@ -6,6 +6,14 @@ on:
 concurrency:
   group: ${{ github.workflow }}
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  contents: read
+  deployments: write
+  packages: read
+
 jobs:
   deploy:
     name: "Deploy to Cloudflare Workers"
