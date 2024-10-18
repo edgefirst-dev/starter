@@ -32,17 +32,20 @@
 		"@react-router/node": "^7.0.0-pre.1",
 		"@react-router/serve": "^7.0.0-pre.1",
 		"bcryptjs": "^2.4.3",
+		"clsx": "^2.1.1",
 		"drizzle-orm": "^0.35.1",
 		"inflected": "^2.1.0",
 		"isbot": "^5",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"react-router": "^7.0.0-pre.1"
+		"react-router": "^7.0.0-pre.1",
+		"tailwind-merge": "^2.5.4"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@cloudflare/workers-types": "4.20241011.0",
 		"@react-router/dev": "^7.0.0-pre.1",
+		"@tailwindcss/vite": "^4.0.0-alpha.26",
 		"@total-typescript/ts-reset": "^0.6.1",
 		"@total-typescript/tsconfig": "^1.0.4",
 		"@types/bcryptjs": "^2.4.6",
@@ -55,6 +58,8 @@
 		"msw": "^2.4.11",
 		"typescript": "^5.6.3",
 		"vite": "^5.4.9",
+		"vite-env-only": "^3.0.3",
+		"vite-plugin-cjs-interop": "^2.1.4",
 		"vite-tsconfig-paths": "^5.0.1",
 		"wrangler": "^3.81.0"
 	}
