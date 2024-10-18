@@ -26,5 +26,7 @@
 		"*.js": "javascriptreact",
 		"*.ts": "typescriptreact"
 	},
-	"tailwindCSS.classAttributes": ["class", "className", "cn", "tv"]
+	"tailwindCSS.classAttributes": ["class", "className", "cn", "tv"],
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true
 }
