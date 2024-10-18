@@ -1,0 +1,10 @@
+# Folders
+/node_modules
+/.cache
+/.wrangler
+/coverage
+/build
+
+# Files
+.DS_Store
+.dev.vars
