@@ -8,7 +8,7 @@ export default bootstrap(
 	{
 		async onRequest() {
 			queue().enqueue("count:users", {
-				delay: 60 * 1000,
+				delay: 60,
 			});
 
 			let result = await orm().query.users.findMany();
