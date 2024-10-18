@@ -1,29 +1,36 @@
 {
-  "name": "@edgefirst-dev/starter-worker",
-  "description": "A starter template for Edge-first applications",
-  "license": "MIT",
-  "private": true,
-  "engines": {
-    "node": ">=20"
-  },
-  "type": "module",
-  "scripts": {
-    "deploy": "wrangler deploy",
-    "start": "wrangler dev"
-  },
-  "dependencies": {
-    "@edgefirst-dev/core": "^0.0.27",
-    "@paralleldrive/cuid2": "^2.2.2",
-    "drizzle-orm": "^0.35.1"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@cloudflare/workers-types": "4.20241011.0",
-    "@total-typescript/ts-reset": "^0.6.1",
-    "@total-typescript/tsconfig": "^1.0.4",
-    "dotenv": "^16.4.5",
-    "drizzle-kit": "^0.26.2",
-    "typescript": "^5.6.3",
-    "wrangler": "^3.81.0"
-  }
+	"name": "@edgefirst-dev/starter-worker",
+	"description": "A starter template for Edge-first applications",
+	"license": "MIT",
+	"private": true,
+	"engines": {
+		"node": ">=20"
+	},
+	"type": "module",
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"start": "wrangler dev",
+
+		"dev:typecheck": "tsc",
+		"dev:quality": "biome check .",
+		"dev:quality:fix": "biome check . --write --unsafe",
+
+		"db:migrate": "drizzle-kit generate --config drizzle.config.ts && wrangler d1 migrations apply",
+		"postdb:generate": "npm run dev:quality:fix"
+	},
+	"dependencies": {
+		"@edgefirst-dev/core": "^0.0.27",
+		"@paralleldrive/cuid2": "^2.2.2",
+		"drizzle-orm": "^0.35.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@cloudflare/workers-types": "4.20241011.0",
+		"@total-typescript/ts-reset": "^0.6.1",
+		"@total-typescript/tsconfig": "^1.0.4",
+		"dotenv": "^16.4.5",
+		"drizzle-kit": "^0.26.2",
+		"typescript": "^5.6.3",
+		"wrangler": "^3.81.0"
+	}
 }
