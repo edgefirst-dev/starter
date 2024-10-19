@@ -15,6 +15,13 @@
 			"when": 1729325207950,
 			"tag": "20241019080647_colorful_dracula",
 			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "6",
+			"when": 1729325432764,
+			"tag": "20241019081032_talented_cobalt_man",
+			"breakpoints": true
 		}
 	]
 }

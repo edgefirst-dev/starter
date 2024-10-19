@@ -18,7 +18,7 @@ export const users = sqliteTable("users", {
 	avatarKey: text("avatar_key", { mode: "text", length: ID_LENGTH }),
 	role: text("role", { mode: "text", enum: ["user", "root"] })
 		.notNull()
-		.$defaultFn(() => "user"),
+		.default("user"),
 });
 
 export const audits = sqliteTable("audit_logs", {
@@ -26,7 +26,7 @@ export const audits = sqliteTable("audit_logs", {
 	// Timestamps
 	createdAt,
 	// Attributes
-	action: text("action", { mode: "text" }).notNull(),
+	action: text("action", { mode: "text" }),
 	auditable: text("auditable", { mode: "text" }),
 	// Relationships
 	userId: text("user_id", { mode: "text" })
@@ -52,7 +52,7 @@ export const memberships = sqliteTable("memberships", {
 	// Attributes
 	role: text("role", { mode: "text", enum: ["member", "admin"] })
 		.notNull()
-		.$defaultFn(() => "member"),
+		.default("member"),
 	// Relationships
 	userId: text("user_id", { mode: "text" })
 		.notNull()
