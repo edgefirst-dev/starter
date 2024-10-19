@@ -29,7 +29,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
       - run: bun run build
-      - run: bunx react-router typegen
+      - run: bun run rr:typegen
       - run: bun run typecheck
 
   tests:
