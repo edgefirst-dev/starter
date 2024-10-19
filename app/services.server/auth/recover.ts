@@ -1,3 +1,4 @@
+import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { UsersRepository } from "app:repositories.server/users";
 import type { Email } from "@edgefirst-dev/email";
 import { encodeBase32 } from "@oslojs/encoding";
@@ -12,12 +13,14 @@ import { encodeBase32 } from "@oslojs/encoding";
  */
 export async function recover(
 	input: recover.Input,
-	repos = { users: new UsersRepository() },
+	repos = { audits: new AuditLogsRepository(), users: new UsersRepository() },
 ): Promise<recover.Output> {
 	let [user] = await repos.users.findByEmail(input.email);
 	if (!user) throw new Error("User not found");
 
 	let otp = generateRandomOTP();
+
+	await repos.audits.create(user, "generate_recovery_code");
 
 	return { otp };
 }

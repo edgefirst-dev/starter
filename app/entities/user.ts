@@ -1,4 +1,5 @@
 import { TableEntity } from "app:core/entity";
+import { StringParser } from "app:lib/string-parser";
 import { Email } from "@edgefirst-dev/email";
 
 export class User extends TableEntity {
@@ -30,5 +31,13 @@ export class User extends TableEntity {
 		}
 
 		return `/api/files/${this.parser.string("avatarKey")}`;
+	}
+
+	get role() {
+		return new StringParser(this.parser.string("role")).enum("user", "root");
+	}
+
+	get isRoot() {
+		return this.role === "root";
 	}
 }

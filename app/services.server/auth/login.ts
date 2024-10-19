@@ -3,6 +3,7 @@ import type { Team } from "app:entities/team";
 import type { User } from "app:entities/user";
 
 import { Password } from "app:lib/password";
+import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { CredentialsRepository } from "app:repositories.server/credentials";
 import { MembershipsRepository } from "app:repositories.server/memberships";
 import { TeamsRepository } from "app:repositories.server/teams";
@@ -20,6 +21,7 @@ import { Email } from "@edgefirst-dev/email";
 export async function login(
 	input: login.Input,
 	repos = {
+		audits: new AuditLogsRepository(),
 		users: new UsersRepository(),
 		teams: new TeamsRepository(),
 		credentials: new CredentialsRepository(),
@@ -39,8 +41,11 @@ export async function login(
 		// biome-ignore lint/style/noNonNullAssertion: We know there's one element
 		let [team] = await repos.teams.findByMembership(memberships.at(0)!);
 		if (!team) throw new Error("User has no team");
+		await repos.audits.create(user, "user_login");
 		return { user, team, memberships };
 	}
+
+	await repos.audits.create(user, "invalid_credentials_attempt", credential);
 
 	throw new Error("Invalid credentials");
 }

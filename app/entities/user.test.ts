@@ -13,6 +13,7 @@ describe(User.name, () => {
 		emailVerifiedAt: new Date(),
 		displayName: null,
 		avatarKey: null,
+		role: "user",
 	};
 
 	test("#constructor", () => {
@@ -31,5 +32,15 @@ describe(User.name, () => {
 	test("#diplayName fallbacks to the email's username", () => {
 		let user = User.from(userRow);
 		expect(user.displayName).toBe("john.doe");
+	});
+
+	test("#role", () => {
+		let user = User.from(userRow);
+		expect(user.role).toBe("user");
+	});
+
+	test("#isRoot", () => {
+		let user = User.from(userRow);
+		expect(user.isRoot).toBe(false);
 	});
 });

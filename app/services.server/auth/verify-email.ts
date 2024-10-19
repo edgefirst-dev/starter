@@ -1,3 +1,4 @@
+import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { UsersRepository } from "app:repositories.server/users";
 import type { Email } from "@edgefirst-dev/email";
 
@@ -12,6 +13,7 @@ import type { Email } from "@edgefirst-dev/email";
 export async function verifyEmail(
 	input: verifyEmail.Input,
 	repos = {
+		audits: new AuditLogsRepository(),
 		user: new UsersRepository(),
 	},
 ) {
@@ -24,6 +26,8 @@ export async function verifyEmail(
 	// Here we should validate that data.code is valid
 
 	await repos.user.verifyEmail(user);
+
+	await repos.audits.create(user, "verified_email");
 }
 
 export namespace verifyEmail {

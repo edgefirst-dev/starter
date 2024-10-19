@@ -6,7 +6,10 @@ import { eq } from "drizzle-orm";
 
 export class MembershipsRepository extends Repository {
 	async create(
-		input: Pick<typeof memberships.$inferInsert, "teamId" | "userId">,
+		input: Pick<
+			typeof memberships.$inferInsert,
+			"teamId" | "userId" | "role" | "acceptedAt"
+		>,
 	) {
 		let [membership] = await this.db
 			.insert(memberships)

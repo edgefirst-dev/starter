@@ -3,6 +3,7 @@ import type { Membership } from "app:entities/membership";
 import type { Team } from "app:entities/team";
 import type { User } from "app:entities/user";
 import { Password } from "app:lib/password";
+import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { CredentialsRepository } from "app:repositories.server/credentials";
 import { MembershipsRepository } from "app:repositories.server/memberships";
 import { TeamsRepository } from "app:repositories.server/teams";
@@ -21,6 +22,7 @@ import { Email } from "@edgefirst-dev/email";
 export async function register(
 	input: register.Input,
 	repos = {
+		audits: new AuditLogsRepository(),
 		users: new UsersRepository(),
 		teams: new TeamsRepository(),
 		memberships: new MembershipsRepository(),
@@ -63,7 +65,12 @@ export async function register(
 	let membership = await repos.memberships.create({
 		userId: user.id,
 		teamId: team.id,
+		role: "admin", // A user is the admin of their personal team
+		acceptedAt: new Date(), // Automatically accept the membership
 	});
+
+	await repos.audits.create(user, "user_register");
+	await repos.audits.create(user, "accepts_membership", membership);
 
 	return { user, team, membership };
 }
