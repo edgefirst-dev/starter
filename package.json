@@ -13,6 +13,8 @@
 		"deploy": "wrangler deploy",
 		"start": "wrangler dev",
 		"typecheck": "tsc",
+		"rr:typegen": "react-router typegen",
+		"rr:routes": "react-router routes",
 		"quality": "biome check .",
 		"quality:fix": "biome check . --write --unsafe",
 		"predb:migrate:local": "drizzle-kit generate --config drizzle.config.ts",
