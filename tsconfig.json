@@ -3,6 +3,7 @@
 	"include": [
 		".react-router/types/**/*",
 		"worker.ts",
+		"./config/**/*.ts",
 		"./app/**/*.tsx",
 		"./app/**/*.ts",
 		"./db/**/*.ts"
@@ -19,6 +20,7 @@
 		"rootDirs": [".", "./.react-router/types"],
 		"plugins": [{ "name": "@react-router/dev" }],
 		"paths": {
+			"config:*": ["./config/*"],
 			"types:*": ["./.react-router/types/app/*"],
 			"db:schema": ["./db/schema.ts"],
 			"app:*": ["./app/*"]
