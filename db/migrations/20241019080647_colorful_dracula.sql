@@ -9,5 +9,5 @@ CREATE TABLE `audit_logs` (
 --> statement-breakpoint
 CREATE UNIQUE INDEX `audit_logs_id_unique` ON `audit_logs` (`id`);--> statement-breakpoint
 ALTER TABLE `memberships` ADD `accepted_at` integer;--> statement-breakpoint
-ALTER TABLE `memberships` ADD `role` text NOT NULL;--> statement-breakpoint
-ALTER TABLE `users` ADD `role` text NOT NULL;
+ALTER TABLE `memberships` ADD `role` text;--> statement-breakpoint
+ALTER TABLE `users` ADD `role` text;
