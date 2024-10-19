@@ -32,6 +32,8 @@ export default async function handleRequest(
 
 	if (userAgent && isbot(userAgent)) await stream.allReady;
 
-	headers.set("Content-Type", "text/html");
+	headers.set("Content-Type", "text/html; charset=utf-8");
+	headers.set("Transfer-Encoding", "chunked");
+
 	return new Response(stream, { status, headers });
 }
