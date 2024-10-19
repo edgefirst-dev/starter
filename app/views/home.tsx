@@ -8,5 +8,5 @@ export async function loader() {
 }
 
 export default function Home(props: Route.ComponentProps) {
-	return <h2>Home</h2>;
+	return <h2 className="text-4xl">Home</h2>;
 }
