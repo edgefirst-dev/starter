@@ -1,10 +1,10 @@
-import type { TableEntity } from "app:core/entity";
+import type { Entity } from "app:core/entity";
 import { Repository } from "app:core/repository";
 import type { User } from "app:entities/user";
 import { audits } from "db:schema";
 
 export class AuditLogsRepository extends Repository {
-	async create(user: User, action: AuditAction, auditable?: TableEntity) {
+	async create(user: User, action: AuditAction, auditable?: Entity) {
 		let { success } = await this.db
 			.insert(audits)
 			.values({ action, userId: user.id, auditable: auditable?.toString() });
