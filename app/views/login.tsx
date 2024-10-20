@@ -6,8 +6,8 @@ import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { BodyParser } from "app:lib/body-parser";
 import { Cookies } from "app:lib/cookies";
 import { Password } from "app:lib/password";
-import { register } from "app:services.server/auth/register";
-import type * as Route from "types:views/+types.register";
+import { login } from "app:services.server/auth/login";
+import type * as Route from "types:views/+types.login";
 import { sessionStorage } from "@edgefirst-dev/core";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
@@ -24,12 +24,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 	try {
 		let data = await BodyParser.from(request).formData(
-			class extends Data<FormParser> implements register.Input {
-				get displayName() {
-					if (!this.parser.has("displayName")) return null;
-					return this.parser.string("displayName");
-				}
-
+			class extends Data<FormParser> implements login.Input {
 				get email() {
 					return Email.from(this.parser.string("email"));
 				}
@@ -40,13 +35,16 @@ export async function action({ request }: Route.ActionArgs) {
 			},
 		);
 
-		let { user, team, membership } = await register(data);
+		let { user, team, memberships } = await login(data);
 
 		let session = await sessionStorage().read();
 
 		session.set("userId", user.id);
 		session.set("teamId", team.id);
-		session.set("teams", [membership.teamId]);
+		session.set(
+			"teams",
+			memberships.map((m) => m.teamId),
+		);
 
 		await sessionStorage().save(session);
 
@@ -61,10 +59,8 @@ export async function action({ request }: Route.ActionArgs) {
 		}
 
 		if (error instanceof Error) {
-			console.error(error);
 			return badRequest({ error: error.message });
 		}
-
 		throw error;
 	}
 }
@@ -75,10 +71,7 @@ export default function Component({ actionData }: Route.ComponentProps) {
 
 	return (
 		<Form method="POST" className="contents">
-			<h1 className="font-medium text-2xl/none">Create an account</h1>
-			<p className="text-neutral-500">
-				Enter your email below to create your account
-			</p>
+			<h1 className="font-medium text-2xl/none">Access</h1>
 
 			{actionData?.ok === false && (
 				<p className="text-danger-500">{actionData.error}</p>
@@ -108,8 +101,8 @@ export default function Component({ actionData }: Route.ComponentProps) {
 			</label>
 
 			<footer className="flex justify-between items-center gap-4 w-full">
-				<Link to="/login" className="hover:underline">
-					Already have an account? Login
+				<Link to="/register" className="hover:underline">
+					First day? Register
 				</Link>
 
 				<button
@@ -121,7 +114,7 @@ export default function Component({ actionData }: Route.ComponentProps) {
 							<Spinner aria-hidden className="size-5" />
 						</span>
 					)}
-					<span className={cn({ invisible: isSubmitting })}>Sign Up</span>
+					<span className={cn({ invisible: isSubmitting })}>Access</span>
 				</button>
 			</footer>
 		</Form>

@@ -1,8 +1,18 @@
 import type * as Route from "types:views/+types.home";
+import { Link } from "react-router";
 
 export default function Home(props: Route.ComponentProps) {
 	return (
 		<main className="flex justify-center items-center flex-col min-h-dvh gap-8">
+			<aside className="flex gap-2 absolute top-0 right-0 pt-4 pr-4">
+				<Link to="/login" className="hover:underline">
+					Login
+				</Link>
+				<Link to="/register" className="hover:underline">
+					Register
+				</Link>
+			</aside>
+
 			<header className="flex flex-col gap-4 text-center">
 				<h1 className="font-bold text-3xl tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
 					Edge-first Starter Kit for React
