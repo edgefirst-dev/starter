@@ -33,7 +33,7 @@ export default function Component() {
 		<main className="flex items-center justify-center min-h-dvh w-full">
 			<Form
 				method="POST"
-				className="flex flex-col w-full max-w-md gap-6 rounded-xl bg-neutral-900 p-10"
+				className="flex flex-col w-full max-w-md gap-6 rounded-xl bg-neutral-50 dark:bg-neutral-900 p-10 shadow"
 			>
 				<h1 className="font-medium text-2xl/none">Purge Database</h1>
 
