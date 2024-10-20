@@ -9,6 +9,7 @@ export default bootstrap(
 		// @ts-expect-error The RR handler returns a Response with a different type
 		async onRequest(request) {
 			let handler = createRequestHandler(
+				// @ts-expect-error The RR handler expects a different type
 				() => import("./build/server/index.js"),
 				"production",
 			);
