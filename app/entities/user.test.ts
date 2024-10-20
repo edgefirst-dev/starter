@@ -11,6 +11,7 @@ describe(User.name, () => {
 		updatedAt: new Date(),
 		email: "john.doe@example.com",
 		emailVerifiedAt: new Date(),
+		emailVerificationToken: "xijjlqpjwls8h18k1fn49r6y",
 		displayName: null,
 		avatarKey: null,
 		role: "user",
