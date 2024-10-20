@@ -14,7 +14,7 @@ export const users = sqliteTable("users", {
 	emailVerifiedAt: timestamp("email_verified_at"),
 	// Attributes
 	displayName: text("display_name", { mode: "text" }),
-	email: text("email", { mode: "text" }),
+	email: text("email", { mode: "text" }).notNull(),
 	avatarKey: text("avatar_key", { mode: "text", length: ID_LENGTH }),
 	role: text("role", { mode: "text", enum: ["user", "root"] })
 		.notNull()
