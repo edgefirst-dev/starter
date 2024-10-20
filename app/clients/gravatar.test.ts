@@ -94,65 +94,10 @@ describe(Gravatar.name, () => {
 });
 
 const mockResponse = {
-	entry: [
-		{
-			hash: "06c9ef83e41816017543a51874a9f609",
-			requestHash: "hello32b8898f78",
-			profileUrl: "https://gravatar.com/hello32b8898f78",
-			preferredUsername: "hello32b8898f78",
-			thumbnailUrl:
-				"https://2.gravatar.com/avatar/06c9ef83e41816017543a51874a9f609",
-			photos: [
-				{
-					value:
-						"https://2.gravatar.com/avatar/06c9ef83e41816017543a51874a9f609",
-					type: "thumbnail",
-				},
-			],
-			displayName: "Sergio Xalambr\u00ed",
-			pronouns: "He/Him",
-			currentLocation: "Per\u00fa",
-			job_title: "Web Developer",
-			company: "Daffy.org",
-			emails: [{ primary: "true", value: "hello@sergiodxa.com" }],
-			accounts: [
-				{
-					domain: "twitter.com",
-					display: "@sergiodxa",
-					url: "https://twitter.com/sergiodxa",
-					iconUrl: "https://gravatar.com/icons/twitter-alt.svg",
-					username: "sergiodxa",
-					verified: true,
-					name: "Twitter",
-					shortname: "twitter",
-				},
-				{
-					domain: "github.com",
-					display: "sergiodxa",
-					url: "https://github.com/sergiodxa",
-					iconUrl: "https://gravatar.com/icons/github.svg",
-					username: "sergiodxa",
-					verified: true,
-					name: "GitHub",
-					shortname: "github",
-				},
-				{
-					domain: "twitch.tv",
-					display: "sergiodxa",
-					url: "https://twitch.tv/sergiodxa",
-					iconUrl: "https://gravatar.com/icons/twitch.svg",
-					username: "sergiodxa",
-					verified: true,
-					name: "Twitch",
-					shortname: "twitch",
-				},
-			],
-			payments: {
-				paypalme: "https://www.paypal.com/paypalme/sergiodxa",
-				Sponsor: "https://github.com/sponsors/sergiodxa",
-			},
-			profileBackground: { opacity: 0.01 },
-			section_order: ["links", "photos", "verified-accounts", "interests"],
-		},
-	],
+	hash: "14330318de450e39207d3063ca9dc23698bba910562fdb497d50cc52e1bae0ea",
+	display_name: "Sergio Xalambrí",
+	location: "Perú",
+	job_title: "Web Developer",
+	company: "Daffy.org",
+	pronouns: "He/Him",
 };
