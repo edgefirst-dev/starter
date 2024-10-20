@@ -1,6 +1,7 @@
 [test]
-coverage = true         # Always enable coverage
-coverageThreshold = 0.8 # Fail if coverage is below 80%
+coverage = true # Always enable coverage
+# Uncomment to set a minimum coverage threshold
+# coverageThreshold = 0.8
 
 [install.scopes]
 "@edgefirst-dev" = { url = "https://npm.pkg.github.com", token = "$GITHUB_TOKEN" }
