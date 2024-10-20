@@ -1,9 +1,10 @@
 import { unauthorized } from "app:helpers/response";
-import { getSession } from "app:helpers/session";
+import { getSession, querySession } from "app:helpers/session";
 import { Cookies } from "app:lib/cookies";
 import { UsersRepository } from "app:repositories.server/users";
 import { redirect } from "react-router";
 
+/** Only allow access to a route to authenticated users */
 export async function authenticate(request: Request, returnTo?: string) {
 	let session = await getSession(request);
 	let [user] = await new UsersRepository().findById(session.userId);
@@ -16,4 +17,10 @@ export async function authenticate(request: Request, returnTo?: string) {
 	}
 	if (!user) throw unauthorized({ message: "Unauthorized" });
 	return user;
+}
+
+/** Only allow access to a route to anonymous visitors */
+export async function anonymous(request: Request, returnTo: string) {
+	let session = await querySession(request);
+	if (session) throw redirect(returnTo);
 }
