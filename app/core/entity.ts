@@ -11,7 +11,11 @@ import { dasherize, underscore } from "inflected";
  * transient and not persisted to the database, or may be backed by a different
  * kind of data store.
  */
-export abstract class Entity extends Data<ObjectParser> {}
+export abstract class Entity extends Data<ObjectParser> {
+	override toString() {
+		return `${dasherize(underscore(this.constructor.name))}`;
+	}
+}
 
 /**
  * A table entity represents a single row in a database table.
