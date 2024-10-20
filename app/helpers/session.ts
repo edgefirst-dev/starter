@@ -6,7 +6,7 @@ import { redirect } from "react-router";
 
 export async function querySession(request: Request) {
 	let sessionId = await Cookies.session.parse(request.headers.get("cookie"));
-	if (!sessionId) throw null;
+	if (!sessionId) return null;
 
 	let session = await sessionStorage().read(sessionId);
 	if (!session) return null;
