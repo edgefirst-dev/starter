@@ -46,12 +46,6 @@ export default function Component() {
 
 				<button
 					type="submit"
-					className="max-w-fit self-end rounded-lg bg-neutral-600 px-5 py-2 text-neutral-100"
-				>
-					Purge
-				</button>
-				<button
-					type="submit"
 					className="relative max-w-fit self-end rounded-lg dark:bg-neutral-600 px-5 py-2 dark:text-neutral-100 outline-blue-500 text-neutral-900 bg-neutral-100"
 				>
 					{isSubmitting && (
