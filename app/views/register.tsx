@@ -71,7 +71,6 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function Component({ actionData }: Route.ComponentProps) {
 	let navigation = useNavigation();
-
 	let isSubmitting = navigation.state === "submitting";
 
 	return (

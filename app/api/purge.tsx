@@ -1,8 +1,10 @@
+import { Spinner } from "app:components/spinner";
+import { cn } from "app:helpers/cn";
 import { ok } from "app:helpers/response";
 import { Cookies } from "app:lib/cookies";
 import schema from "db:schema";
 import { orm } from "@edgefirst-dev/core";
-import { Form, redirect } from "react-router";
+import { Form, redirect, useNavigation } from "react-router";
 
 export async function loader() {
 	// if (env().fetch("APP_ENV", "production") === "production") {
@@ -29,6 +31,9 @@ export async function action() {
 }
 
 export default function Component() {
+	let navigation = useNavigation();
+	let isSubmitting = navigation.state === "submitting";
+
 	return (
 		<main className="flex items-center justify-center min-h-dvh w-full">
 			<Form
@@ -44,6 +49,17 @@ export default function Component() {
 					className="max-w-fit self-end rounded-lg bg-neutral-600 px-5 py-2 text-neutral-100"
 				>
 					Purge
+				</button>
+				<button
+					type="submit"
+					className="relative max-w-fit self-end rounded-lg dark:bg-neutral-600 px-5 py-2 dark:text-neutral-100 outline-blue-500 text-neutral-900 bg-neutral-100"
+				>
+					{isSubmitting && (
+						<span className="absolute inset-0 flex justify-center items-center">
+							<Spinner aria-hidden className="size-5" />
+						</span>
+					)}
+					<span className={cn({ invisible: isSubmitting })}>Purge</span>
 				</button>
 			</Form>
 		</main>
