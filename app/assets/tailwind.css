@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
+}
