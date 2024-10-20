@@ -1,8 +1,8 @@
 {
 	"version": "6",
 	"dialect": "sqlite",
-	"id": "7771fb64-696d-412c-8288-43e926827606",
-	"prevId": "ad54c918-c519-4fbd-9e0d-cfd2df391c00",
+	"id": "989c20a3-4bf8-4e15-89f2-f8d7164bd891",
+	"prevId": "00000000-0000-0000-0000-000000000000",
 	"tables": {
 		"audit_logs": {
 			"name": "audit_logs",
@@ -25,7 +25,7 @@
 					"name": "action",
 					"type": "text",
 					"primaryKey": false,
-					"notNull": true,
+					"notNull": false,
 					"autoincrement": false
 				},
 				"auditable": {
@@ -34,6 +34,14 @@
 					"primaryKey": false,
 					"notNull": false,
 					"autoincrement": false
+				},
+				"payload": {
+					"name": "payload",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false,
+					"default": "'{}'"
 				},
 				"user_id": {
 					"name": "user_id",
@@ -48,6 +56,11 @@
 					"name": "audit_logs_id_unique",
 					"columns": ["id"],
 					"isUnique": true
+				},
+				"audit_logs_user_id_idx": {
+					"name": "audit_logs_user_id_idx",
+					"columns": ["user_id"],
+					"isUnique": false
 				}
 			},
 			"foreignKeys": {
@@ -96,6 +109,13 @@
 					"notNull": true,
 					"autoincrement": false
 				},
+				"reset_token": {
+					"name": "reset_token",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
 				"user_id": {
 					"name": "user_id",
 					"type": "text",
@@ -109,6 +129,21 @@
 					"name": "users_credentials_id_unique",
 					"columns": ["id"],
 					"isUnique": true
+				},
+				"users_credentials_reset_token_unique": {
+					"name": "users_credentials_reset_token_unique",
+					"columns": ["reset_token"],
+					"isUnique": true
+				},
+				"users_credentials_user_id_idx": {
+					"name": "users_credentials_user_id_idx",
+					"columns": ["user_id"],
+					"isUnique": false
+				},
+				"users_credentials_reset_token_idx": {
+					"name": "users_credentials_reset_token_idx",
+					"columns": ["reset_token"],
+					"isUnique": false
 				}
 			},
 			"foreignKeys": {
@@ -162,7 +197,8 @@
 					"type": "text",
 					"primaryKey": false,
 					"notNull": true,
-					"autoincrement": false
+					"autoincrement": false,
+					"default": "'member'"
 				},
 				"user_id": {
 					"name": "user_id",
@@ -184,6 +220,26 @@
 					"name": "memberships_id_unique",
 					"columns": ["id"],
 					"isUnique": true
+				},
+				"memberships_user_id_idx": {
+					"name": "memberships_user_id_idx",
+					"columns": ["user_id"],
+					"isUnique": false
+				},
+				"memberships_user_team_idx": {
+					"name": "memberships_user_team_idx",
+					"columns": ["user_id", "team_id"],
+					"isUnique": false
+				},
+				"memberships_team_id_idx": {
+					"name": "memberships_team_id_idx",
+					"columns": ["team_id"],
+					"isUnique": false
+				},
+				"memberships_team_user_idx": {
+					"name": "memberships_team_user_idx",
+					"columns": ["team_id", "user_id"],
+					"isUnique": false
 				}
 			},
 			"foreignKeys": {
@@ -296,7 +352,7 @@
 					"name": "email",
 					"type": "text",
 					"primaryKey": false,
-					"notNull": false,
+					"notNull": true,
 					"autoincrement": false
 				},
 				"avatar_key": {
@@ -310,6 +366,14 @@
 					"name": "role",
 					"type": "text",
 					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false,
+					"default": "'user'"
+				},
+				"email_verification_token": {
+					"name": "email_verification_token",
+					"type": "text(24)",
+					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false
 				}
@@ -319,6 +383,21 @@
 					"name": "users_id_unique",
 					"columns": ["id"],
 					"isUnique": true
+				},
+				"users_email_unique": {
+					"name": "users_email_unique",
+					"columns": ["email"],
+					"isUnique": true
+				},
+				"users_email_verification_token_unique": {
+					"name": "users_email_verification_token_unique",
+					"columns": ["email_verification_token"],
+					"isUnique": true
+				},
+				"users_email_idx": {
+					"name": "users_email_idx",
+					"columns": ["email"],
+					"isUnique": false
 				}
 			},
 			"foreignKeys": {},
