@@ -1,4 +1,6 @@
+import { Spinner } from "app:components/spinner";
 import { anonymous } from "app:helpers/auth";
+import { cn } from "app:helpers/cn";
 import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { BodyParser } from "app:lib/body-parser";
@@ -10,7 +12,7 @@ import { sessionStorage } from "@edgefirst-dev/core";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
 import { Email } from "@edgefirst-dev/email";
-import { Form, redirect } from "react-router";
+import { Form, redirect, useNavigation } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	await anonymous(request, "/profile");
@@ -68,6 +70,10 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function Component({ actionData }: Route.ComponentProps) {
+	let navigation = useNavigation();
+
+	let isSubmitting = navigation.state === "submitting";
+
 	return (
 		<Form method="POST" className="contents">
 			<h1 className="font-medium text-2xl/none">Create an account</h1>
@@ -104,9 +110,14 @@ export default function Component({ actionData }: Route.ComponentProps) {
 
 			<button
 				type="submit"
-				className="max-w-fit self-end rounded-lg bg-neutral-600 px-5 py-2 text-neutral-100 outline-blue-500"
+				className="relative max-w-fit self-end rounded-lg dark:bg-neutral-600 px-5 py-2 dark:text-neutral-100 outline-blue-500 text-neutral-900 bg-neutral-100"
 			>
-				Sign Up
+				{isSubmitting && (
+					<span className="absolute inset-0 flex justify-center items-center">
+						<Spinner aria-hidden className="size-5" />
+					</span>
+				)}
+				<span className={cn({ invisible: isSubmitting })}>Sign Up</span>
 			</button>
 		</Form>
 	);
