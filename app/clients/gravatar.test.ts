@@ -34,7 +34,7 @@ describe(Gravatar.name, () => {
 		let client = new Gravatar();
 
 		server.resetHandlers(
-			http.get("https://api.gravatar.com//v3/profiles/:hash", () => {
+			http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
 				return HttpResponse.json(mockResponse);
 			}),
 		);
@@ -46,7 +46,7 @@ describe(Gravatar.name, () => {
 		let client = new Gravatar();
 
 		server.resetHandlers(
-			http.get("https://api.gravatar.com//v3/profiles/:hash", () => {
+			http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
 				return new HttpResponse(null, { status: 404 });
 			}),
 		);
@@ -58,7 +58,7 @@ describe(Gravatar.name, () => {
 		let client = new Gravatar();
 
 		server.resetHandlers(
-			http.get("https://api.gravatar.com//v3/profiles/:hash", () => {
+			http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
 				return new HttpResponse(null, { status: 429 });
 			}),
 		);
@@ -70,7 +70,7 @@ describe(Gravatar.name, () => {
 		let client = new Gravatar();
 
 		server.resetHandlers(
-			http.get("https://api.gravatar.com//v3/profiles/:hash", () => {
+			http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
 				return new HttpResponse(null, { status: 500 });
 			}),
 		);
@@ -82,7 +82,7 @@ describe(Gravatar.name, () => {
 		let client = new Gravatar();
 
 		server.resetHandlers(
-			http.get("https://api.gravatar.com//v3/profiles/:hash", () => {
+			http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
 				return HttpResponse.json(mockResponse);
 			}),
 		);
