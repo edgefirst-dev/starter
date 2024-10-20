@@ -25,9 +25,9 @@
 	},
 	"dependencies": {
 		"@edgefirst-dev/api-client": "^0.0.1",
-		"@edgefirst-dev/core": "0.0.30",
+		"@edgefirst-dev/core": "^0.0.31",
 		"@edgefirst-dev/data": "^0.0.2",
-		"@edgefirst-dev/email": "^0.0.1",
+		"@edgefirst-dev/email": "^0.0.2",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
 		"@paralleldrive/cuid2": "^2.2.2",
