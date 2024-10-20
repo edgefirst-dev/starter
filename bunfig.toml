@@ -1,0 +1,3 @@
+[test]
+coverage = true         # Always enable coverage
+coverageThreshold = 0.8 # Fail if coverage is below 80%
