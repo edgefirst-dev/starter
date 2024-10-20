@@ -6,7 +6,7 @@ import type { Email } from "@edgefirst-dev/email";
 
 export class Gravatar extends APIClient {
 	constructor() {
-		super(new URL("https://gravatar.com"));
+		super(new URL("https://api.gravatar.com"));
 	}
 
 	/**
@@ -19,7 +19,7 @@ export class Gravatar extends APIClient {
 	 * @returns A Gravatar profile object.
 	 */
 	async profile(email: Email) {
-		let response = await this.get(`/${email.hash}.json`);
+		let response = await this.get(`/v3/profiles/${email.hash}`);
 
 		if (response.status === 404) throw new Gravatar.NotFoundError(email);
 		if (!response.ok) throw new Gravatar.ServerError();
@@ -28,8 +28,7 @@ export class Gravatar extends APIClient {
 	}
 
 	protected override async before(request: Request): Promise<Request> {
-		let token = env().fetch("GRAVATAR_API_TOKEN", "missing");
-		if (token === "missing") return request;
+		let token = env().fetch("GRAVATAR_API_TOKEN");
 		request.headers.set("Authorization", `Bearer ${token}`);
 		return request;
 	}
