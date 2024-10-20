@@ -1,3 +1,4 @@
+import { anonymous } from "app:helpers/auth";
 import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { BodyParser } from "app:lib/body-parser";
@@ -12,9 +13,8 @@ import { Email } from "@edgefirst-dev/email";
 import { Form, redirect } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	let sessionId = await Cookies.session.parse(request.headers.get("cookie"));
-	if (!sessionId) return ok(null);
-	throw redirect("/");
+	await anonymous(request, "/profile");
+	return ok(null);
 }
 
 export async function action({ request }: Route.ActionArgs) {
