@@ -1,13 +1,13 @@
 import { ok } from "app:helpers/response";
 import { Cookies } from "app:lib/cookies";
 import schema from "db:schema";
-import { env, orm } from "@edgefirst-dev/core";
+import { orm } from "@edgefirst-dev/core";
 import { Form, redirect } from "react-router";
 
 export async function loader() {
-	if (env().fetch("APP_ENV", "production") === "production") {
-		throw redirect("/404");
-	}
+	// if (env().fetch("APP_ENV", "production") === "production") {
+	// 	throw redirect("/404");
+	// }
 	return ok(null);
 }
 

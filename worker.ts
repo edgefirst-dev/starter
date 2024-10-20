@@ -26,7 +26,6 @@ export default bootstrap(
 
 		async onQueue(batch) {
 			jobsManager.register(new FetchGravatarProfileJob());
-			// Process your queued messages here
 			for (let message of batch.messages) await jobsManager.handle(message);
 		},
 	},
