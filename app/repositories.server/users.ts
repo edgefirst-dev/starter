@@ -36,6 +36,14 @@ export class UsersRepository extends Repository {
 		throw new Error("Failed to create user");
 	}
 
+	async update(user: User, input: Partial<typeof users.$inferInsert>) {
+		await this.db
+			.update(users)
+			.set(input)
+			.where(eq(users.id, user.id))
+			.execute();
+	}
+
 	async verifyEmail(user: User) {
 		await this.db
 			.update(users)
