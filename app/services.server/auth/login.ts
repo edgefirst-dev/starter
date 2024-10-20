@@ -31,7 +31,7 @@ export async function login(
 	let [user] = await repos.users.findByEmail(input.email);
 	if (!user) throw new Error("User not found");
 
-	let [credential] = await repos.credentials.findByUserId(user.id);
+	let [credential] = await repos.credentials.findByUser(user);
 	if (!credential) throw new Error("User has no associated credentials");
 
 	// Compare the provided password with the stored password hash

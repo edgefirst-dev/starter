@@ -1,4 +1,5 @@
 import { AuditLogsRepository } from "app:repositories.server/audit-logs";
+import { CredentialsRepository } from "app:repositories.server/credentials";
 import { UsersRepository } from "app:repositories.server/users";
 import type { Email } from "@edgefirst-dev/email";
 import { encodeBase32 } from "@oslojs/encoding";
@@ -13,16 +14,25 @@ import { encodeBase32 } from "@oslojs/encoding";
  */
 export async function recover(
 	input: recover.Input,
-	repos = { audits: new AuditLogsRepository(), users: new UsersRepository() },
+	repos = {
+		audits: new AuditLogsRepository(),
+		users: new UsersRepository(),
+		credentials: new CredentialsRepository(),
+	},
 ): Promise<recover.Output> {
 	let [user] = await repos.users.findByEmail(input.email);
 	if (!user) throw new Error("User not found");
 
-	let otp = generateRandomOTP();
+	let [credential] = await repos.credentials.findByUser(user);
+	if (!credential) throw new Error("User has no associated credentials");
+
+	let token = generateRandomOTP();
+
+	await repos.credentials.createResetToken(credential, token);
 
 	await repos.audits.create(user, "generate_recovery_code");
 
-	return { otp };
+	return { token };
 }
 
 /**
@@ -52,6 +62,6 @@ export namespace recover {
 	 */
 	export interface Output {
 		/** The generated OTP (one-time password) for recovery. */
-		otp: string;
+		token: string;
 	}
 }
