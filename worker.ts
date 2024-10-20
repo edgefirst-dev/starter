@@ -1,6 +1,7 @@
 import schema from "db:schema";
 
 import jobsManager from "app:core/jobs-manager";
+import { FetchGravatarProfileJob } from "app:jobs/fetch-gravatar-profile";
 import { bootstrap } from "@edgefirst-dev/core/worker";
 import { createRequestHandler } from "react-router";
 
@@ -24,6 +25,7 @@ export default bootstrap(
 		},
 
 		async onQueue(batch) {
+			jobsManager.register(new FetchGravatarProfileJob());
 			// Process your queued messages here
 			for (let message of batch.messages) await jobsManager.handle(message);
 		},
