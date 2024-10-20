@@ -35,6 +35,7 @@ declare module "@edgefirst-dev/core" {
 		// 👇 Env variables
 		GRAVATAR_API_TOKEN: string;
 		SESSION_SECRET: string;
+		APP_ENV: "development" | "production";
 	}
 
 	type Schema = typeof schema;
