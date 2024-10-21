@@ -6,7 +6,6 @@ import {
 	Outlet,
 	Scripts,
 	ScrollRestoration,
-	isRouteErrorResponse,
 	useRouteError,
 } from "react-router";
 
@@ -21,8 +20,6 @@ export function ErrorBoundary() {
 
 	let title =
 		error instanceof Error ? error.message : "Oops, something went wrong!";
-
-	let isDev = process.env.NODE_ENV === "development";
 
 	return (
 		<main className="min-h-dvh w-full flex flex-col justify-center items-center">
@@ -57,7 +54,7 @@ export function Layout({ children }: { children: ReactNode }) {
 	return (
 		<html
 			lang="en"
-			className="bg-white text-neutral-950 dark:bg-black dark:text-neutral-50"
+			className="bg-white text-black dark:bg-black dark:text-white"
 		>
 			<head>
 				<meta charSet="utf-8" />

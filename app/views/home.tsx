@@ -29,7 +29,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 				)}
 			</aside>
 
-			<header className="flex flex-col gap-4 text-center">
+			<header className="contents text-center">
 				<h1 className="font-bold text-3xl tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
 					Edge-first Starter Kit for React
 				</h1>
@@ -41,7 +41,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
 			<div className="flex gap-4">
 				<a
-					className="inline-flex items-center justify-center rounded-md bg-neutral-900 px-10 py-3 font-medium text-base text-neutral-50 shadow transition-colors hover:bg-neutral-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-neutral-50 dark:text-neutral-900 dark:focus-visible:ring-neutral-300 dark:hover:bg-neutral-50/90"
+					className="max-w-fit rounded-lg dark:bg-white px-5 py-2 dark:text-black outline-blue-500 text-white bg-black"
 					href="https://github.com/edgefirst-dev/starter"
 				>
 					Get Started
