@@ -1,7 +1,57 @@
 import type { ReactNode } from "react";
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import {
+	Link,
+	Links,
+	Meta,
+	Outlet,
+	Scripts,
+	ScrollRestoration,
+	isRouteErrorResponse,
+	useRouteError,
+} from "react-router";
 
 import "./assets/tailwind.css";
+
+export default function App() {
+	return <Outlet />;
+}
+
+export function ErrorBoundary() {
+	let error = useRouteError();
+
+	let title =
+		error instanceof Error ? error.message : "Oops, something went wrong!";
+
+	let isDev = process.env.NODE_ENV === "development";
+
+	return (
+		<main className="min-h-dvh w-full flex flex-col justify-center items-center">
+			<div className="flex flex-col justify-center items-center gap-y-6 max-w-lg">
+				<h1 className="text-4xl/none font-semibold text-center text-balance">
+					{title}
+				</h1>
+
+				<p className="text-lg/normal text-center text-balance">
+					We're sorry, but an unexpected error has occurred. Please try again
+					later or contact support if the issue persists.
+				</p>
+
+				<Link
+					to="/"
+					className="max-w-fit rounded-lg dark:bg-white px-5 py-2 dark:text-black outline-blue-500 text-white bg-black"
+				>
+					Go to Homepage
+				</Link>
+
+				{error instanceof Error && error.stack ? (
+					<pre className="bg-black text-white p-3 rounded-xl w-full overflow-x-auto mt-4">
+						<code>{JSON.stringify(error.stack, null, "\t")}</code>
+					</pre>
+				) : null}
+			</div>
+		</main>
+	);
+}
 
 export function Layout({ children }: { children: ReactNode }) {
 	return (
@@ -22,8 +72,4 @@ export function Layout({ children }: { children: ReactNode }) {
 			</body>
 		</html>
 	);
-}
-
-export default function App() {
-	return <Outlet />;
 }
