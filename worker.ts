@@ -35,11 +35,10 @@ export default bootstrap(
 	},
 );
 
-	return {
-		ua: UserAgent.fromRequest(request),
-		ip: IPAddress.fromRequest(request),
-	};
 async function getLoadContext(request: Request) {
+	let ua = UserAgent.fromRequest(request);
+	let ip = IPAddress.fromRequest(request);
+	return { ua, ip };
 }
 
 declare module "@edgefirst-dev/core" {
