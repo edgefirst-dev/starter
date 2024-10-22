@@ -1,4 +1,5 @@
 import { isIP } from "node:net";
+import type { Request } from "@cloudflare/workers-types";
 
 export class IPAddress {
 	private value: string;
@@ -15,6 +16,12 @@ export class IPAddress {
 
 	static from(ip: string | IPAddress) {
 		return new IPAddress(ip);
+	}
+
+	static fromRequest(request: Request) {
+		let header = request.headers.get("CF-Connecting-IP");
+		if (!header) return null;
+		return IPAddress.from(header);
 	}
 
 	static canParse(ip: string | IPAddress) {
