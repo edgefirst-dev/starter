@@ -10,7 +10,8 @@ A full-stack starter kit for Edge-first applications built with React.
 - [x] Code Quality checker with **[Biome](https://biomejs.dev)**
 - [x] CI with **[GH Actions](https://github.com/features/actions)**
 - [x] Router with **[React Router](https://reactrouter.com/dev)**
-- [x] Database, migrations and ORM with **[D1](https://developers.cloudflare.com/d1/)** and **[Drizzle](https://orm.drizzle.team)**
+- [x] Database with **[Cloudflare D1](https://developers.cloudflare.com/d1/)**
+- [x] Query builder and DB migrations **[Drizzle](https://orm.drizzle.team)**
 - [x] Queues with **[Cloudflare Queues](https://developers.cloudflare.com/queues/)**
 - [x] Scheduled tasks with **[Cloudflare Workers Cron Triggers](https://developers.cloudflare.com/workers/configuration/cron-triggers/)**
 - [x] KV storage and caching with **[Cloudflare Workers KV](https://developers.cloudflare.com/kv/)**
