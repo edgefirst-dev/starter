@@ -2,22 +2,24 @@ import schema from "db:schema";
 
 import jobsManager from "app:core/jobs-manager";
 import { FetchGravatarProfileJob } from "app:jobs/fetch-gravatar-profile";
+import { IPAddress } from "app:lib/ip-address.js";
+import { UserAgent } from "app:lib/user-agent.js";
+import type { Request, Response } from "@cloudflare/workers-types";
 import { bootstrap } from "@edgefirst-dev/core/worker";
 import { createRequestHandler } from "react-router";
 
 export default bootstrap(
 	{ orm: { schema }, rateLimit: { limit: 1000, period: 60 } },
 	{
-		// @ts-expect-error The RR handler returns a Response with a different type
 		async onRequest(request) {
 			let handler = createRequestHandler(
-				// @ts-expect-error The RR handler expects a different type
+				// @ts-expect-error The file may not exists in dev, or the type will be different
 				() => import("./build/server/index.js"),
 				"production",
 			);
 
 			// @ts-expect-error The RR handler exepcts a Request with a different type
-			return await handler(request);
+			return (await handler(request, getLoadContext(request))) as Response;
 		},
 
 		async onSchedule() {
@@ -31,6 +33,13 @@ export default bootstrap(
 	},
 );
 
+function getLoadContext(request: Request) {
+	return {
+		ua: UserAgent.fromRequest(request),
+		ip: IPAddress.fromRequest(request),
+	};
+}
+
 declare module "@edgefirst-dev/core" {
 	export interface Bindings {
 		DB: D1Database;
@@ -43,4 +52,8 @@ declare module "@edgefirst-dev/core" {
 
 	type Schema = typeof schema;
 	export interface DatabaseSchema extends Schema {}
+}
+
+declare module "react-router" {
+	export interface AppLoadContext extends ReturnType<typeof getLoadContext> {}
 }
