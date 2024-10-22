@@ -18,8 +18,10 @@ export default bootstrap(
 				"production",
 			);
 
+			let context = await getLoadContext(request);
+
 			// @ts-expect-error The RR handler exepcts a Request with a different type
-			return (await handler(request, getLoadContext(request))) as Response;
+			return (await handler(request, context)) as Response;
 		},
 
 		async onSchedule() {
@@ -33,11 +35,11 @@ export default bootstrap(
 	},
 );
 
-function getLoadContext(request: Request) {
 	return {
 		ua: UserAgent.fromRequest(request),
 		ip: IPAddress.fromRequest(request),
 	};
+async function getLoadContext(request: Request) {
 }
 
 declare module "@edgefirst-dev/core" {
@@ -55,5 +57,6 @@ declare module "@edgefirst-dev/core" {
 }
 
 declare module "react-router" {
-	export interface AppLoadContext extends ReturnType<typeof getLoadContext> {}
+	export interface AppLoadContext
+		extends Awaited<ReturnType<typeof getLoadContext>> {}
 }
