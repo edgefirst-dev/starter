@@ -1,19 +1,17 @@
 import { Gravatar } from "app:clients/gravatar";
-import { Jobs } from "app:core/job";
 import { UsersRepository } from "app:repositories.server/users";
+import { Job } from "@edgefirst-dev/core";
 import { Data } from "@edgefirst-dev/data";
 import { ObjectParser } from "@edgefirst-dev/data/parser";
 import { Email } from "@edgefirst-dev/email";
 
-export class FetchGravatarProfileJob extends Jobs<Input> {
-	gravatar = new Gravatar();
-	users = new UsersRepository();
+export class FetchGravatarProfileJob extends Job<Input> {
+	private readonly gravatar = new Gravatar();
+	private readonly users = new UsersRepository();
 
-	async validate(body: ObjectParser): Promise<Input> {
-		return new Input(body);
-	}
+	readonly data = Input;
 
-	async handle(input: Input): Promise<void> {
+	async perform(input: Input): Promise<void> {
 		let [user] = await this.users.findByEmail(input.email);
 		if (!user) throw new Error("User not found");
 		let profile = await this.gravatar.profile(input.email);

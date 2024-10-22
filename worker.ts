@@ -1,6 +1,5 @@
 import schema from "db:schema";
 
-import jobsManager from "app:core/jobs-manager";
 import { FetchGravatarProfileJob } from "app:jobs/fetch-gravatar-profile";
 import { IPAddress } from "app:lib/ip-address.js";
 import { UserAgent } from "app:lib/user-agent.js";
@@ -9,7 +8,13 @@ import { bootstrap } from "@edgefirst-dev/core/worker";
 import { createRequestHandler } from "react-router";
 
 export default bootstrap(
-	{ orm: { schema }, rateLimit: { limit: 1000, period: 60 } },
+	{
+		orm: { schema },
+		rateLimit: { limit: 1000, period: 60 },
+		jobs() {
+			return [new FetchGravatarProfileJob()];
+		},
+	},
 	{
 		async onRequest(request) {
 			let handler = createRequestHandler(
@@ -26,11 +31,6 @@ export default bootstrap(
 
 		async onSchedule() {
 			// Add your scheduled tasks here
-		},
-
-		async onQueue(batch) {
-			jobsManager.register(new FetchGravatarProfileJob());
-			for (let message of batch.messages) await jobsManager.handle(message);
 		},
 	},
 );
