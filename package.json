@@ -67,5 +67,6 @@
 		"vite-plugin-cjs-interop": "^2.1.4",
 		"vite-tsconfig-paths": "^5.0.1",
 		"wrangler": "^3.81.0"
-	}
+	},
+	"trustedDependencies": ["@biomejs/biome"]
 }
