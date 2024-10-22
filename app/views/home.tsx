@@ -1,3 +1,4 @@
+import { AnchorButton } from "app:components/anchor-button";
 import { ok } from "app:helpers/response";
 import { querySession } from "app:helpers/session";
 import type * as Route from "types:views/+types.home";
@@ -40,12 +41,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 			</header>
 
 			<div className="flex gap-4">
-				<a
-					className="max-w-fit rounded-lg dark:bg-white px-5 py-2 dark:text-black outline-blue-500 text-white bg-black"
-					href="https://github.com/edgefirst-dev/starter"
+				<AnchorButton
+					reloadDocument
+					to="https://github.com/edgefirst-dev/starter"
 				>
 					Get Started
-				</a>
+				</AnchorButton>
 			</div>
 		</main>
 	);

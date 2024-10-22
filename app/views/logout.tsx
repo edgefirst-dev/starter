@@ -1,3 +1,4 @@
+import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
 import { authenticate } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
@@ -35,17 +36,14 @@ export default function Component() {
 
 			<p>Do you want to leave the app?</p>
 
-			<button
-				type="submit"
-				className="relative max-w-fit self-end rounded-lg dark:bg-neutral-600 px-5 py-2 dark:text-neutral-100 outline-blue-500 text-neutral-900 bg-neutral-100"
-			>
+			<Button type="submit" className="relative">
 				{isSubmitting && (
 					<span className="absolute inset-0 flex justify-center items-center">
 						<Spinner aria-hidden className="size-5" />
 					</span>
 				)}
 				<span className={cn({ invisible: isSubmitting })}>Log Out</span>
-			</button>
+			</Button>
 		</Form>
 	);
 }

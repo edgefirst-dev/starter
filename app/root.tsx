@@ -1,6 +1,6 @@
+import { AnchorButton } from "app:components/anchor-button";
 import type { ReactNode } from "react";
 import {
-	Link,
 	Links,
 	Meta,
 	Outlet,
@@ -8,7 +8,6 @@ import {
 	ScrollRestoration,
 	useRouteError,
 } from "react-router";
-
 import "./assets/tailwind.css";
 
 export default function App() {
@@ -33,12 +32,7 @@ export function ErrorBoundary() {
 					later or contact support if the issue persists.
 				</p>
 
-				<Link
-					to="/"
-					className="max-w-fit rounded-lg dark:bg-white px-5 py-2 dark:text-black outline-blue-500 text-white bg-black"
-				>
-					Go to Homepage
-				</Link>
+				<AnchorButton to="/">Go to Homepage</AnchorButton>
 
 				{error instanceof Error && error.stack ? (
 					<pre className="bg-black text-white p-3 rounded-xl w-full overflow-x-auto mt-4">

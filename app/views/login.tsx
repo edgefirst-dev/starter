@@ -1,3 +1,4 @@
+import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
 import { anonymous } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
@@ -105,17 +106,14 @@ export default function Component({ actionData }: Route.ComponentProps) {
 					First day? Register
 				</Link>
 
-				<button
-					type="submit"
-					className="relative max-w-fit self-end rounded-lg dark:bg-neutral-600 px-5 py-2 dark:text-neutral-100 outline-blue-500 text-neutral-900 bg-neutral-100"
-				>
+				<Button type="submit" className="relative self-end">
 					{isSubmitting && (
 						<span className="absolute inset-0 flex justify-center items-center">
 							<Spinner aria-hidden className="size-5" />
 						</span>
 					)}
 					<span className={cn({ invisible: isSubmitting })}>Access</span>
-				</button>
+				</Button>
 			</footer>
 		</Form>
 	);
