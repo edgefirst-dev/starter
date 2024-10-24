@@ -1,5 +1,4 @@
-import { sha1 } from "@oslojs/crypto/sha1";
-import { encodeHexLowerCase } from "@oslojs/encoding";
+import { PwnedPasswords } from "app:clients/pwned-password";
 import bcrypt from "bcryptjs";
 
 const MIN_LENGTH = 8;
@@ -104,22 +103,8 @@ export class Password {
 	 * in a data breach, otherwise `false`.
 	 */
 	private async isPwned() {
-		let hash = encodeHexLowerCase(sha1(new TextEncoder().encode(this.value)));
-		let hashPrefix = hash.slice(0, 5);
-
-		let response = await fetch(
-			`https://api.pwnedpasswords.com/range/${hashPrefix}`,
-		);
-
-		let data = await response.text();
-		let items = data.split("\n");
-
-		for (let item of items) {
-			let hashSuffix = item.slice(0, 35).toLowerCase();
-			if (hash === hashPrefix + hashSuffix) return true;
-		}
-
-		return false;
+		let hash = PwnedPasswords.hash(this.value);
+		return await new PwnedPasswords().isPwned(hash);
 	}
 
 	toJSON() {
