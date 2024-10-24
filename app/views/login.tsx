@@ -6,7 +6,6 @@ import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { createSession } from "app:helpers/session";
 import { BodyParser } from "app:lib/body-parser";
-import { Cookies } from "app:lib/cookies";
 import { Password } from "app:lib/password";
 import { login } from "app:services.server/auth/login";
 import type * as Route from "types:views/+types.login";
