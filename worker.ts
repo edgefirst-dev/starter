@@ -43,8 +43,6 @@ async function getLoadContext(request: Request) {
 
 declare module "@edgefirst-dev/core" {
 	export interface Bindings {
-		DB: D1Database;
-		QUEUE: Queue;
 		// 👇 Env variables
 		GRAVATAR_API_TOKEN: string;
 		SESSION_SECRET: string;
