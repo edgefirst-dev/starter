@@ -1,11 +1,11 @@
 import type { Request } from "@cloudflare/workers-types";
-import * as Bowser from "bowser";
+import { type Parser, parse } from "bowser";
 
 export class UserAgent {
-	#parsed: Bowser.Parser.ParsedResult;
+	#parsed: Parser.ParsedResult;
 
 	constructor(private value: string) {
-		this.#parsed = Bowser.parse(this.value);
+		this.#parsed = parse(this.value);
 	}
 
 	static from(value: string | UserAgent): UserAgent {
