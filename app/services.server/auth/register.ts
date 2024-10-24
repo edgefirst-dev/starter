@@ -43,7 +43,9 @@ export async function register(
 	let displayName = input.displayName;
 
 	// If the display name is not provided, try to fetch it from Gravatar
-	if (!displayName) FetchGravatarProfileJob.enqueue({ email: input.email });
+	if (!displayName) {
+		FetchGravatarProfileJob.enqueue({ email: input.email.toString() });
+	}
 
 	let user = await repos.users.create({
 		email: input.email.toString(),
