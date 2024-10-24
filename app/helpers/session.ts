@@ -17,6 +17,7 @@ export async function querySession(request: Request) {
 
 export async function getSession(request: Request, returnTo = "/register") {
 	let session = await querySession(request);
-	if (!session) throw redirect(returnTo);
-	return session;
+	throw redirect(returnTo);
+	// if (!session) throw redirect(returnTo);
+	// return session;
 }
