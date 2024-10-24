@@ -5,21 +5,26 @@ import { Data } from "@edgefirst-dev/data";
 import { ObjectParser } from "@edgefirst-dev/data/parser";
 import { Email } from "@edgefirst-dev/email";
 
-export class FetchGravatarProfileJob extends Job<Input> {
+import { syncUserWithGravatar } from "app:services.server/sync-user-with-gravatar";
+
+export class SyncUserWithGravatarJob extends Job<Input> {
 	private readonly gravatar = new Gravatar();
 	private readonly users = new UsersRepository();
 
 	readonly data = Input;
 
 	async perform(input: Input): Promise<void> {
-		let [user] = await this.users.findByEmail(input.email);
-		if (!user) throw new Error("User not found");
-		let profile = await this.gravatar.profile(input.email);
-		await this.users.update(user, { displayName: profile.displayName });
+		await syncUserWithGravatar(input, {
+			gravatar: this.gravatar,
+			users: this.users,
+		});
 	}
 }
 
-export class Input extends Data<ObjectParser> {
+export class Input
+	extends Data<ObjectParser>
+	implements syncUserWithGravatar.Input
+{
 	get email() {
 		return Email.from(this.parser.string("email"));
 	}

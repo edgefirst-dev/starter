@@ -1,6 +1,6 @@
 import schema from "db:schema";
 
-import { FetchGravatarProfileJob } from "app:jobs/fetch-gravatar-profile";
+import { SyncUserWithGravatarJob } from "app:jobs/sync-user-with-gravatar.js";
 import { IPAddress } from "app:lib/ip-address.js";
 import { UserAgent } from "app:lib/user-agent.js";
 import { GenerateReportTask } from "app:tasks/generate-report.js";
@@ -14,7 +14,7 @@ export default bootstrap({
 	rateLimit: { limit: 1000, period: 60 },
 
 	jobs() {
-		return [new FetchGravatarProfileJob()];
+		return [new SyncUserWithGravatarJob()];
 	},
 
 	tasks() {

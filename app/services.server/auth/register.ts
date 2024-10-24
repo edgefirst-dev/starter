@@ -2,7 +2,7 @@ import { Gravatar } from "app:clients/gravatar";
 import type { Membership } from "app:entities/membership";
 import type { Team } from "app:entities/team";
 import type { User } from "app:entities/user";
-import { FetchGravatarProfileJob } from "app:jobs/fetch-gravatar-profile";
+import { SyncUserWithGravatarJob } from "app:jobs/sync-user-with-gravatar";
 import { Password } from "app:lib/password";
 import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { CredentialsRepository } from "app:repositories.server/credentials";
@@ -44,7 +44,7 @@ export async function register(
 
 	// If the display name is not provided, try to fetch it from Gravatar
 	if (!displayName) {
-		FetchGravatarProfileJob.enqueue({ email: input.email.toString() });
+		SyncUserWithGravatarJob.enqueue({ email: input.email.toString() });
 	}
 
 	let user = await repos.users.create({
