@@ -40,6 +40,14 @@ export class SessionsRepository extends Repository {
 			.where(eq(schema.sessions.id, id))
 			.execute();
 	}
+
+	async recordActivity(id: Session["id"]) {
+		await this.db
+			.update(schema.sessions)
+			.set({ lastActivityAt: new Date() })
+			.where(eq(schema.sessions.id, id))
+			.execute();
+	}
 }
 
 export namespace SessionsRepository {

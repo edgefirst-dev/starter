@@ -3,11 +3,15 @@ import { SessionsRepository } from "app:repositories.server/sessions";
 import { redirect } from "react-router";
 
 export async function querySession(request: Request) {
+	let repo = new SessionsRepository();
 	let sessionId = await Cookies.session.parse(request.headers.get("cookie"));
 	if (!sessionId) return null;
 
-	let [session] = await new SessionsRepository().findById(sessionId);
-	if (session) return session;
+	let [session] = await repo.findById(sessionId);
+	if (session) {
+		await repo.recordActivity(session.id);
+		return session;
+	}
 
 	return null;
 }
@@ -18,11 +22,27 @@ export async function getSession(request: Request, returnTo = "/register") {
 	return session;
 }
 
-export async function createSession(input: SessionsRepository.CreateInput) {
-	return await new SessionsRepository().create(input);
+export async function createSession(
+	input: SessionsRepository.CreateInput,
+	responseHeaders = new Headers(),
+) {
+	let session = await new SessionsRepository().create(input);
+	responseHeaders.append(
+		"Set-Cookie",
+		await Cookies.session.serialize(session.id),
+	);
+	return responseHeaders;
 }
 
-export async function deleteSession(request: Request) {
+export async function deleteSession(
+	request: Request,
+	responseHeaders = new Headers(),
+) {
 	let id = await Cookies.session.parse(request.headers.get("cookie"));
-	return await new SessionsRepository().destroy(id);
+	await new SessionsRepository().destroy(id);
+	responseHeaders.append(
+		"Set-Cookie",
+		await Cookies.session.serialize(null, { maxAge: 0 }),
+	);
+	return responseHeaders;
 }

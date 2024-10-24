@@ -28,3 +28,9 @@ export async function anonymous(request: Request, returnTo: string) {
 	let session = await querySession(request);
 	if (session) throw redirect(returnTo);
 }
+
+/** Checks if the user is authenticated or not */
+export async function isAuthenticated(request: Request) {
+	if (await querySession(request)) return true;
+	return false;
+}

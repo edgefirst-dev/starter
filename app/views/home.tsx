@@ -1,13 +1,11 @@
 import { AnchorButton } from "app:components/anchor-button";
+import { isAuthenticated } from "app:helpers/auth";
 import { ok } from "app:helpers/response";
-import { querySession } from "app:helpers/session";
 import type * as Route from "types:views/+types.home";
 import { Link } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	let session = await querySession(request);
-	if (session) return ok({ isSignedIn: true });
-	return ok({ isSignedIn: false });
+	return ok({ isSignedIn: await isAuthenticated(request) });
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
