@@ -38,15 +38,11 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 		let { user, team, memberships } = await login(data);
 
-		let session = await createSession({
+		let headers = await createSession({
 			user: user,
 			ip: context?.ip,
 			ua: context?.ua,
 			payload: { teamId: team.id, teams: memberships.map((m) => m.teamId) },
-		});
-
-		let headers = new Headers({
-			"set-cookie": await Cookies.session.serialize(session.id),
 		});
 
 		throw redirect("/profile", { headers });
