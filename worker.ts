@@ -3,37 +3,37 @@ import schema from "db:schema";
 import { FetchGravatarProfileJob } from "app:jobs/fetch-gravatar-profile";
 import { IPAddress } from "app:lib/ip-address.js";
 import { UserAgent } from "app:lib/user-agent.js";
+import { GenerateReportTask } from "app:tasks/generate-report.js";
 import type { Request, Response } from "@cloudflare/workers-types";
 import { bootstrap } from "@edgefirst-dev/core/worker";
 import { createRequestHandler } from "react-router";
 
-export default bootstrap(
-	{
-		orm: { schema },
-		rateLimit: { limit: 1000, period: 60 },
-		jobs() {
-			return [new FetchGravatarProfileJob()];
-		},
+export default bootstrap({
+	orm: { schema },
+
+	rateLimit: { limit: 1000, period: 60 },
+
+	jobs() {
+		return [new FetchGravatarProfileJob()];
 	},
-	{
-		async onRequest(request) {
-			let handler = createRequestHandler(
-				// @ts-expect-error The file may not exists in dev, or the type will be different
-				() => import("./build/server/index.js"),
-				"production",
-			);
 
-			let context = await getLoadContext(request);
-
-			// @ts-expect-error The RR handler exepcts a Request with a different type
-			return (await handler(request, context)) as Response;
-		},
-
-		async onSchedule() {
-			// Add your scheduled tasks here
-		},
+	tasks() {
+		return [new GenerateReportTask().everyMinute()];
 	},
-);
+
+	async onRequest(request) {
+		let handler = createRequestHandler(
+			// @ts-expect-error The file may not exists in dev, or the type will be different
+			() => import("./build/server/index.js"),
+			"production",
+		);
+
+		let context = await getLoadContext(request);
+
+		// @ts-expect-error The RR handler exepcts a Request with a different type
+		return (await handler(request, context)) as Response;
+	},
+});
 
 async function getLoadContext(request: Request) {
 	let ua = UserAgent.fromRequest(request);
