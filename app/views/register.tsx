@@ -5,11 +5,10 @@ import { cn } from "app:helpers/cn";
 import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { BodyParser } from "app:lib/body-parser";
-import { Cookies } from "app:lib/cookies";
+// import { Cookies } from "app:lib/cookies";
 import { Password } from "app:lib/password";
 import { register } from "app:services.server/auth/register";
 import type * as Route from "types:views/+types.register";
-import { sessionStorage } from "@edgefirst-dev/core";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
 import { Email } from "@edgefirst-dev/email";
@@ -43,16 +42,16 @@ export async function action({ request }: Route.ActionArgs) {
 
 		let { user, team, membership } = await register(data);
 
-		let session = await sessionStorage().read();
+		// let session = await sessionStorage().read();
 
-		session.set("userId", user.id);
-		session.set("teamId", team.id);
-		session.set("teams", [membership.teamId]);
+		// session.set("userId", user.id);
+		// session.set("teamId", team.id);
+		// session.set("teams", [membership.teamId]);
 
-		await sessionStorage().save(session);
+		// await sessionStorage().save(session);
 
 		let headers = new Headers({
-			"set-cookie": await Cookies.session.serialize(session.id),
+			// "set-cookie": await Cookies.session.serialize(session.id),
 		});
 
 		throw redirect("/profile", { headers });

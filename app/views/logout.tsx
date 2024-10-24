@@ -5,7 +5,6 @@ import { cn } from "app:helpers/cn";
 import { ok } from "app:helpers/response";
 import { Cookies } from "app:lib/cookies";
 import type * as Route from "types:views/+types.logout";
-import { sessionStorage } from "@edgefirst-dev/core";
 import { Form, redirect, useNavigation } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -15,7 +14,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
 	let sessionId = await Cookies.session.parse(request.headers.get("cookie"));
-	await sessionStorage().destroy(sessionId);
+	// await sessionStorage().destroy(sessionId);
 
 	let headers = new Headers();
 	headers.append(
