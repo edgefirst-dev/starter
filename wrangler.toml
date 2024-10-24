@@ -42,5 +42,5 @@ binding = "QUEUE"
 queue = "edgefirst-queue"
 
 # Uncomment to enable cron jobs
-[triggers]
-crons = ["* * * * *"]
+# [triggers]
+# crons = ["* * * * *"]
