@@ -41,6 +41,6 @@ binding = "QUEUE"
 [[queues.consumers]]
 queue = "edgefirst-queue"
 
-# Uncomment to add a cron trigger
-# [triggers]
-# crons = ["*/3 * * * *"]
+# Uncomment to enable cron jobs
+[triggers]
+crons = ["* * * * *"]
