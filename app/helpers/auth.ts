@@ -1,3 +1,4 @@
+import type { User } from "app:entities/user";
 import { unauthorized } from "app:helpers/response";
 import { getSession, querySession } from "app:helpers/session";
 // import { Cookies } from "app:lib/cookies";
@@ -5,7 +6,10 @@ import { getSession, querySession } from "app:helpers/session";
 import { redirect } from "react-router";
 
 /** Only allow access to a route to authenticated users */
-export async function authenticate(request: Request, returnTo?: string) {
+export async function authenticate(
+	request: Request,
+	returnTo?: string,
+): Promise<User> {
 	let session = await getSession(request);
 	throw unauthorized({ message: "Unauthorized" });
 	// let [user] = await new UsersRepository().findById(session.userId);
