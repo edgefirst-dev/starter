@@ -119,4 +119,20 @@ export const credentials = sqliteTable(
 	},
 );
 
-export default { users, audits, teams, memberships, credentials };
+export const sessions = sqliteTable("sessions", {
+	id: cuid("id", "sessions_id_unique"),
+	// Timestamps
+	createdAt,
+	updatedAt,
+	lastActivityAt: timestamp("last_activity_at"),
+	// Attributes
+	userAgent: text("user_agent", { mode: "text" }),
+	ipAddress: text("ip_address", { mode: "text" }),
+	payload: text("payload", { mode: "json" }).default(JSON.stringify({})),
+	// Relationships
+	userId: text("user_id", { mode: "text" })
+		.notNull()
+		.references(() => users.id),
+});
+
+export default { users, audits, teams, memberships, credentials, sessions };

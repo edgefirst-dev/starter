@@ -3,6 +3,7 @@ import { isCuid } from "@paralleldrive/cuid2";
 
 import { Email } from "@edgefirst-dev/email";
 import { IPAddress } from "./ip-address";
+import { UserAgent } from "./user-agent";
 
 export type CUID = string & { __cuid: true };
 
@@ -47,5 +48,10 @@ export class StringParser extends Parser<string> {
 
 	wordCount() {
 		return this.value.split(/\s+/).length;
+	}
+
+	userAgent() {
+		if (UserAgent.canParse(this.value)) return UserAgent.from(this.value);
+		throw new Error(`Expected a valid user agent, but got ${this.value}`);
 	}
 }

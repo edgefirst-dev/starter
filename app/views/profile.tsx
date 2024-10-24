@@ -1,7 +1,7 @@
 import { authenticate } from "app:helpers/auth";
 import { ok } from "app:helpers/response";
 import type * as Route from "types:views/+types.profile";
-import { Link, redirect } from "react-router";
+import { Link } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	let user = await authenticate(request, "/register");

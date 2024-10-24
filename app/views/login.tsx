@@ -4,8 +4,9 @@ import { anonymous } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
+import { createSession } from "app:helpers/session";
 import { BodyParser } from "app:lib/body-parser";
-// import { Cookies } from "app:lib/cookies";
+import { Cookies } from "app:lib/cookies";
 import { Password } from "app:lib/password";
 import { login } from "app:services.server/auth/login";
 import type * as Route from "types:views/+types.login";
@@ -19,7 +20,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 	return ok(null);
 }
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request, context }: Route.ActionArgs) {
 	await rateLimit(request.headers);
 
 	try {
@@ -37,19 +38,15 @@ export async function action({ request }: Route.ActionArgs) {
 
 		let { user, team, memberships } = await login(data);
 
-		// let session = await sessionStorage().read();
-
-		// session.set("userId", user.id);
-		// session.set("teamId", team.id);
-		// session.set(
-		// 	"teams",
-		// 	memberships.map((m) => m.teamId),
-		// );
-
-		// await sessionStorage().save(session);
+		let session = await createSession({
+			user: user,
+			ip: context?.ip,
+			ua: context?.ua,
+			payload: { teamId: team.id, teams: memberships.map((m) => m.teamId) },
+		});
 
 		let headers = new Headers({
-			// "set-cookie": await Cookies.session.serialize(session.id),
+			"set-cookie": await Cookies.session.serialize(session.id),
 		});
 
 		throw redirect("/profile", { headers });

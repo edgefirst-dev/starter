@@ -19,6 +19,15 @@ export class UserAgent {
 		return UserAgent.from(header);
 	}
 
+	static canParse(value: string) {
+		try {
+			parse(value);
+			return true;
+		} catch {
+			return false;
+		}
+	}
+
 	get browser() {
 		return this.#parsed.browser;
 	}

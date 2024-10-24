@@ -3,6 +3,7 @@ import { Spinner } from "app:components/spinner";
 import { authenticate } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { ok } from "app:helpers/response";
+import { deleteSession } from "app:helpers/session";
 import { Cookies } from "app:lib/cookies";
 import type * as Route from "types:views/+types.logout";
 import { Form, redirect, useNavigation } from "react-router";
@@ -13,8 +14,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export async function action({ request }: Route.ActionArgs) {
-	let sessionId = await Cookies.session.parse(request.headers.get("cookie"));
-	// await sessionStorage().destroy(sessionId);
+	await deleteSession(request);
 
 	let headers = new Headers();
 	headers.append(
