@@ -1,19 +1,19 @@
 import { Cookies } from "app:lib/cookies";
 import { SessionsRepository } from "app:repositories.server/sessions";
+import { waitUntil } from "@edgefirst-dev/core";
 import { redirect } from "react-router";
 
 export async function querySession(request: Request) {
 	let repo = new SessionsRepository();
+
 	let sessionId = await Cookies.session.parse(request.headers.get("cookie"));
 	if (!sessionId) return null;
 
 	let [session] = await repo.findById(sessionId);
-	if (session) {
-		await repo.recordActivity(session.id);
-		return session;
-	}
+	if (!session) return null;
 
-	return null;
+	waitUntil(repo.recordActivity(session.id));
+	return session;
 }
 
 export async function getSession(request: Request, returnTo = "/register") {
