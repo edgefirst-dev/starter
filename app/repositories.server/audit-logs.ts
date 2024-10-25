@@ -1,7 +1,7 @@
-import type { Entity } from "app:core/entity";
 import { Repository } from "app:core/repository";
 import type { User } from "app:entities/user";
 import { audits } from "db:schema";
+import type { Entity } from "@edgefirst-dev/core";
 
 export class AuditLogsRepository extends Repository {
 	async create(user: User, action: AuditAction, auditable?: Entity) {

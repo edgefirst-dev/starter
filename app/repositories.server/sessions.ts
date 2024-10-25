@@ -1,9 +1,8 @@
 import { Repository } from "app:core/repository";
 import { Session } from "app:entities/session";
 import type { User } from "app:entities/user";
-import type { IPAddress } from "app:lib/ip-address";
-import { UserAgent } from "app:lib/user-agent";
 import schema from "db:schema";
+import type { IPAddress, UserAgent } from "@edgefirst-dev/core";
 import { eq } from "drizzle-orm";
 
 export class SessionsRepository extends Repository {

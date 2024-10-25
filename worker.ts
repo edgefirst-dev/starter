@@ -1,10 +1,9 @@
 import schema from "db:schema";
 
 import { SyncUserWithGravatarJob } from "app:jobs/sync-user-with-gravatar.js";
-import { IPAddress } from "app:lib/ip-address.js";
-import { UserAgent } from "app:lib/user-agent.js";
 import { GenerateReportTask } from "app:tasks/generate-report.js";
 import type { Request, Response } from "@cloudflare/workers-types";
+import { IPAddress, UserAgent } from "@edgefirst-dev/core";
 import { bootstrap } from "@edgefirst-dev/core/worker";
 import { createRequestHandler } from "react-router";
 

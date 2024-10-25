@@ -1,6 +1,4 @@
-import { TableEntity } from "app:core/entity";
-import type { Password } from "app:lib/password";
-import { StringParser } from "app:lib/string-parser";
+import { Password, StringParser, TableEntity } from "@edgefirst-dev/core";
 
 export class Credential extends TableEntity {
 	get userId() {

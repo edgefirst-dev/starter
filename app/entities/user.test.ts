@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import type { users } from "db:schema";
 
-import type { CUID } from "app:lib/string-parser";
 import { User } from "./user";
 
 describe(User.name, () => {
 	let userRow: typeof users.$inferSelect = {
-		id: "a3j3p00nmf5fnhggm9zqc6l8" as CUID,
+		// biome-ignore lint/suspicious/noExplicitAny: It's a test
+		id: "a3j3p00nmf5fnhggm9zqc6l8" as any,
 		createdAt: new Date(),
 		updatedAt: new Date(),
 		email: "john.doe@example.com",

@@ -1,4 +1,4 @@
-import { TableEntity } from "app:core/entity";
+import { TableEntity } from "@edgefirst-dev/core";
 
 export class Team extends TableEntity {
 	get name() {

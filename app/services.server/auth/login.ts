@@ -2,12 +2,12 @@ import type { Membership } from "app:entities/membership";
 import type { Team } from "app:entities/team";
 import type { User } from "app:entities/user";
 
-import { Password } from "app:lib/password";
 import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { CredentialsRepository } from "app:repositories.server/credentials";
 import { MembershipsRepository } from "app:repositories.server/memberships";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
+import type { Password } from "@edgefirst-dev/core";
 import { Email } from "@edgefirst-dev/email";
 
 /**
