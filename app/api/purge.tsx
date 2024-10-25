@@ -14,6 +14,7 @@ export async function loader() {
 }
 
 export async function action() {
+	await orm().delete(schema.sessions).execute();
 	await orm().delete(schema.audits).execute();
 	await orm().delete(schema.memberships).execute();
 	await orm().delete(schema.teams).execute();
