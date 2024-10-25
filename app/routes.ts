@@ -1,4 +1,4 @@
-import { index, layout, route } from "@react-router/dev/routes";
+import { index, layout, prefix, route } from "@react-router/dev/routes";
 
 export const routes = [
 	index("./views/home.tsx"),
@@ -12,8 +12,10 @@ export const routes = [
 	]),
 
 	// API Routes
-	route("api/files/:key", "./api/files.ts"),
-	route("api/dev/purge", "./api/purge.tsx"),
+	...prefix("api", [
+		route("files/:key", "./api/files.ts"),
+		route("dev/purge", "./api/purge.tsx"),
+	]),
 
 	// Catch-all Route
 	route("*", "./views/catch-all.tsx"),
