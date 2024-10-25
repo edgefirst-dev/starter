@@ -33,7 +33,7 @@ export async function action() {
 
 export default function Component() {
 	let navigation = useNavigation();
-	let isSubmitting = navigation.state === "submitting";
+	let isPending = navigation.state !== "idle";
 
 	return (
 		<main className="flex items-center justify-center min-h-dvh w-full">
@@ -49,12 +49,12 @@ export default function Component() {
 					type="submit"
 					className="relative max-w-fit self-end rounded-lg dark:bg-neutral-600 px-5 py-2 dark:text-neutral-100 outline-blue-500 text-neutral-900 bg-neutral-100"
 				>
-					{isSubmitting && (
+					{isPending && (
 						<span className="absolute inset-0 flex justify-center items-center">
 							<Spinner aria-hidden className="size-5" />
 						</span>
 					)}
-					<span className={cn({ invisible: isSubmitting })}>Purge</span>
+					<span className={cn({ invisible: isPending })}>Purge</span>
 				</button>
 			</Form>
 		</main>

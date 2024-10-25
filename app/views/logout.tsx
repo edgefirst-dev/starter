@@ -19,7 +19,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function Component() {
 	let navigation = useNavigation();
-	let isSubmitting = navigation.state === "submitting";
+	let isPending = navigation.state !== "idle";
 
 	return (
 		<Form method="POST" className="contents">
@@ -28,12 +28,12 @@ export default function Component() {
 			<p>Do you want to leave the app?</p>
 
 			<Button type="submit" className="relative">
-				{isSubmitting && (
+				{isPending && (
 					<span className="absolute inset-0 flex justify-center items-center">
 						<Spinner aria-hidden className="size-5" />
 					</span>
 				)}
-				<span className={cn({ invisible: isSubmitting })}>Log Out</span>
+				<span className={cn({ invisible: isPending })}>Log Out</span>
 			</Button>
 		</Form>
 	);
