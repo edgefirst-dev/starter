@@ -1,8 +1,7 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
 import { GravatarProfile } from "app:entities/gravatar-profile";
+import { gravatar, server } from "app:mocks/server";
 import { Email } from "@edgefirst-dev/email";
-import { http, HttpResponse } from "msw";
-import { setupServer } from "msw/native";
 import { Gravatar } from "./gravatar";
 
 mock.module("@edgefirst-dev/core", () => {
@@ -19,7 +18,6 @@ mock.module("@edgefirst-dev/core", () => {
 });
 
 describe(Gravatar.name, () => {
-	let server = setupServer();
 	let email = Email.from("john.doe@company.com");
 
 	beforeAll(() => server.listen());
@@ -33,11 +31,7 @@ describe(Gravatar.name, () => {
 	test("#profile()", async () => {
 		let client = new Gravatar();
 
-		server.resetHandlers(
-			http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
-				return HttpResponse.json(mockResponse);
-			}),
-		);
+		server.resetHandlers(gravatar.success);
 
 		expect(client.profile(email)).resolves.toBeInstanceOf(GravatarProfile);
 	});
@@ -45,11 +39,7 @@ describe(Gravatar.name, () => {
 	test("#profile() with error", async () => {
 		let client = new Gravatar();
 
-		server.resetHandlers(
-			http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
-				return new HttpResponse(null, { status: 404 });
-			}),
-		);
+		server.resetHandlers(gravatar.notFoundError);
 
 		expect(client.profile(email)).rejects.toThrowError(Gravatar.NotFoundError);
 	});
@@ -57,11 +47,7 @@ describe(Gravatar.name, () => {
 	test("#profile() with rate limit error", async () => {
 		let client = new Gravatar();
 
-		server.resetHandlers(
-			http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
-				return new HttpResponse(null, { status: 429 });
-			}),
-		);
+		server.resetHandlers(gravatar.rateLimitError);
 
 		expect(client.profile(email)).rejects.toThrowError(Gravatar.RateLimitError);
 	});
@@ -69,11 +55,7 @@ describe(Gravatar.name, () => {
 	test("#profile() with server error", async () => {
 		let client = new Gravatar();
 
-		server.resetHandlers(
-			http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
-				return new HttpResponse(null, { status: 500 });
-			}),
-		);
+		server.resetHandlers(gravatar.serverError);
 
 		expect(client.profile(email)).rejects.toThrowError(Gravatar.ServerError);
 	});
@@ -81,11 +63,7 @@ describe(Gravatar.name, () => {
 	test("#displayName", async () => {
 		let client = new Gravatar();
 
-		server.resetHandlers(
-			http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
-				return HttpResponse.json(mockResponse);
-			}),
-		);
+		server.resetHandlers(gravatar.success);
 
 		let profile = await client.profile(email);
 
