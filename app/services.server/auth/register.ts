@@ -1,4 +1,6 @@
 import { Gravatar } from "app:clients/gravatar";
+import type { Credential } from "app:entities/credential";
+import type { GravatarProfile } from "app:entities/gravatar-profile";
 import type { Membership } from "app:entities/membership";
 import type { Team } from "app:entities/team";
 import type { User } from "app:entities/user";
@@ -8,7 +10,8 @@ import { CredentialsRepository } from "app:repositories.server/credentials";
 import { MembershipsRepository } from "app:repositories.server/memberships";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
-import { Password } from "@edgefirst-dev/core";
+import type schema from "db:schema";
+import { Entity, Password } from "@edgefirst-dev/core";
 import { Email } from "@edgefirst-dev/email";
 
 /**
@@ -16,13 +19,13 @@ import { Email } from "@edgefirst-dev/email";
  * and setting up a personal team.
  *
  * @param input - The registration input data containing the email and password.
- * @param repos - The dependency injection object containing repositories.
+ * @param deps - The dependency injection object containing repositories.
  * @returns A promise that resolves to the newly created user and team.
  * @throws {Error} If the user already exists or if the registration process fails.
  */
 export async function register(
 	input: register.Input,
-	repos = {
+	deps: register.Dependencies = {
 		audits: new AuditLogsRepository(),
 		users: new UsersRepository(),
 		teams: new TeamsRepository(),
@@ -36,7 +39,7 @@ export async function register(
 
 	let passwordHash = await input.password.hash();
 
-	await repos.users.findByEmail(input.email).then(([user]) => {
+	await deps.users.findByEmail(input.email).then(([user]) => {
 		if (user) throw new Error("User already exists");
 	});
 
@@ -47,24 +50,24 @@ export async function register(
 		SyncUserWithGravatarJob.enqueue({ email: input.email.toString() });
 	}
 
-	let user = await repos.users.create({
+	let user = await deps.users.create({
 		email: input.email.toString(),
 		displayName,
 	});
 
-	await repos.credentials.create({ userId: user.id, passwordHash });
+	await deps.credentials.create({ userId: user.id, passwordHash });
 
-	let team = await repos.teams.create({ name: "Personal Team" });
+	let team = await deps.teams.create({ name: "Personal Team" });
 
-	let membership = await repos.memberships.create({
+	let membership = await deps.memberships.create({
 		userId: user.id,
 		teamId: team.id,
 		role: "admin", // A user is the admin of their personal team
 		acceptedAt: new Date(), // Automatically accept the membership
 	});
 
-	await repos.audits.create(user, "user_register");
-	await repos.audits.create(user, "accepts_membership", membership);
+	await deps.audits.create(user, "user_register");
+	await deps.audits.create(user, "accepts_membership", membership);
 
 	return { user, team, membership };
 }
@@ -94,5 +97,40 @@ export namespace register {
 		team: Team;
 		/** The membership object linking the user to the team. */
 		membership: Membership;
+	}
+
+	export interface Dependencies {
+		audits: {
+			create(user: User, action: string, entity?: Entity): Promise<void>;
+		};
+		users: {
+			findByEmail(email: Email): Promise<User[]>;
+			create(data: {
+				email: string;
+				displayName: string | null;
+			}): Promise<User>;
+		};
+		teams: {
+			create(data: { name: string }): Promise<Team>;
+		};
+		memberships: {
+			create(
+				data: Pick<
+					typeof schema.memberships.$inferInsert,
+					"teamId" | "userId" | "role" | "acceptedAt"
+				>,
+			): Promise<Membership>;
+		};
+		credentials: {
+			create(
+				data: Pick<
+					typeof schema.credentials.$inferInsert,
+					"userId" | "passwordHash"
+				>,
+			): Promise<Credential>;
+		};
+		gravatar: {
+			profile(email: Email): Promise<GravatarProfile>;
+		};
 	}
 }
