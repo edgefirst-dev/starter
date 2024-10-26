@@ -1,6 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
 import { Credential } from "app:entities/credential";
-import { User } from "app:entities/user";
 import { Password } from "@edgefirst-dev/core";
 import { Email } from "@edgefirst-dev/email";
 import { login } from "./login";

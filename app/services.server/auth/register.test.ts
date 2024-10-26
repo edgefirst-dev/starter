@@ -1,17 +1,14 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
 
-import { emailVerifier, pwnedPasswords, server } from "app:mocks/server";
+import { emailVerifier, pwnedPasswords } from "app:mocks/server";
 import { Password } from "@edgefirst-dev/core";
 import { Email } from "@edgefirst-dev/email";
+import { setupServer } from "msw/native";
 import { register } from "./register";
-
-let waitUntil = mock().mockImplementation(
-	(promise: Promise<unknown>) => void 0,
-);
 
 mock.module("@edgefirst-dev/core", () => {
 	return {
-		waitUntil,
+		waitUntil: mock().mockImplementation((promise: Promise<unknown>) => void 0),
 		queue: mock().mockImplementation(() => {
 			return {
 				enqueue: mock().mockImplementation(() => void 0),
@@ -28,6 +25,7 @@ mock.module("@edgefirst-dev/core", () => {
 describe(register.name, () => {
 	let email = Email.from("john.doe@company.com");
 	let password = Password.from("abcDEF123!@#");
+	let server = setupServer();
 
 	beforeAll(() => server.listen());
 	afterAll(() => server.close());

@@ -1,7 +1,8 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
 import { GravatarProfile } from "app:entities/gravatar-profile";
-import { gravatar, server } from "app:mocks/server";
+import { gravatar } from "app:mocks/server";
 import { Email } from "@edgefirst-dev/email";
+import { setupServer } from "msw/native";
 import { Gravatar } from "./gravatar";
 
 mock.module("@edgefirst-dev/core", () => {
@@ -19,6 +20,7 @@ mock.module("@edgefirst-dev/core", () => {
 
 describe(Gravatar.name, () => {
 	let email = Email.from("john.doe@company.com");
+	let server = setupServer();
 
 	beforeAll(() => server.listen());
 	afterAll(() => server.close());

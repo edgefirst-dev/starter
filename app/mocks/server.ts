@@ -1,7 +1,4 @@
 import { http, HttpResponse } from "msw";
-import { setupServer } from "msw/native";
-
-export const server = setupServer();
 
 export const gravatar = {
 	success: http.get("https://api.gravatar.com/v3/profiles/:hash", () => {
