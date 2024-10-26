@@ -1,7 +1,7 @@
 import type { User } from "app:entities/user";
+import { Cookies } from "app:helpers/cookies";
 import { unauthorized } from "app:helpers/response";
 import { getSession, querySession } from "app:helpers/session";
-import { Cookies } from "app:lib/cookies";
 import { UsersRepository } from "app:repositories.server/users";
 import { redirect } from "react-router";
 

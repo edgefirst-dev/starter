@@ -1,7 +1,7 @@
 import { Spinner } from "app:components/spinner";
 import { cn } from "app:helpers/cn";
+import { Cookies } from "app:helpers/cookies";
 import { ok } from "app:helpers/response";
-import { Cookies } from "app:lib/cookies";
 import schema from "db:schema";
 import { orm } from "@edgefirst-dev/core";
 import { Form, redirect, useNavigation } from "react-router";

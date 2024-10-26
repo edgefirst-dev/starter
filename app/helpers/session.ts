@@ -1,4 +1,4 @@
-import { Cookies } from "app:lib/cookies";
+import { Cookies } from "app:helpers/cookies";
 import { SessionsRepository } from "app:repositories.server/sessions";
 import { waitUntil } from "@edgefirst-dev/core";
 import { redirect } from "react-router";

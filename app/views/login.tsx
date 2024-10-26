@@ -1,11 +1,11 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
 import { anonymous } from "app:helpers/auth";
+import { BodyParser } from "app:helpers/body-parser";
 import { cn } from "app:helpers/cn";
 import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { createSession } from "app:helpers/session";
-import { BodyParser } from "app:lib/body-parser";
 import { login } from "app:services.server/auth/login";
 import type * as Route from "types:views/+types.login";
 import { Password } from "@edgefirst-dev/core";
