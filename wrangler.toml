@@ -8,9 +8,11 @@ compatibility_date = "2024-10-11"
 # This is needed for AsyncLocalStorage to work
 compatibility_flags = ["nodejs_compat"]
 
+# Set the development port to be 3000
 dev.port = 3000
 
-assets = { directory = "./build/client", binding = "ASSETS" }
+# Enable serving static assets from the `./build/client` directory
+assets = { directory = "./build/client" }
 
 # To be able to use assets in your Worker, Smart placement needs to be off
 [placement]
@@ -20,30 +22,40 @@ mode = "off"
 [observability]
 enabled = true
 
+# Configure your D1 database
 [[d1_databases]]
 binding = "DB"
 database_name = "stack-db"
 database_id = "e746a19d-d890-4321-9c30-5167828540a2"
 migrations_dir = "./db/migrations"
 
+# Configure your KV namespace
 [[kv_namespaces]]
 binding = "KV"
 id = "1473f4ea43174ad5853a017f8fde1f37"
 
+# Configure your R2 bucket
 [[r2_buckets]]
 binding = "FS"
 bucket_name = "stack-blob"
 
+# Configure this worker as a queue producer
 [[queues.producers]]
 queue = "edgefirst-queue"
 binding = "QUEUE"
 
+# Configure this worker as a queue consumer
 [[queues.consumers]]
 queue = "edgefirst-queue"
 
+# Enable the AI service
+# Note that using AI on development can incur additional costs as it uses Worker
+# cloud resources and not your local machine
 [ai]
 binding = "AI"
 
 # Uncomment to enable cron jobs
+# Note that this will trigger your Worker every minute, increasing your request
+# count and potentially incurring additional costs
 # [triggers]
 # crons = ["* * * * *"]
