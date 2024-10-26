@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import type { users } from "db:schema";
 
+import { Email } from "@edgefirst-dev/email";
 import { User } from "./user";
 
 describe(User.name, () => {
@@ -21,6 +22,21 @@ describe(User.name, () => {
 		let user = User.from(userRow);
 		expect(user).toBeInstanceOf(User);
 		expect(user.toString()).toBe("user:a3j3p00nmf5fnhggm9zqc6l8");
+	});
+
+	test("get email", () => {
+		let user = User.from(userRow);
+		expect(user.email).toBeInstanceOf(Email);
+	});
+
+	test("get emailVerifiedAt", () => {
+		let user = User.from(userRow);
+		expect(user.emailVerifiedAt).toBeInstanceOf(Date);
+	});
+
+	test("get hasEmailVerified", () => {
+		let user = User.from(userRow);
+		expect(user.hasEmailVerified).toBe(true);
 	});
 
 	test("#avatar fallbacks to Gravatar if no avatarKey", () => {
