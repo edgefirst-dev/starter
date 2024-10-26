@@ -29,7 +29,7 @@ A full-stack starter kit for Edge-first applications built with React on top of 
 Create a new React application using the Edge-first Starter Kit:
 
 ```sh
-npm create react-router@latest my-app --template=edgefirst-dev/starter-worker
+npx degit edgefirst-dev/starter-worker my-app
 ```
 
 Then update your `wrangler.toml` to match your Cloudflare account and create a `.dev.vars` with these variables:
