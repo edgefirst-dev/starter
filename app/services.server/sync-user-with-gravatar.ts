@@ -5,16 +5,29 @@ import { Email } from "@edgefirst-dev/email";
 
 export async function syncUserWithGravatar(
 	input: syncUserWithGravatar.Input,
-	repos = { gravatar: new Gravatar(), users: new UsersRepository() },
+	deps: syncUserWithGravatar.Dependencies = {
+		gravatar: new Gravatar(),
+		users: new UsersRepository(),
+	},
 ) {
-	let [user] = await repos.users.findByEmail(input.email);
+	let [user] = await deps.users.findByEmail(input.email);
 	if (!user) throw new Error("User not found");
-	let profile = await repos.gravatar.profile(input.email);
-	await repos.users.update(user.id, { displayName: profile.displayName });
+	let profile = await deps.gravatar.profile(input.email);
+	await deps.users.update(user.id, { displayName: profile.displayName });
 }
 
 export namespace syncUserWithGravatar {
 	export interface Input {
 		readonly email: Email;
+	}
+
+	export interface Dependencies {
+		gravatar: {
+			profile(email: Email): Promise<{ readonly displayName: string }>;
+		};
+		users: {
+			findByEmail(email: Email): Promise<readonly { readonly id: string }[]>;
+			update(id: string, data: { readonly displayName: string }): Promise<void>;
+		};
 	}
 }
