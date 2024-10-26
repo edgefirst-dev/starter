@@ -11,7 +11,7 @@ import { MembershipsRepository } from "app:repositories.server/memberships";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
 import type schema from "db:schema";
-import { Entity, Password } from "@edgefirst-dev/core";
+import { Entity, Password, waitUntil } from "@edgefirst-dev/core";
 import { Email } from "@edgefirst-dev/email";
 
 /**
@@ -66,8 +66,8 @@ export async function register(
 		acceptedAt: new Date(), // Automatically accept the membership
 	});
 
-	await deps.audits.create(user, "user_register");
-	await deps.audits.create(user, "accepts_membership", membership);
+	waitUntil(deps.audits.create(user, "user_register"));
+	waitUntil(deps.audits.create(user, "accepts_membership", membership));
 
 	return { user, team, membership };
 }
