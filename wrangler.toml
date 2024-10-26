@@ -14,6 +14,11 @@ dev.port = 3000
 # Enable serving static assets from the `./build/client` directory
 assets = { directory = "./build/client" }
 
+# Enables the Browser Rendering service
+# To use it locally, update the ./scripts/dev.ts file and add `--remote` after 
+# the `bun start` command
+browser = { binding = "BROWSER" }
+
 # To be able to use assets in your Worker, Smart placement needs to be off
 [placement]
 mode = "off"
@@ -48,7 +53,7 @@ binding = "QUEUE"
 [[queues.consumers]]
 queue = "edgefirst-queue"
 
-# Enable the AI service
+# Enables the Workers AI service
 # Note that using AI on development can incur additional costs as it uses Worker
 # cloud resources and not your local machine
 [ai]
