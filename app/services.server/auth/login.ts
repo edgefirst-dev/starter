@@ -2,25 +2,26 @@ import type { Membership } from "app:entities/membership";
 import type { Team } from "app:entities/team";
 import type { User } from "app:entities/user";
 
+import type { Credential } from "app:entities/credential";
 import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { CredentialsRepository } from "app:repositories.server/credentials";
 import { MembershipsRepository } from "app:repositories.server/memberships";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
-import type { Password } from "@edgefirst-dev/core";
+import { type Entity, type Password, waitUntil } from "@edgefirst-dev/core";
 import { Email } from "@edgefirst-dev/email";
 
 /**
  * Logs in a user by verifying the provided email and password.
  *
  * @param input - The login input data containing the email and password.
- * @param repos - The dependency injection object containing repositories.
+ * @param deps - The dependency injection object containing repositories.
  * @returns A promise that resolves to the logged-in user.
  * @throws {Error} If the user is not found or the credentials are invalid.
  */
 export async function login(
 	input: login.Input,
-	repos = {
+	deps: login.Dependencies = {
 		audits: new AuditLogsRepository(),
 		users: new UsersRepository(),
 		teams: new TeamsRepository(),
@@ -28,24 +29,26 @@ export async function login(
 		memberships: new MembershipsRepository(),
 	},
 ): Promise<login.Output> {
-	let [user] = await repos.users.findByEmail(input.email);
+	let [user] = await deps.users.findByEmail(input.email);
 	if (!user) throw new Error("User not found");
 
-	let [credential] = await repos.credentials.findByUser(user);
+	let [credential] = await deps.credentials.findByUser(user);
 	if (!credential) throw new Error("User has no associated credentials");
 
 	// Compare the provided password with the stored password hash
 	if (await credential.match(input.password)) {
-		let memberships = await repos.memberships.findByUser(user);
+		let memberships = await deps.memberships.findByUser(user);
 		if (memberships.length === 0) throw new Error("User has no memberships");
 		// biome-ignore lint/style/noNonNullAssertion: We know there's one element
-		let [team] = await repos.teams.findByMembership(memberships.at(0)!);
+		let [team] = await deps.teams.findByMembership(memberships.at(0)!);
 		if (!team) throw new Error("User has no team");
-		await repos.audits.create(user, "user_login");
+		waitUntil(deps.audits.create(user, "user_login"));
 		return { user, team, memberships };
 	}
 
-	await repos.audits.create(user, "invalid_credentials_attempt", credential);
+	waitUntil(
+		deps.audits.create(user, "invalid_credentials_attempt", credential),
+	);
 
 	throw new Error("Invalid credentials");
 }
@@ -73,5 +76,23 @@ export namespace login {
 		team: Team;
 		/** The membership object linking the user to the team. */
 		memberships: Membership[];
+	}
+
+	export interface Dependencies {
+		audits: {
+			create(user: User, action: string, entity?: Entity): Promise<void>;
+		};
+		users: {
+			findByEmail(email: Email): Promise<User[]>;
+		};
+		teams: {
+			findByMembership(membership: Membership): Promise<Team[]>;
+		};
+		credentials: {
+			findByUser(user: User): Promise<Credential[]>;
+		};
+		memberships: {
+			findByUser(user: User): Promise<Membership[]>;
+		};
 	}
 }
