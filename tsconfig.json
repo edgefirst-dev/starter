@@ -19,7 +19,6 @@
 			"@react-router/cloudflare"
 		],
 		"rootDirs": [".", "./.react-router/types"],
-		"plugins": [{ "name": "@react-router/dev" }],
 		"paths": {
 			"config:*": ["./config/*"],
 			"types:*": ["./.react-router/types/app/*"],

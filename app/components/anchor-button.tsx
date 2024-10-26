@@ -7,7 +7,7 @@ export function AnchorButton(props: ComponentProps<typeof Link>) {
 		<Link
 			{...props}
 			className={cn(
-				"max-w-fit rounded-lg dark:bg-white px-5 py-2 dark:text-black outline-blue-500 text-white bg-black",
+				"max-w-fit rounded-lg dark:bg-white px-5 py-2 dark:text-black outline-info-500 text-white bg-black",
 				props.className,
 			)}
 		/>

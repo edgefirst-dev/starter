@@ -1,6 +1,5 @@
 import { reactRouter } from "@react-router/dev/vite";
 import { cloudflareDevProxy } from "@react-router/dev/vite/cloudflare";
-import tailwind from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import { denyImports } from "vite-env-only";
 import { cjsInterop } from "vite-plugin-cjs-interop";
@@ -31,6 +30,5 @@ export default defineConfig({
 		}),
 		cloudflareDevProxy(),
 		reactRouter(),
-		tailwind(),
 	],
 });

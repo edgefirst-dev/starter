@@ -1,3 +1,4 @@
+import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
 import { cn } from "app:helpers/cn";
 import { Cookies } from "app:helpers/cookies";
@@ -45,17 +46,14 @@ export default function Component() {
 
 				<p>Are you sure you want to delete all the data from the database?</p>
 
-				<button
-					type="submit"
-					className="relative max-w-fit self-end rounded-lg dark:bg-neutral-600 px-5 py-2 dark:text-neutral-100 outline-blue-500 text-neutral-900 bg-neutral-100"
-				>
+				<Button type="submit" className="relative self-end">
 					{isPending && (
 						<span className="absolute inset-0 flex justify-center items-center">
 							<Spinner aria-hidden className="size-5" />
 						</span>
 					)}
 					<span className={cn({ invisible: isPending })}>Purge</span>
-				</button>
+				</Button>
 			</Form>
 		</main>
 	);
