@@ -41,6 +41,9 @@ binding = "QUEUE"
 [[queues.consumers]]
 queue = "edgefirst-queue"
 
+[ai]
+binding = "AI"
+
 # Uncomment to enable cron jobs
 # [triggers]
 # crons = ["* * * * *"]
