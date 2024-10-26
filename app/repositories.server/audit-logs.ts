@@ -1,11 +1,10 @@
-import { Repository } from "app:core/repository";
 import type { User } from "app:entities/user";
 import { audits } from "db:schema";
-import type { Entity } from "@edgefirst-dev/core";
+import { type Entity, orm } from "@edgefirst-dev/core";
 
-export class AuditLogsRepository extends Repository {
+export class AuditLogsRepository {
 	async create(user: User, action: AuditAction, auditable?: Entity) {
-		let { success } = await this.db
+		let { success } = await orm()
 			.insert(audits)
 			.values({ action, userId: user.id, auditable: auditable?.toString() });
 		if (!success) throw new Error("Failed to create audit log");

@@ -1,14 +1,14 @@
-import { Repository } from "app:core/repository";
 import { Credential } from "app:entities/credential";
 import type { User } from "app:entities/user";
 import { credentials } from "db:schema";
+import { orm } from "@edgefirst-dev/core";
 import { eq } from "drizzle-orm";
 
-export class CredentialsRepository extends Repository {
+export class CredentialsRepository {
 	async create(
 		input: Pick<typeof credentials.$inferInsert, "userId" | "passwordHash">,
 	) {
-		let [credential] = await this.db
+		let [credential] = await orm()
 			.insert(credentials)
 			.values(input)
 			.returning();
@@ -18,7 +18,7 @@ export class CredentialsRepository extends Repository {
 	}
 
 	async findByUser(user: User) {
-		let list = await this.db
+		let list = await orm()
 			.select()
 			.from(credentials)
 			.where(eq(credentials.userId, user.id))
@@ -29,7 +29,7 @@ export class CredentialsRepository extends Repository {
 	}
 
 	async createResetToken(credential: Credential, token: string) {
-		await this.db
+		await orm()
 			.update(credentials)
 			.set({ resetToken: token })
 			.where(eq(credentials.id, credential.id))
@@ -37,7 +37,7 @@ export class CredentialsRepository extends Repository {
 	}
 
 	async revokeResetToken(credential: Credential) {
-		await this.db
+		await orm()
 			.update(credentials)
 			.set({ resetToken: null })
 			.where(eq(credentials.id, credential.id))

@@ -1,14 +1,13 @@
-import { Repository } from "app:core/repository";
 import { Session } from "app:entities/session";
 import type { User } from "app:entities/user";
 import schema from "db:schema";
-import type { IPAddress, UserAgent } from "@edgefirst-dev/core";
+import { type IPAddress, type UserAgent, orm } from "@edgefirst-dev/core";
 import { eq } from "drizzle-orm";
 
-export class SessionsRepository extends Repository {
+export class SessionsRepository {
 	async findById(id: Session["id"]) {
 		return Session.fromMany(
-			await this.db
+			await orm()
 				.select()
 				.from(schema.sessions)
 				.where(eq(schema.sessions.id, id))
@@ -18,7 +17,7 @@ export class SessionsRepository extends Repository {
 	}
 
 	async create({ user, ip, ua, payload }: SessionsRepository.CreateInput) {
-		let [session] = await this.db
+		let [session] = await orm()
 			.insert(schema.sessions)
 			.values({
 				userId: user.id,
@@ -34,14 +33,14 @@ export class SessionsRepository extends Repository {
 	}
 
 	async destroy(id: Session["id"]) {
-		await this.db
+		await orm()
 			.delete(schema.sessions)
 			.where(eq(schema.sessions.id, id))
 			.execute();
 	}
 
 	async recordActivity(id: Session["id"]) {
-		await this.db
+		await orm()
 			.update(schema.sessions)
 			.set({ lastActivityAt: new Date() })
 			.where(eq(schema.sessions.id, id))

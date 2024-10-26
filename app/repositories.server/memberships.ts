@@ -1,17 +1,17 @@
-import { Repository } from "app:core/repository";
 import { Membership } from "app:entities/membership";
 import type { User } from "app:entities/user";
 import { memberships } from "db:schema";
+import { orm } from "@edgefirst-dev/core";
 import { eq } from "drizzle-orm";
 
-export class MembershipsRepository extends Repository {
+export class MembershipsRepository {
 	async create(
 		input: Pick<
 			typeof memberships.$inferInsert,
 			"teamId" | "userId" | "role" | "acceptedAt"
 		>,
 	) {
-		let [membership] = await this.db
+		let [membership] = await orm()
 			.insert(memberships)
 			.values(input)
 			.returning();
@@ -20,7 +20,7 @@ export class MembershipsRepository extends Repository {
 	}
 
 	async findByUser(user: User) {
-		let items = await this.db
+		let items = await orm()
 			.select()
 			.from(memberships)
 			.where(eq(memberships.userId, user.id))

@@ -1,16 +1,16 @@
-import { Repository } from "app:core/repository";
 import { User } from "app:entities/user";
 import schema from "db:schema";
+import { orm } from "@edgefirst-dev/core";
 import { eq } from "drizzle-orm";
 
-export class UsersRepository extends Repository {
+export class UsersRepository {
 	async findAll() {
-		return User.fromMany(await this.db.select().from(schema.users).execute());
+		return User.fromMany(await orm().select().from(schema.users).execute());
 	}
 
 	async findById(id: User["id"]) {
 		return User.fromMany(
-			await this.db
+			await orm()
 				.select()
 				.from(schema.users)
 				.where(eq(schema.users.id, id))
@@ -21,7 +21,7 @@ export class UsersRepository extends Repository {
 
 	async findByEmail(email: User["email"]) {
 		return User.fromMany(
-			await this.db
+			await orm()
 				.select()
 				.from(schema.users)
 				.where(eq(schema.users.email, email.toString()))
@@ -31,7 +31,7 @@ export class UsersRepository extends Repository {
 	}
 
 	async create(input: Omit<typeof schema.users.$inferInsert, "id">) {
-		let [user] = await this.db.insert(schema.users).values(input).returning();
+		let [user] = await orm().insert(schema.users).values(input).returning();
 		if (user) return User.from(user);
 		throw new Error("Failed to create user");
 	}
@@ -40,7 +40,7 @@ export class UsersRepository extends Repository {
 		id: User["id"],
 		input: Partial<typeof schema.users.$inferInsert>,
 	) {
-		await this.db
+		await orm()
 			.update(schema.users)
 			.set(input)
 			.where(eq(schema.users.id, id))
@@ -48,7 +48,7 @@ export class UsersRepository extends Repository {
 	}
 
 	async verifyEmail(user: User) {
-		await this.db
+		await orm()
 			.update(schema.users)
 			.set({ emailVerifiedAt: new Date() })
 			.where(eq(schema.users.id, user.id))
