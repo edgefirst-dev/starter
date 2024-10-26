@@ -76,7 +76,6 @@ export default function Component({ actionData }: Route.ComponentProps) {
 					type="email"
 					name="email"
 					placeholder="john.doe@example.com"
-					defaultValue="hello@sergiodxa.com"
 					autoCapitalize="off"
 					className="w-full rounded-md border border-neutral-700 px-5 py-2 dark:bg-neutral-800 dark:text-white dark:placeholder:text-neutral-300"
 				/>
@@ -88,7 +87,6 @@ export default function Component({ actionData }: Route.ComponentProps) {
 					type="password"
 					name="password"
 					autoComplete="new-password"
-					defaultValue="soswad-cicbat-syDhe5"
 					className="w-full rounded-md border border-neutral-700 px-5 py-2 dark:bg-neutral-800 dark:text-white dark:placeholder:text-neutral-300"
 				/>
 			</label>
