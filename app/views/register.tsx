@@ -1,7 +1,7 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
 import { anonymous } from "app:helpers/auth";
-import { BodyParser } from "app:helpers/body-parser";
+import { parseBody } from "app:helpers/body-parser";
 import { cn } from "app:helpers/cn";
 import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
@@ -23,7 +23,8 @@ export async function action({ request, context }: Route.ActionArgs) {
 	await rateLimit(request.headers);
 
 	try {
-		let data = await BodyParser.from(request).formData(
+		let data = await parseBody(
+			request,
 			class extends Data<FormParser> implements register.Input {
 				get displayName() {
 					if (!this.parser.has("displayName")) return null;
