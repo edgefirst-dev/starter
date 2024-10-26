@@ -2,6 +2,9 @@
 
 A full-stack starter kit for Edge-first applications built with React on top of Cloudflare Developer Platform.
 
+> [!IMPORTANT]
+> This is still in development, the authentication code included works but is not ready or complete, however app works just fine ignoring that.
+
 ## Features
 
 - [x] Deploy to **[Cloudflare Workers](https://workers.cloudflare.com/)**
