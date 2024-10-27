@@ -1,17 +1,18 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
+import { authenticate } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { Cookies } from "app:helpers/cookies";
 import { ok } from "app:helpers/response";
 import schema from "db:schema";
+import * as Route from "types:api/+types.purge";
 import { orm } from "@edgefirst-dev/core";
 import { Form, redirect, useNavigation } from "react-router";
 
-export async function loader() {
-	// if (env().fetch("APP_ENV", "production") === "production") {
-	// 	throw redirect("/404");
-	// }
-	return ok(null);
+export async function loader({ request }: Route.LoaderArgs) {
+	let user = await authenticate(request);
+	if (user.isRoot) return ok(null);
+	throw redirect("/404");
 }
 
 export async function action() {
