@@ -29,7 +29,7 @@ export default bootstrap({
 
 		let context = await getLoadContext(request);
 
-		// @ts-expect-error The RR handler exepcts a Request with a different type
+		// @ts-expect-error The RR handler expects a Request with a different type
 		return (await handler(request, context)) as Response;
 	},
 });
