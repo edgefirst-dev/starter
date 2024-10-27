@@ -73,7 +73,7 @@ export const memberships = sqliteTable(
 		updatedAt,
 		acceptedAt: timestamp("accepted_at"),
 		// Attributes
-		role: text("role", { mode: "text", enum: ["member", "admin"] })
+		role: text("role", { mode: "text", enum: ["member", "owner"] })
 			.notNull()
 			.default("member"),
 		// Relationships

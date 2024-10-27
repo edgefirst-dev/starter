@@ -62,7 +62,7 @@ export async function register(
 	let membership = await deps.memberships.create({
 		userId: user.id,
 		teamId: team.id,
-		role: "admin", // A user is the admin of their personal team
+		role: "owner", // A user is the owner of their personal team
 		acceptedAt: new Date(), // Automatically accept the membership
 	});
 
