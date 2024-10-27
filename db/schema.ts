@@ -46,7 +46,7 @@ export const audits = sqliteTable(
 		// Relationships
 		userId: text("user_id", { mode: "text" })
 			.notNull()
-			.references(() => users.id),
+			.references(() => users.id, { onDelete: "cascade" }),
 	},
 	(t) => {
 		return {
@@ -79,10 +79,10 @@ export const memberships = sqliteTable(
 		// Relationships
 		userId: text("user_id", { mode: "text" })
 			.notNull()
-			.references(() => users.id),
+			.references(() => users.id, { onDelete: "cascade" }),
 		teamId: text("team_id", { mode: "text" })
 			.notNull()
-			.references(() => teams.id),
+			.references(() => teams.id, { onDelete: "cascade" }),
 	},
 	(t) => {
 		return {
@@ -107,7 +107,7 @@ export const credentials = sqliteTable(
 		// Relationships
 		userId: text("user_id", { mode: "text" })
 			.notNull()
-			.references(() => users.id),
+			.references(() => users.id, { onDelete: "cascade" }),
 	},
 	(t) => {
 		return {
@@ -132,7 +132,7 @@ export const sessions = sqliteTable("sessions", {
 	// Relationships
 	userId: text("user_id", { mode: "text" })
 		.notNull()
-		.references(() => users.id),
+		.references(() => users.id, { onDelete: "cascade" }),
 });
 
 export default { users, audits, teams, memberships, credentials, sessions };
