@@ -16,12 +16,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export async function action() {
-	await orm().delete(schema.sessions).execute();
-	await orm().delete(schema.audits).execute();
-	await orm().delete(schema.memberships).execute();
-	await orm().delete(schema.teams).execute();
-	await orm().delete(schema.credentials).execute();
 	await orm().delete(schema.users).execute();
+	await orm().delete(schema.teams).execute();
 
 	let headers = new Headers();
 
