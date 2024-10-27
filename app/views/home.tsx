@@ -10,7 +10,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
 	return (
-		<main className="flex justify-center items-center flex-col min-h-dvh gap-8">
+		<main className="min-h-dvh w-full flex flex-col justify-center items-center">
 			<aside className="flex gap-2 absolute top-0 right-0 pt-4 pr-4">
 				{loaderData.isSignedIn ? (
 					<Link to="/profile" className="hover:underline">
@@ -28,17 +28,16 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 				)}
 			</aside>
 
-			<header className="contents text-center">
-				<h1 className="font-bold text-3xl tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+			<div className="flex flex-col justify-center items-center gap-y-6 max-w-lg">
+				<h1 className="text-4xl/none font-semibold text-center text-balance">
 					Edge-first Starter Kit for React
 				</h1>
-				<p className="mx-auto max-w-[700px] text-neutral-500 md:text-xl dark:text-neutral-400">
+
+				<p className="text-lg/normal text-center text-balance">
 					Build lightning-fast React applications with edge computing. Deploy
 					globally and scale effortlessly.
 				</p>
-			</header>
 
-			<div className="flex gap-4">
 				<AnchorButton
 					reloadDocument
 					to="https://github.com/edgefirst-dev/starter"
