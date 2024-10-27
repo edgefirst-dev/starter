@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { index, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { ID_LENGTH, cuid } from "./helpers/id";
 import { createdAt, timestamp, updatedAt } from "./helpers/timestamp";
@@ -135,4 +136,62 @@ export const sessions = sqliteTable("sessions", {
 		.references(() => users.id, { onDelete: "cascade" }),
 });
 
-export default { users, audits, teams, memberships, credentials, sessions };
+export const usersRelations = relations(users, ({ many, one }) => {
+	return {
+		audits: many(audits),
+		memberships: many(memberships),
+		credentials: one(credentials),
+		sessions: many(sessions),
+	};
+});
+
+export const teamsRelations = relations(teams, ({ many }) => {
+	return {
+		memberships: many(memberships),
+	};
+});
+
+export const membershipsRelations = relations(memberships, ({ one }) => {
+	return {
+		user: one(users, {
+			fields: [memberships.userId],
+			references: [users.id],
+		}),
+		team: one(teams, {
+			fields: [memberships.teamId],
+			references: [teams.id],
+		}),
+	};
+});
+
+export const credentialsRelations = relations(credentials, ({ one }) => {
+	return {
+		user: one(users, {
+			fields: [credentials.userId],
+			references: [users.id],
+		}),
+	};
+});
+
+export const sessionsRelations = relations(sessions, ({ one }) => {
+	return {
+		user: one(users, {
+			fields: [sessions.userId],
+			references: [users.id],
+		}),
+	};
+});
+
+export default {
+	users,
+	audits,
+	teams,
+	memberships,
+	credentials,
+	sessions,
+	usersRelations,
+	teamsRelations,
+	membershipsRelations,
+	credentialsRelations,
+	sessionsRelations,
+};
