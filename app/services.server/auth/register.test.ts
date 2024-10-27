@@ -61,7 +61,7 @@ describe(register.name, () => {
 		expect(memberships.create).toHaveBeenCalledWith({
 			userId: expect.any(String),
 			teamId: expect.any(String),
-			role: "admin",
+			role: "owner",
 			acceptedAt: expect.any(Date),
 		});
 		expect(audits.create).toHaveBeenCalledWith(
@@ -82,7 +82,7 @@ describe(register.name, () => {
 
 		users.findByEmail.mockResolvedValue([{ id: "1" }]);
 
-		await expect(
+		expect(
 			register(
 				{ email, password, displayName: null },
 				{ users, credentials, memberships, teams, audits, gravatar },
@@ -103,7 +103,7 @@ describe(register.name, () => {
 		users.findByEmail.mockResolvedValue([]);
 		users.create.mockResolvedValue({ id: "1" });
 
-		await expect(
+		expect(
 			register(
 				{ email, password, displayName: null },
 				{ users, credentials, memberships, teams, audits, gravatar },
@@ -123,7 +123,7 @@ describe(register.name, () => {
 
 		users.findByEmail.mockResolvedValue([]);
 
-		await expect(
+		expect(
 			register(
 				{ email, password, displayName: null },
 				{ users, credentials, memberships, teams, audits, gravatar },
