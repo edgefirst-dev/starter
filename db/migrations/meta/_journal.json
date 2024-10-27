@@ -15,6 +15,13 @@
 			"when": 1729758956363,
 			"tag": "20241024083556_natural_madame_masque",
 			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "6",
+			"when": 1730007597504,
+			"tag": "20241027053957_huge_echo",
+			"breakpoints": true
 		}
 	]
 }
