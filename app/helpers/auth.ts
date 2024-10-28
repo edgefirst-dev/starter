@@ -29,6 +29,12 @@ export async function anonymous(request: Request, returnTo: string) {
 	if (session) throw redirect(returnTo);
 }
 
+export async function rootOnly(request: Request) {
+	let user = await authenticate(request);
+	if (user.isRoot) return user;
+	throw unauthorized({ message: "Unauthorized" });
+}
+
 /** Checks if the user is authenticated or not */
 export async function isAuthenticated(request: Request) {
 	if (await querySession(request)) return true;
