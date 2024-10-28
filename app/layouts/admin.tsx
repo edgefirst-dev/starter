@@ -9,39 +9,32 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function Component() {
+	let links = [{ to: "/admin/dashboard", label: "Dashboard" }];
+
 	return (
-		<div>
-			<div className="border-b border-neutral-500">
-				<header className="flex flex-row gap-8 max-w-screen-xl mx-auto items-center py-2">
-					<h1>Admin Panel</h1>
+		<>
+			<header className="border-b border-neutral-200 dark:border-neutral-500">
+				<nav className="flex flex-row gap-8 max-w-screen-xl mx-auto items-center py-2">
+					<ul className="flex flex-row">
+						{links.map((link) => {
+							return (
+								<li key={link.to}>
+									<NavLink
+										to={link.to}
+										className="py-1.5 px-2 flex items-end justify-center dark:hover:bg-neutral-800 hover:bg-neutral-100 rounded-md"
+									>
+										{link.label}
+									</NavLink>
+								</li>
+							);
+						})}
+					</ul>
+				</nav>
+			</header>
 
-					<nav>
-						<ul className="flex flex-row">
-							<li>
-								<NavLink
-									to="/admin/dashboard"
-									className="py-1.5 px-2 flex items-end justify-center hover:bg-neutral-800 rounded"
-								>
-									Dashboard
-								</NavLink>
-							</li>
-
-							<li>
-								<NavLink
-									to="/admin/users"
-									className="py-1.5 px-2 flex items-end justify-center hover:bg-neutral-800 rounded"
-								>
-									Users
-								</NavLink>
-							</li>
-						</ul>
-					</nav>
-				</header>
-			</div>
-
-			<main className="max-w-screen-xl mx-auto py-24 max-xl:px-5">
+			<main className="max-w-screen-lg mx-auto py-24 max-lg:px-5 w-full">
 				<Outlet />
 			</main>
-		</div>
+		</>
 	);
 }
