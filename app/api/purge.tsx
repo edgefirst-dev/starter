@@ -1,6 +1,6 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
-import { authenticate } from "app:helpers/auth";
+import { rootOnly } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { Cookies } from "app:helpers/cookies";
 import { ok } from "app:helpers/response";
@@ -10,9 +10,8 @@ import { orm } from "@edgefirst-dev/core";
 import { Form, redirect, useNavigation } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	let user = await authenticate(request);
-	if (user.isRoot) return ok(null);
-	throw redirect("/404");
+	await rootOnly(request);
+	return ok(null);
 }
 
 export async function action() {
