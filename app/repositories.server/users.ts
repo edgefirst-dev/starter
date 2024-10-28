@@ -1,7 +1,7 @@
 import { User } from "app:entities/user";
 import schema from "db:schema";
 import { orm } from "@edgefirst-dev/core";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 
 export class UsersRepository {
 	async findAll() {
@@ -53,5 +53,13 @@ export class UsersRepository {
 			.set({ emailVerifiedAt: new Date() })
 			.where(eq(schema.users.id, user.id))
 			.execute();
+	}
+
+	async count() {
+		let [result] = await orm()
+			.select({ count: count() })
+			.from(schema.users)
+			.execute();
+		return result?.count ?? 0;
 	}
 }
