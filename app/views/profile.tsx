@@ -1,10 +1,15 @@
 import { authenticate } from "app:helpers/auth";
 import { ok } from "app:helpers/response";
+import { getSession } from "app:helpers/session";
+import { SessionsRepository } from "app:repositories.server/sessions";
 import type * as Route from "types:views/+types.profile";
 import { Link } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	let user = await authenticate(request, "/register");
+	let currentSession = await getSession(request);
+
+	let sessions = await new SessionsRepository().findByUser(user);
 
 	return ok({
 		user: {
@@ -12,12 +17,23 @@ export async function loader({ request }: Route.LoaderArgs) {
 			displayName: user.displayName,
 			hasEmailVerified: user.hasEmailVerified,
 		},
+
+		sessions: sessions.map((session) => {
+			return {
+				id: session.id,
+				ip: session.ip?.valueOf() ?? null,
+				ua: session.ua
+					? { browser: session.ua?.browser.name, os: session.ua?.os.name }
+					: null,
+				isCurrent: currentSession.id === session.id,
+			};
+		}),
 	});
 }
 
 export default function Component({ loaderData }: Route.ComponentProps) {
 	return (
-		<main className="flex items-center justify-center min-h-dvh w-full">
+		<main className="flex flex-col items-center justify-center min-h-dvh w-full gap-8">
 			<aside className="flex gap-2 absolute top-0 right-0 pt-4 pr-4">
 				<Link to="/logout" className="hover:underline">
 					Leave
@@ -46,6 +62,32 @@ export default function Component({ loaderData }: Route.ComponentProps) {
 					</p>
 				)}
 			</div>
+
+			<section className="w-full max-w-screen-xl mx-auto border dark:border-l-neutral-700 p-6 rounded-xl">
+				<header>
+					<h2 className="text-xl/none font-semibold">Session</h2>
+					<hr />
+					<p className="text-lg/normal">
+						This is a list of devices that have logged into your account. Revoke
+						any sessions that you do not recognize.
+					</p>
+				</header>
+
+				<ol>
+					{loaderData.sessions.map((session) => {
+						return (
+							<li key={session.id}>
+								<div>
+									<p>
+										{session.ip} - {session.ua?.browser}
+									</p>
+									{session.isCurrent && <p>Your current session</p>}
+								</div>
+							</li>
+						);
+					})}
+				</ol>
+			</section>
 		</main>
 	);
 }

@@ -16,6 +16,16 @@ export class SessionsRepository {
 		);
 	}
 
+	async findByUser(user: User) {
+		return Session.fromMany(
+			await orm()
+				.select()
+				.from(schema.sessions)
+				.where(eq(schema.sessions.userId, user.id))
+				.execute(),
+		);
+	}
+
 	async create({ user, ip, ua, payload }: SessionsRepository.CreateInput) {
 		let [session] = await orm()
 			.insert(schema.sessions)
