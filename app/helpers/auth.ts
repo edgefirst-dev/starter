@@ -29,6 +29,7 @@ export async function anonymous(request: Request, returnTo: string) {
 	if (session) throw redirect(returnTo);
 }
 
+/** Only allow access to a route to authenticated root users */
 export async function rootOnly(request: Request) {
 	let user = await authenticate(request);
 	if (user.isRoot) return user;
