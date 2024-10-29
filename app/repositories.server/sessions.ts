@@ -2,7 +2,7 @@ import { Session } from "app:entities/session";
 import type { User } from "app:entities/user";
 import schema from "db:schema";
 import { type IPAddress, type UserAgent, orm } from "@edgefirst-dev/core";
-import { desc, eq, lte } from "drizzle-orm";
+import { desc, eq, gte } from "drizzle-orm";
 
 export class SessionsRepository {
 	async findById(id: Session["id"]) {
@@ -67,7 +67,7 @@ export class SessionsRepository {
 			await orm()
 				.select()
 				.from(schema.sessions)
-				.where(lte(schema.sessions.expiresAt, new Date()))
+				.where(gte(schema.sessions.expiresAt, new Date()))
 				.execute(),
 		);
 	}
