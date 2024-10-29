@@ -1,7 +1,7 @@
 import schema from "db:schema";
 
 import { SyncUserWithGravatarJob } from "app:jobs/sync-user-with-gravatar.js";
-import { GenerateReportTask } from "app:tasks/generate-report.js";
+import { CleanupSessionsTask } from "app:tasks/cleanup-sessions.js";
 import type { Request, Response } from "@cloudflare/workers-types";
 import { IPAddress, UserAgent } from "@edgefirst-dev/core";
 import { bootstrap } from "@edgefirst-dev/core/worker";
@@ -17,7 +17,7 @@ export default bootstrap({
 	},
 
 	tasks() {
-		return [new GenerateReportTask().everyMinute()];
+		return [new CleanupSessionsTask().hourly()];
 	},
 
 	async onRequest(request) {

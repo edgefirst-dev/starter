@@ -59,8 +59,7 @@ queue = "edgefirst-queue"
 [ai]
 binding = "AI"
 
-# Uncomment to enable cron jobs
 # Note that this will trigger your Worker every minute, increasing your request
 # count and potentially incurring additional costs
-# [triggers]
-# crons = ["* * * * *"]
+[triggers]
+crons = ["* * * * *"]

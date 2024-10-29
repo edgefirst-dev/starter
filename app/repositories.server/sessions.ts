@@ -2,7 +2,7 @@ import { Session } from "app:entities/session";
 import type { User } from "app:entities/user";
 import schema from "db:schema";
 import { type IPAddress, type UserAgent, orm } from "@edgefirst-dev/core";
-import { eq } from "drizzle-orm";
+import { eq, lte } from "drizzle-orm";
 
 export class SessionsRepository {
 	async findById(id: Session["id"]) {
@@ -49,6 +49,16 @@ export class SessionsRepository {
 			})
 			.where(eq(schema.sessions.id, id))
 			.execute();
+	}
+
+	async findExpired() {
+		return Session.fromMany(
+			await orm()
+				.select()
+				.from(schema.sessions)
+				.where(lte(schema.sessions.expiresAt, new Date()))
+				.execute(),
+		);
 	}
 
 	private getDateInFuture(days: number) {
