@@ -20,18 +20,19 @@ export async function loader({ request }: Route.LoaderArgs) {
 			hasEmailVerified: user.hasEmailVerified,
 		},
 
-		sessions: sessions.map((session) => {
-			return {
-				id: session.id,
-				ip: session.ip?.valueOf() ?? null,
-				ua: session.ua
-					? { browser: session.ua?.browser.name, os: session.ua?.os.name }
-					: null,
-				geo: { city: session.geo?.city, country: session.geo?.country },
-				isCurrent: currentSession.id === session.id,
-				hasExpired: session.hasExpired,
-			};
-		}),
+		sessions: sessions
+			.filter((s) => !s.hasExpired)
+			.map((session) => {
+				return {
+					id: session.id,
+					ip: session.ip?.valueOf() ?? null,
+					ua: session.ua
+						? { browser: session.ua?.browser.name, os: session.ua?.os.name }
+						: null,
+					geo: { city: session.geo?.city, country: session.geo?.country },
+					isCurrent: currentSession.id === session.id,
+				};
+			}),
 	});
 }
 
@@ -86,7 +87,6 @@ export default function Component({ loaderData }: Route.ComponentProps) {
 										{session.geo.city}, {session.geo.country} - {session.ip} -{" "}
 										{session.ua?.browser}{" "}
 										{session.isCurrent ? " (current)" : ""}
-										{session.hasExpired ? " (expired)" : ""}
 									</p>
 								</div>
 							</li>
