@@ -15,6 +15,14 @@ export class Session extends TableEntity {
 		return new StringParser(this.parser.string("userAgent")).userAgent();
 	}
 
+	get expiresAt() {
+		return this.parser.date("expiresAt");
+	}
+
+	get hasExpired() {
+		return this.expiresAt < new Date();
+	}
+
 	get lastActivityAt() {
 		return this.parser.date("lastActivityAt");
 	}

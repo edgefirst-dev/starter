@@ -25,6 +25,7 @@ export class SessionsRepository {
 				userAgent: ua?.toString(),
 				payload,
 				lastActivityAt: new Date(),
+				expiresAt: this.getDateInFuture(30),
 			})
 			.returning();
 
@@ -42,9 +43,16 @@ export class SessionsRepository {
 	async recordActivity(id: Session["id"]) {
 		await orm()
 			.update(schema.sessions)
-			.set({ lastActivityAt: new Date() })
+			.set({
+				lastActivityAt: new Date(),
+				expiresAt: this.getDateInFuture(30),
+			})
 			.where(eq(schema.sessions.id, id))
 			.execute();
+	}
+
+	private getDateInFuture(days: number) {
+		return new Date(Date.now() + 1000 * 60 * 60 * 24 * days);
 	}
 }
 

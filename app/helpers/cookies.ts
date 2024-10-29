@@ -13,6 +13,18 @@ export namespace Cookies {
 		sameSite: "lax",
 		secure: process.env.NODE_ENV === "production",
 		httpOnly: true,
+		maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+		secrets: [env().fetch("SESSION_SECRET", "s3cr3t")],
+	});
+
+	/**
+	 * This cookie is used to store the user's expired session information.
+	 */
+	export const expiredSession = createCookie("expired_session", {
+		path: "/",
+		sameSite: "lax",
+		secure: process.env.NODE_ENV === "production",
+		httpOnly: true,
 		secrets: [env().fetch("SESSION_SECRET", "s3cr3t")],
 	});
 

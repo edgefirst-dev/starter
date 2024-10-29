@@ -34,6 +34,60 @@ export const users = sqliteTable(
 	},
 );
 
+export const permissions = sqliteTable("permissions", {
+	id: cuid("id", "permissions_id_unique"),
+	// Timestamps
+	createdAt,
+	updatedAt,
+	// Attributes
+	action: text("action", {
+		mode: "text",
+		enum: ["create", "read", "update", "delete"],
+	}).notNull(),
+	entity: text("entity", { mode: "text" }).notNull(),
+	access: text("access", { mode: "text", enum: ["own", "any"] }).notNull(),
+	description: text("description", { mode: "text" }),
+});
+
+export const roles = sqliteTable("roles", {
+	id: cuid("id", "roles_id_unique"),
+	// Timestamps
+	createdAt,
+	updatedAt,
+	// Attributes
+	name: text("name", { mode: "text" }).notNull(),
+	description: text("description", { mode: "text" }),
+});
+
+export const rolePermissions = sqliteTable(
+	"role_permissions",
+	{
+		id: cuid("id", "role_permissions_id_unique"),
+		// Timestamps
+		createdAt,
+		updatedAt,
+		// Relationships
+		roleId: text("role_id", { mode: "text" })
+			.notNull()
+			.references(() => roles.id, { onDelete: "cascade" }),
+		permissionId: text("permission_id", { mode: "text" })
+			.notNull()
+			.references(() => permissions.id, { onDelete: "cascade" }),
+	},
+	(t) => {
+		return {
+			roleIndex: index("role_permissions_role_id_idx").on(t.roleId),
+			permissionIndex: index("role_permissions_permission_id_idx").on(
+				t.permissionId,
+			),
+			rolePermissionIndex: index("role_permissions_role_permission_idx").on(
+				t.roleId,
+				t.permissionId,
+			),
+		};
+	},
+);
+
 export const audits = sqliteTable(
 	"audit_logs",
 	{
@@ -125,6 +179,7 @@ export const sessions = sqliteTable("sessions", {
 	// Timestamps
 	createdAt,
 	updatedAt,
+	expiresAt: timestamp("expires_at").notNull(),
 	lastActivityAt: timestamp("last_activity_at"),
 	// Attributes
 	userAgent: text("user_agent", { mode: "text" }),

@@ -3,9 +3,11 @@ import { Spinner } from "app:components/spinner";
 import { anonymous } from "app:helpers/auth";
 import { parseBody } from "app:helpers/body-parser";
 import { cn } from "app:helpers/cn";
+import { Cookies } from "app:helpers/cookies";
 import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { createSession } from "app:helpers/session";
+import { UsersRepository } from "app:repositories.server/users";
 import { login } from "app:services.server/auth/login";
 import type * as Route from "types:views/+types.login";
 import { Password } from "@edgefirst-dev/core";
@@ -16,7 +18,11 @@ import { Form, Link, redirect, useNavigation } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	await anonymous(request, "/profile");
-	return ok(null);
+	let userId = await Cookies.expiredSession.parse(
+		request.headers.get("cookie"),
+	);
+	let users = userId ? await new UsersRepository().findById(userId) : null;
+	return ok({ defaultEmail: users?.at(0)?.email ?? null });
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
@@ -58,7 +64,10 @@ export async function action({ request, context }: Route.ActionArgs) {
 	}
 }
 
-export default function Component({ actionData }: Route.ComponentProps) {
+export default function Component({
+	loaderData,
+	actionData,
+}: Route.ComponentProps) {
 	let navigation = useNavigation();
 	let isPending = navigation.state !== "idle";
 
@@ -76,6 +85,7 @@ export default function Component({ actionData }: Route.ComponentProps) {
 					type="email"
 					name="email"
 					placeholder="john.doe@example.com"
+					defaultValue={loaderData.defaultEmail ?? ""}
 					autoCapitalize="off"
 					className="w-full rounded-md border border-neutral-700 px-5 py-2 dark:bg-neutral-800 dark:text-white dark:placeholder:text-neutral-300"
 				/>

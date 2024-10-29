@@ -12,6 +12,15 @@ export async function querySession(request: Request) {
 	let [session] = await repo.findById(sessionId);
 	if (!session) return null;
 
+	if (session.hasExpired) {
+		let headers = await deleteSession(request);
+		headers.append(
+			"Set-Cookie",
+			await Cookies.expiredSession.serialize(session.userId),
+		);
+		throw redirect("/login", { headers });
+	}
+
 	waitUntil(repo.recordActivity(session.id));
 	return session;
 }
