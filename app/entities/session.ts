@@ -42,7 +42,7 @@ export class Session extends TableEntity {
 	}
 
 	get geo() {
-		if (this.payload.isNull("geo")) return null;
+		if (!this.payload.has("geo")) return null;
 		let geo = this.payload.object("geo");
 		return { city: geo.string("city"), country: geo.string("country") };
 	}
