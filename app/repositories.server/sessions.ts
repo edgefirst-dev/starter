@@ -2,7 +2,7 @@ import { Session } from "app:entities/session";
 import type { User } from "app:entities/user";
 import schema from "db:schema";
 import { type IPAddress, type UserAgent, orm } from "@edgefirst-dev/core";
-import { eq, lte } from "drizzle-orm";
+import { desc, eq, lte } from "drizzle-orm";
 
 export class SessionsRepository {
 	async findById(id: Session["id"]) {
@@ -22,6 +22,7 @@ export class SessionsRepository {
 				.select()
 				.from(schema.sessions)
 				.where(eq(schema.sessions.userId, user.id))
+				.orderBy(desc(schema.sessions.lastActivityAt))
 				.execute(),
 		);
 	}
