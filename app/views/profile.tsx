@@ -25,6 +25,10 @@ export async function loader({ request }: Route.LoaderArgs) {
 				ua: session.ua
 					? { browser: session.ua?.browser.name, os: session.ua?.os.name }
 					: null,
+				geo: {
+					city: session.payload.object("geo").string("city"),
+					country: session.payload.object("geo").string("country"),
+				},
 				isCurrent: currentSession.id === session.id,
 			};
 		}),
@@ -79,9 +83,10 @@ export default function Component({ loaderData }: Route.ComponentProps) {
 							<li key={session.id}>
 								<div>
 									<p>
-										{session.ip} - {session.ua?.browser}
+										{session.geo.city}, {session.geo.country} - {session.ip} -{" "}
+										{session.ua?.browser}{" "}
+										{session.isCurrent ? " (current)" : ""}
 									</p>
-									{session.isCurrent && <p>Your current session</p>}
 								</div>
 							</li>
 						);

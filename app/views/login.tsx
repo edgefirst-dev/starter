@@ -10,7 +10,7 @@ import { createSession } from "app:helpers/session";
 import { UsersRepository } from "app:repositories.server/users";
 import { login } from "app:services.server/auth/login";
 import type * as Route from "types:views/+types.login";
-import { Password } from "@edgefirst-dev/core";
+import { Password, geo } from "@edgefirst-dev/core";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
 import { Email } from "@edgefirst-dev/email";
@@ -48,7 +48,11 @@ export async function action({ request, context }: Route.ActionArgs) {
 			user: user,
 			ip: context?.ip,
 			ua: context?.ua,
-			payload: { teamId: team.id, teams: memberships.map((m) => m.teamId) },
+			payload: {
+				teamId: team.id,
+				teams: memberships.map((m) => m.teamId),
+				geo: { city: geo().city, country: geo().country },
+			},
 		});
 
 		throw redirect("/profile", { headers });

@@ -8,7 +8,7 @@ import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { createSession } from "app:helpers/session";
 import { register } from "app:services.server/auth/register";
 import type * as Route from "types:views/+types.register";
-import { Password } from "@edgefirst-dev/core";
+import { Password, geo } from "@edgefirst-dev/core";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
 import { Email } from "@edgefirst-dev/email";
@@ -47,7 +47,11 @@ export async function action({ request, context }: Route.ActionArgs) {
 			user: user,
 			ip: context?.ip,
 			ua: context?.ua,
-			payload: { teamId: team.id, teams: [membership.teamId] },
+			payload: {
+				teamId: team.id,
+				teams: [membership.teamId],
+				geo: { city: geo().city, country: geo().country },
+			},
 		});
 
 		throw redirect("/profile", { headers });
