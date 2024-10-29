@@ -53,5 +53,9 @@ export async function deleteSession(
 		"Set-Cookie",
 		await Cookies.session.serialize(null, { maxAge: 0 }),
 	);
+	responseHeaders.append(
+		"Set-Cookie",
+		await Cookies.expiredSession.serialize(null, { maxAge: 0 }),
+	);
 	return responseHeaders;
 }
