@@ -27,6 +27,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 					: null,
 				geo: { city: session.geo?.city, country: session.geo?.country },
 				isCurrent: currentSession.id === session.id,
+				hasExpired: session.hasExpired,
 			};
 		}),
 	});
@@ -83,6 +84,7 @@ export default function Component({ loaderData }: Route.ComponentProps) {
 										{session.geo.city}, {session.geo.country} - {session.ip} -{" "}
 										{session.ua?.browser}{" "}
 										{session.isCurrent ? " (current)" : ""}
+										{session.hasExpired ? " (expired)" : ""}
 									</p>
 								</div>
 							</li>
