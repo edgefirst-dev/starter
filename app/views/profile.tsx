@@ -7,9 +7,11 @@ import { Link } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	let user = await authenticate(request, "/register");
-	let currentSession = await getSession(request);
 
-	let sessions = await new SessionsRepository().findByUser(user);
+	let [currentSession, sessions] = await Promise.all([
+		getSession(request),
+		new SessionsRepository().findByUser(user),
+	]);
 
 	return ok({
 		user: {
