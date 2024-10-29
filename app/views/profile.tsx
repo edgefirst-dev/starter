@@ -25,10 +25,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 				ua: session.ua
 					? { browser: session.ua?.browser.name, os: session.ua?.os.name }
 					: null,
-				geo: {
-					city: session.payload.object("geo").string("city"),
-					country: session.payload.object("geo").string("country"),
-				},
+				geo: { city: session.geo?.city, country: session.geo?.country },
 				isCurrent: currentSession.id === session.id,
 			};
 		}),

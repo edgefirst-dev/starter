@@ -40,4 +40,10 @@ export class Session extends TableEntity {
 			.array("teams")
 			.map((team: string) => new StringParser(team).cuid());
 	}
+
+	get geo() {
+		if (this.payload.isNull("geo")) return null;
+		let geo = this.payload.object("geo");
+		return { city: geo.string("city"), country: geo.string("country") };
+	}
 }
