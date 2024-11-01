@@ -29,6 +29,13 @@
 			"when": 1730187479015,
 			"tag": "20241029073759_closed_earthquake",
 			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "6",
+			"when": 1730448691758,
+			"tag": "20241101081131_right_princess_powerful",
+			"breakpoints": true
 		}
 	]
 }
