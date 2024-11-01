@@ -22,6 +22,33 @@ You can get a new Verifier API key at [verifier.meetchopra.com](https://verifier
 
 You can get a new Gravatar API token at [gravatar.com/developers](https://gravatar.com/developers/applications) completely free.
 
+> [!IMPORTANT]
+> On your Cloudflare Workers environment you will only need `GRAVATAR_API_TOKEN` and `VERIFIER_API_KEY` environment variables.
+
 ## The Cloudflare API token should have the following permissions:
 
-WIP
+- Workers AI:Edit
+- D1:Edit
+- Workers R2 Storage:Edit
+- Workers KV Storage:Edit
+- Workers Scripts:Edit
+
+## Run migrations
+
+You will need to run the database migrations, you can do it with
+
+```bash
+bun run db:migrate:local db-name
+```
+
+Replace `db-name` with your database name configured in `wrangler.toml`.
+
+## Setup GitHub Action Secrets
+
+To deploy using the GitHub Action workflow you will need to setup the following secrets:
+
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_DATABASE_NAME`
+- `CLOUDFLARE_API_TOKEN`
+
+These can be the sames that you used in your `.dev.vars` file.
