@@ -16,7 +16,7 @@ GRAVATAR_API_TOKEN=""
 VERIFIER_API_KEY=""
 ```
 
-Rpleace the empty strings with the values of your Cloudflare account, database and API token, Gravatar API token and Verifier API key.
+Replace the empty strings with the values of your Cloudflare account, database and API token, Gravatar API token and Verifier API key.
 
 You can get a new Verifier API key at [verifier.meetchopra.com](https://verifier.meetchopra.com) completely free.
 
