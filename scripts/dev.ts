@@ -21,7 +21,7 @@ await Promise.all([retry(run), watch()]);
  */
 async function run() {
 	await $`bun run build`.nothrow();
-	await $`bun start --test-scheduled`;
+	await $`bun start`;
 }
 
 /**

@@ -11,7 +11,7 @@
 		"dev": "bun run ./scripts/dev.ts",
 		"build": "react-router build",
 		"deploy": "wrangler deploy",
-		"start": "wrangler dev",
+		"start": "wrangler dev --test-scheduled",
 		"typecheck": "tsc",
 		"rr:typegen": "react-router typegen",
 		"rr:routes": "react-router routes",
