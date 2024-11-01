@@ -1,6 +1,6 @@
 [
 	{
 		"action": "remove",
-		"files": ["LICENSE", "README.md"]
+		"files": ["LICENSE", "README.md", ".github/FUNDING.yml"]
 	}
 ]
