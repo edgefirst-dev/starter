@@ -19,6 +19,7 @@
 		"quality:fix": "biome check . --write --unsafe",
 		"predb:migrate:local": "bun run orm:generate",
 		"db:drop": "rm -rf ./.wrangler",
+		"db:seed": "wrangler d1 execute --local --file=./db/seed.sql",
 		"db:migrate:local": "bun run db:migrate --local",
 		"postdb:migrate:local": "bun run quality:fix",
 		"db:migrate": "wrangler d1 migrations apply",
