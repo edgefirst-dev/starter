@@ -68,3 +68,21 @@ To deploy using the GitHub Action workflow you will need to setup the following 
 - `CLOUDFLARE_API_TOKEN`
 
 These can be the sames that you used in your `.dev.vars` file.
+
+## Create Cloudflare Secrets
+
+Inside your Cloudflare Workers environment you will need to create the following secrets
+
+- `APP_ENV`
+- `GRAVATAR_API_TOKEN`
+- `VERIFIER_API_KEY`
+
+You can do it manually on the dashboard or using the `wrangler secret` command.
+
+```bash
+bunx wrangler secret put APP_ENV
+bunx wrangler secret put GRAVATAR_API_TOKEN
+bunx wrangler secret put VERIFIER_API_KEY
+```
+
+Set APP_ENV to `production`, and the other two to the values you used in your `.dev.vars` file.
