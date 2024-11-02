@@ -1,7 +1,7 @@
 -- This file is used to seed the database with initial data.
 -- You can run this file against your local database using:
 -- ```sh
--- bun run db:seet <name>
+-- bun run db:seed <name>
 -- ```
 -- Where `<name>` is the name of your database.
 -- Edit the SQL below to seed your database with the initial data you need.
