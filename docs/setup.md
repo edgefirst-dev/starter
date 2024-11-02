@@ -22,7 +22,7 @@ You can get a new Verifier API key at [verifier.meetchopra.com](https://verifier
 
 You can get a new Gravatar API token at [gravatar.com/developers](https://gravatar.com/developers/applications) completely free.
 
-> [!IMPORTANT]
+> [!TIP]
 > On your Cloudflare Workers environment you will only need `GRAVATAR_API_TOKEN` and `VERIFIER_API_KEY` environment variables.
 
 ## The Cloudflare API token should have the following permissions:
@@ -32,6 +32,21 @@ You can get a new Gravatar API token at [gravatar.com/developers](https://gravat
 - Workers R2 Storage:Edit
 - Workers KV Storage:Edit
 - Workers Scripts:Edit
+
+## Create required bindings
+
+You will need to create the following bindings:
+
+```sh
+bunx wrangler d1 create <db-name>
+bunx wrangler kv namespace create <kv-name>
+bunx wrangler r2 bucket create <r2-name>
+```
+
+Replace the values between `<>` with your desired names, then update the IDs in your wrangler.toml file for the D1 and KV, and the name for the D1 and R2.
+
+> [!IMPORTANT]
+> Don't change the binding names, they must be DB, KV and FS as that's what EdgeKit.js expects.
 
 ## Run migrations
 
