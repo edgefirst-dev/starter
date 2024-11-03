@@ -1,8 +1,8 @@
 import { Session } from "app:entities/session";
 import type { User } from "app:entities/user";
 import schema from "db:schema";
-import { type IPAddress, type UserAgent, orm } from "@edgefirst-dev/core";
 import { desc, eq, gte } from "drizzle-orm";
+import { type IPAddress, type UserAgent, orm } from "edgekitjs";
 
 export class SessionsRepository {
 	async findById(id: Session["id"]) {

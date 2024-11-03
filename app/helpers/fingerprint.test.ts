@@ -4,7 +4,7 @@ import { User } from "app:entities/user";
 import type { users } from "db:schema";
 import { fingerprint } from "./fingerprint";
 
-mock.module("@edgefirst-dev/core", () => {
+mock.module("edgekitjs", () => {
 	return {
 		request: () =>
 			new Request("https://example.com", {

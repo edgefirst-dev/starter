@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import type { users } from "db:schema";
 
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
 import { User } from "./user";
 
 describe(User.name, () => {

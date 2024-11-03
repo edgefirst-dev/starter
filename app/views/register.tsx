@@ -8,10 +8,10 @@ import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { createSession } from "app:helpers/session";
 import { register } from "app:services.server/auth/register";
 import type * as Route from "types:views/+types.register";
-import { Password, geo } from "@edgefirst-dev/core";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
+import { Password, geo } from "edgekitjs";
 import { Form, Link, redirect, useNavigation } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {

@@ -1,7 +1,7 @@
 import { User } from "app:entities/user";
 import schema from "db:schema";
-import { orm } from "@edgefirst-dev/core";
 import { count, eq } from "drizzle-orm";
+import { orm } from "edgekitjs";
 
 export class UsersRepository {
 	async findAll() {

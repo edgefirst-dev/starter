@@ -1,8 +1,8 @@
 import type { User } from "app:entities/user";
 import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { UsersRepository } from "app:repositories.server/users";
-import { type Entity, waitUntil } from "@edgefirst-dev/core";
-import type { Email } from "@edgefirst-dev/email";
+import type { Email } from "edgekitjs";
+import { type Entity, waitUntil } from "edgekitjs";
 
 /**
  * Verifies a user's email address by setting the `emailVerifiedAt` field.

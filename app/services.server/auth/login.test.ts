@@ -1,14 +1,14 @@
 import { describe, expect, mock, test } from "bun:test";
 import { Credential } from "app:entities/credential";
-import { Password } from "@edgefirst-dev/core";
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
+import { Password } from "edgekitjs";
 import { login } from "./login";
 
 let waitUntil = mock().mockImplementation(
 	(promise: Promise<unknown>) => void 0,
 );
 
-mock.module("@edgefirst-dev/core", () => {
+mock.module("edgekitjs", () => {
 	return { waitUntil };
 });
 

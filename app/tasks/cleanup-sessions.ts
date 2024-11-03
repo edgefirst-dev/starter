@@ -1,5 +1,5 @@
 import { SessionsRepository } from "app:repositories.server/sessions";
-import { Task } from "@edgefirst-dev/core";
+import { Task } from "edgekitjs";
 
 export class CleanupSessionsTask extends Task {
 	private sessions = new SessionsRepository();

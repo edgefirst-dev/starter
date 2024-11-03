@@ -1,12 +1,12 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
 
 import { emailVerifier, pwnedPasswords } from "app:mocks/server";
-import { Password } from "@edgefirst-dev/core";
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
+import { Password } from "edgekitjs";
 import { setupServer } from "msw/native";
 import { register } from "./register";
 
-mock.module("@edgefirst-dev/core", () => {
+mock.module("edgekitjs", () => {
 	return {
 		waitUntil: mock().mockImplementation((promise: Promise<unknown>) => void 0),
 		queue: mock().mockImplementation(() => {

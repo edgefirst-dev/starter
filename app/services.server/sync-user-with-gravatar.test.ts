@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
 import { syncUserWithGravatar } from "./sync-user-with-gravatar";
 
 describe(syncUserWithGravatar.name, () => {

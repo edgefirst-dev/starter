@@ -1,9 +1,9 @@
 import { Gravatar } from "app:clients/gravatar";
 import { UsersRepository } from "app:repositories.server/users";
-import { Job } from "@edgefirst-dev/core";
 import { Data } from "@edgefirst-dev/data";
 import { ObjectParser } from "@edgefirst-dev/data/parser";
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
+import { Job } from "edgekitjs";
 
 import { syncUserWithGravatar } from "app:services.server/sync-user-with-gravatar";
 

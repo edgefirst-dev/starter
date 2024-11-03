@@ -3,9 +3,9 @@ import type { User } from "app:entities/user";
 import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { CredentialsRepository } from "app:repositories.server/credentials";
 import { UsersRepository } from "app:repositories.server/users";
-import { type Entity, waitUntil } from "@edgefirst-dev/core";
-import type { Email } from "@edgefirst-dev/email";
 import { encodeBase32 } from "@oslojs/encoding";
+import type { Email } from "edgekitjs";
+import { type Entity, waitUntil } from "edgekitjs";
 
 /**
  * Initiates a password recovery process by generating a one-time password (OTP).

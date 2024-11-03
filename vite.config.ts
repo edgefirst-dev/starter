@@ -13,7 +13,7 @@ export default defineConfig({
 		cjsInterop({ dependencies: ["bcrypt"] }),
 		denyImports({
 			client: {
-				specifiers: [/^node:/, "@edgefirst-dev/core"],
+				specifiers: [/^node:/, "edgekitjs"],
 				files: [
 					"**/.server/*",
 					"**/*.server/*",

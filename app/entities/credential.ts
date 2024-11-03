@@ -1,4 +1,4 @@
-import { Password, StringParser, TableEntity } from "@edgefirst-dev/core";
+import { Password, StringParser, TableEntity } from "edgekitjs";
 
 export class Credential extends TableEntity {
 	get userId() {

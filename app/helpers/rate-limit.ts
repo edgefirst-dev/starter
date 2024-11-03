@@ -1,5 +1,5 @@
 import { tooManyRequests } from "app:helpers/response";
-import { rateLimit as edgeRateLimit } from "@edgefirst-dev/core";
+import { rateLimit as edgeRateLimit } from "edgekitjs";
 
 export async function rateLimit(headers: Headers) {
 	let ip = headers.get("cf-connecting-ip");

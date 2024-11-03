@@ -8,8 +8,8 @@ import { CredentialsRepository } from "app:repositories.server/credentials";
 import { MembershipsRepository } from "app:repositories.server/memberships";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
-import { type Entity, type Password, waitUntil } from "@edgefirst-dev/core";
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
+import { type Entity, type Password, waitUntil } from "edgekitjs";
 
 /**
  * Logs in a user by verifying the provided email and password.

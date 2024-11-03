@@ -11,8 +11,8 @@ import { MembershipsRepository } from "app:repositories.server/memberships";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
 import type schema from "db:schema";
-import { Entity, Password, waitUntil } from "@edgefirst-dev/core";
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
+import { Entity, Password, waitUntil } from "edgekitjs";
 
 /**
  * Registers a new user by creating an account, generating a password hash,

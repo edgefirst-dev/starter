@@ -1,4 +1,4 @@
-import { Entity } from "@edgefirst-dev/core";
+import { Entity } from "edgekitjs";
 
 export class GravatarProfile extends Entity {
 	get displayName() {

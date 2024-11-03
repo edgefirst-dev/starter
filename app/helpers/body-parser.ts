@@ -1,7 +1,7 @@
-import { fs } from "@edgefirst-dev/core";
 import type { Data } from "@edgefirst-dev/data";
 import { FormParser } from "@edgefirst-dev/data/parser";
 import { parseFormData } from "@mjackson/form-data-parser";
+import { fs } from "edgekitjs";
 
 export async function parseBody<D extends Data<FormParser> = Data<FormParser>>(
 	request: Request,

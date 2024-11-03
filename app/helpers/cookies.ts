@@ -1,4 +1,4 @@
-import { env } from "@edgefirst-dev/core";
+import { env } from "edgekitjs";
 import { createCookie } from "react-router";
 
 export namespace Cookies {

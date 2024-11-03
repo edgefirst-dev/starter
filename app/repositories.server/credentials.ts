@@ -1,8 +1,8 @@
 import { Credential } from "app:entities/credential";
 import type { User } from "app:entities/user";
 import { credentials } from "db:schema";
-import { orm } from "@edgefirst-dev/core";
 import { eq } from "drizzle-orm";
+import { orm } from "edgekitjs";
 
 export class CredentialsRepository {
 	async create(

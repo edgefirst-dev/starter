@@ -1,4 +1,4 @@
-import { TableEntity } from "@edgefirst-dev/core";
+import { TableEntity } from "edgekitjs";
 
 export class Team extends TableEntity {
 	get name() {

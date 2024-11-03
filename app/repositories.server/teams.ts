@@ -1,8 +1,8 @@
 import type { Membership } from "app:entities/membership";
 import { Team } from "app:entities/team";
 import schema from "db:schema";
-import { orm } from "@edgefirst-dev/core";
 import { count, eq } from "drizzle-orm";
+import { orm } from "edgekitjs";
 
 export class TeamsRepository {
 	async create(input: Omit<typeof schema.teams.$inferInsert, "id">) {

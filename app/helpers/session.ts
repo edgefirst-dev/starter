@@ -1,6 +1,6 @@
 import { Cookies } from "app:helpers/cookies";
 import { SessionsRepository } from "app:repositories.server/sessions";
-import { waitUntil } from "@edgefirst-dev/core";
+import { waitUntil } from "edgekitjs";
 import { redirect } from "react-router";
 
 export async function querySession(request: Request) {

@@ -3,8 +3,8 @@ import schema from "db:schema";
 import { SyncUserWithGravatarJob } from "app:jobs/sync-user-with-gravatar.js";
 import { CleanupSessionsTask } from "app:tasks/cleanup-sessions.js";
 import type { Request, Response } from "@cloudflare/workers-types";
-import { IPAddress, UserAgent } from "@edgefirst-dev/core";
-import { bootstrap } from "@edgefirst-dev/core/worker";
+import { IPAddress, UserAgent } from "edgekitjs";
+import { bootstrap } from "edgekitjs/worker";
 import { createRequestHandler } from "react-router";
 
 export default bootstrap({
@@ -40,8 +40,8 @@ async function getLoadContext(request: Request) {
 	return { ua, ip };
 }
 
-declare module "@edgefirst-dev/core" {
-	export interface Bindings {
+declare module "edgekitjs" {
+	export interface Environment {
 		// 👇 Env variables
 		GRAVATAR_API_TOKEN: string;
 		SESSION_SECRET: string;

@@ -1,11 +1,11 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
 import { GravatarProfile } from "app:entities/gravatar-profile";
 import { gravatar } from "app:mocks/server";
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
 import { setupServer } from "msw/native";
 import { Gravatar } from "./gravatar";
 
-mock.module("@edgefirst-dev/core", () => {
+mock.module("edgekitjs", () => {
 	return {
 		orm: mock(),
 		env() {

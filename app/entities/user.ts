@@ -1,5 +1,5 @@
-import { StringParser, TableEntity } from "@edgefirst-dev/core";
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
+import { StringParser, TableEntity } from "edgekitjs";
 
 export class User extends TableEntity {
 	get email() {

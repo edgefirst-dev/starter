@@ -1,4 +1,4 @@
-import { StringParser, TableEntity } from "@edgefirst-dev/core";
+import { StringParser, TableEntity } from "edgekitjs";
 
 export class Session extends TableEntity {
 	get userId() {

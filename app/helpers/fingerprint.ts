@@ -1,7 +1,7 @@
 import type { User } from "app:entities/user";
-import { IPAddress, UserAgent, request } from "@edgefirst-dev/core";
 import { sha256 } from "@oslojs/crypto/sha2";
 import { encodeHexLowerCase } from "@oslojs/encoding";
+import { IPAddress, UserAgent, request } from "edgekitjs";
 
 export function fingerprint(user?: User) {
 	let ua = UserAgent.fromRequest(request());

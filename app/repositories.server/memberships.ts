@@ -1,8 +1,8 @@
 import { Membership } from "app:entities/membership";
 import type { User } from "app:entities/user";
 import { memberships } from "db:schema";
-import { orm } from "@edgefirst-dev/core";
 import { eq } from "drizzle-orm";
+import { orm } from "edgekitjs";
 
 export class MembershipsRepository {
 	async create(

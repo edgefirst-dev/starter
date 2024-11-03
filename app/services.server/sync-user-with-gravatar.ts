@@ -1,7 +1,7 @@
 import { Gravatar } from "app:clients/gravatar";
 import { UsersRepository } from "app:repositories.server/users";
 
-import { Email } from "@edgefirst-dev/email";
+import { Email } from "edgekitjs";
 
 export async function syncUserWithGravatar(
 	input: syncUserWithGravatar.Input,

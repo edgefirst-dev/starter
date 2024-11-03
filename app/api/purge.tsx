@@ -6,7 +6,7 @@ import { Cookies } from "app:helpers/cookies";
 import { ok } from "app:helpers/response";
 import schema from "db:schema";
 import type * as Route from "types:api/+types.purge";
-import { orm } from "@edgefirst-dev/core";
+import { orm } from "edgekitjs";
 import { Form, redirect, useNavigation } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
