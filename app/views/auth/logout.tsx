@@ -4,7 +4,7 @@ import { authenticate } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { ok } from "app:helpers/response";
 import { deleteSession } from "app:helpers/session";
-import type * as Route from "types:views/+types.logout";
+import type * as Route from "types:views/auth/+types.logout";
 import { Form, redirect, useNavigation } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {

@@ -1,30 +1,33 @@
 import { index, layout, prefix, route } from "@react-router/dev/routes";
 
 export const routes = [
+	// Resources
+	route("files/:key", "./api/files.ts"),
+
 	// API Routes
-	...prefix("api", [
-		route("files/:key", "./api/files.ts"),
-		route("dev/purge", "./api/purge.tsx"),
-	]),
+	...prefix("api", []),
 
 	// Webhook Routes
 	...prefix("webhooks", []),
 
+	// Views
+	route("profile", "./views/profile.tsx"),
+
+	// Landing Routes
+	layout("./views/layouts/landing.tsx", [index("./views/landings/home.tsx")]),
+
 	// Admin Routes
-	route("admin", "./layouts/admin.tsx", [
+	route("admin", "./views/layouts/admin.tsx", [
 		route("dashboard", "./views/admin/dashboard.tsx"),
+		...prefix("dev", [route("purge", "./views/admin/purge.tsx")]),
 	]),
 
 	// Auth Routes
-	layout("./layouts/auth.tsx", [
-		route("logout", "./views/logout.tsx"),
-		route("register", "./views/register.tsx"),
-		route("login", "./views/login.tsx"),
+	layout("./views/layouts/auth.tsx", [
+		route("logout", "./views/auth/logout.tsx"),
+		route("register", "./views/auth/register.tsx"),
+		route("login", "./views/auth/login.tsx"),
 	]),
-
-	// Other Routes
-	index("./views/home.tsx"),
-	route("profile", "./views/profile.tsx"),
 
 	// Catch-all Route
 	route("*", "./views/catch-all.tsx"),

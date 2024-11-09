@@ -1,7 +1,7 @@
 import { AnchorButton } from "app:components/anchor-button";
 import { isAuthenticated } from "app:helpers/auth";
 import { ok } from "app:helpers/response";
-import type * as Route from "types:views/+types.home";
+import type * as Route from "types:views/landings/+types.home";
 import { Link } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {

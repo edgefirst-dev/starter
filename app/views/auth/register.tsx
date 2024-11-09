@@ -7,7 +7,7 @@ import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { createSession } from "app:helpers/session";
 import { register } from "app:services.server/auth/register";
-import type * as Route from "types:views/+types.register";
+import type * as Route from "types:views/auth/+types.register";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
 import { Email } from "edgekitjs";

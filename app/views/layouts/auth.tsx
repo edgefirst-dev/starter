@@ -1,6 +1,7 @@
+import type * as Route from "types:views/layouts/+types.admin";
 import { Outlet } from "react-router";
 
-export default function Component() {
+export default function Component(_: Route.ComponentProps) {
 	return (
 		<div className="grid grid-cols-2 gap-8">
 			<aside className="flex flex-col justify-between bg-neutral-50 p-8 pr-0 dark:bg-neutral-950">
