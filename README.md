@@ -35,19 +35,7 @@ Create a new React application using the Edge-first Starter Kit:
 npx degit edgefirst-dev/starter-worker my-app
 ```
 
-Then update your `wrangler.toml` to match your Cloudflare account and create a `.dev.vars` with these variables:
-
-```txt
-APP_ENV="development"
-
-CLOUDFLARE_ACCOUNT_ID=""
-CLOUDFLARE_DATABASE_ID=""
-CLOUDFLARE_API_TOKEN=""
-
-GRAVATAR_API_TOKEN=""
-
-VERIFIER_API_KEY=""
-```
+Once you're inside the repo follow the instructions in the [setup docs](docs/setup.md) file.
 
 ## Author
 
