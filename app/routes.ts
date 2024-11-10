@@ -2,7 +2,7 @@ import { index, layout, prefix, route } from "@react-router/dev/routes";
 
 export const routes = [
 	// Resources
-	route("files/:key", "./api/files.ts"),
+	route("files/:key", "./resources/file.ts"),
 
 	// API Routes
 	...prefix("api", []),

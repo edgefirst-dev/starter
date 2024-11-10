@@ -7,10 +7,10 @@ import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { createSession } from "app:helpers/session";
 import { register } from "app:services.server/auth/register";
-import type * as Route from "types:views/auth/+types.register";
+import type { Route } from "types:views/auth/+types.register";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
-import { Email } from "edgekitjs";
+import { Email, IPAddress, UserAgent } from "edgekitjs";
 import { Password, geo } from "edgekitjs";
 import { Form, Link, redirect, useNavigation } from "react-router";
 
@@ -45,8 +45,8 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 		let headers = await createSession({
 			user: user,
-			ip: context?.ip,
-			ua: context?.ua,
+			ip: context?.ip as IPAddress | null,
+			ua: context?.ua as UserAgent | null,
 			payload: {
 				teamId: team.id,
 				teams: [membership.teamId],

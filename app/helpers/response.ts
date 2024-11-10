@@ -1,4 +1,4 @@
-import { json } from "react-router";
+import { data as json } from "react-router";
 
 export function ok<T>(data: T, init?: ResponseInit) {
 	return json(

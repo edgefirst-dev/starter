@@ -2,7 +2,7 @@ import { rootOnly } from "app:helpers/auth";
 import { ok } from "app:helpers/response";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
-import type * as Route from "types:views/admin/+types.dashboard";
+import type { Route } from "types:views/admin/+types.dashboard";
 import { NumberParser } from "edgekitjs";
 
 export async function loader({ request }: Route.LoaderArgs) {

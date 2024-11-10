@@ -5,7 +5,7 @@ import { cn } from "app:helpers/cn";
 import { Cookies } from "app:helpers/cookies";
 import { ok } from "app:helpers/response";
 import schema from "db:schema";
-import type * as Route from "types:api/+types.purge";
+import type { Route } from "types:views/admin/+types.purge";
 import { orm } from "edgekitjs";
 import { Form, redirect, useNavigation } from "react-router";
 

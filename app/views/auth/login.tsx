@@ -9,10 +9,10 @@ import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { createSession } from "app:helpers/session";
 import { UsersRepository } from "app:repositories.server/users";
 import { login } from "app:services.server/auth/login";
-import type * as Route from "types:views/auth/+types.login";
+import type { Route } from "types:views/auth/+types.login";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
-import { Email } from "edgekitjs";
+import { Email, IPAddress, UserAgent } from "edgekitjs";
 import { Password, geo } from "edgekitjs";
 import { Form, Link, redirect, useNavigation } from "react-router";
 
@@ -22,7 +22,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 		request.headers.get("cookie"),
 	);
 	let users = userId ? await new UsersRepository().findById(userId) : null;
-	return ok({ defaultEmail: users?.at(0)?.email ?? null });
+	return ok({ defaultEmail: users?.at(0)?.email.toString() ?? null });
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
@@ -46,8 +46,8 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 		let headers = await createSession({
 			user: user,
-			ip: context?.ip,
-			ua: context?.ua,
+			ip: context?.ip as IPAddress | null,
+			ua: context?.ua as UserAgent | null,
 			payload: {
 				teamId: team.id,
 				teams: memberships.map((m) => m.teamId),

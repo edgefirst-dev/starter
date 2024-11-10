@@ -2,7 +2,7 @@ import { authenticate } from "app:helpers/auth";
 import { ok } from "app:helpers/response";
 import { getSession } from "app:helpers/session";
 import { SessionsRepository } from "app:repositories.server/sessions";
-import type * as Route from "types:views/+types.profile";
+import type { Route } from "types:views/+types.profile";
 import { Link } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {

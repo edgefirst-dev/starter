@@ -1,7 +1,7 @@
 import { AnchorButton } from "app:components/anchor-button";
 import { notFound } from "app:helpers/response";
 import redirects from "config:redirects";
-import type * as Route from "types:views/+types.catch-all";
+import type { Route } from "types:views/+types.catch-all";
 import { generatePath, redirectDocument } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {

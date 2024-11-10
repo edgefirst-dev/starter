@@ -1,4 +1,4 @@
-import type * as Route from "types:api/+types.files";
+import type { Route } from "types:resources/+types.file";
 import { fs } from "edgekitjs";
 
 export function loader({ params }: Route.LoaderArgs) {
