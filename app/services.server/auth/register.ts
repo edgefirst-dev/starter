@@ -1,17 +1,18 @@
 import { Gravatar } from "app:clients/gravatar";
 import type { Credential } from "app:entities/credential";
 import type { GravatarProfile } from "app:entities/gravatar-profile";
-import type { Membership } from "app:entities/membership";
-import type { Team } from "app:entities/team";
-import type { User } from "app:entities/user";
+import { Membership } from "app:entities/membership";
+import { Team } from "app:entities/team";
+import { User } from "app:entities/user";
 import { SyncUserWithGravatarJob } from "app:jobs/sync-user-with-gravatar";
 import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { CredentialsRepository } from "app:repositories.server/credentials";
 import { MembershipsRepository } from "app:repositories.server/memberships";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
-import type schema from "db:schema";
-import { Email } from "edgekitjs";
+import schema from "db:schema";
+import { createId } from "@paralleldrive/cuid2";
+import { Email, orm } from "edgekitjs";
 import { Entity, Password, waitUntil } from "edgekitjs";
 
 /**
@@ -50,21 +51,45 @@ export async function register(
 		SyncUserWithGravatarJob.enqueue({ email: input.email.toString() });
 	}
 
-	let user = await deps.users.create({
-		email: input.email.toString(),
-		displayName,
-	});
+	let db = orm();
 
-	await deps.credentials.create({ userId: user.id, passwordHash });
+	let userId = createId();
+	let teamId = createId();
 
-	let team = await deps.teams.create({ name: "Personal Team" });
+	console.log({ userId, teamId });
 
-	let membership = await deps.memberships.create({
-		userId: user.id,
-		teamId: team.id,
-		role: "owner", // A user is the owner of their personal team
-		acceptedAt: new Date(), // Automatically accept the membership
-	});
+	let [users, , teams, memberships] = await db.batch([
+		db
+			.insert(schema.users)
+			.values({
+				id: userId,
+				email: input.email.toString(),
+				displayName,
+			})
+			.returning(),
+		db.insert(schema.credentials).values({ userId, passwordHash }),
+		db
+			.insert(schema.teams)
+			.values({ id: teamId, name: "Personal Team" })
+			.returning(),
+		db
+			.insert(schema.memberships)
+			.values({
+				userId,
+				teamId,
+				role: "owner", // A user is the owner of their personal team
+				acceptedAt: new Date(), // Automatically accept the membership
+			})
+			.returning(),
+	]);
+
+	let [user] = User.fromMany(users);
+	let [team] = Team.fromMany(teams);
+	let [membership] = Membership.fromMany(memberships);
+
+	if (!user || !team || !membership) {
+		throw new Error("Failed to register the user");
+	}
 
 	waitUntil(deps.audits.create(user, "user_register"));
 	waitUntil(deps.audits.create(user, "accepts_membership", membership));
