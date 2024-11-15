@@ -10,8 +10,13 @@ import { register } from "app:services.server/auth/register";
 import type { Route } from "types:views/auth/+types.register";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
-import { Email, IPAddress, UserAgent } from "edgekitjs";
-import { Password, geo } from "edgekitjs";
+import {
+	Email,
+	type IPAddress,
+	Password,
+	type UserAgent,
+	geo,
+} from "edgekitjs";
 import { Form, Link, redirect, useNavigation } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {

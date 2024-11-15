@@ -14,7 +14,7 @@ export const routes = [
 	route("profile", "./views/profile.tsx"),
 
 	// Landing Routes
-	layout("./views/layouts/landing.tsx", [index("./views/landings/home.tsx")]),
+	layout("./views/layouts/landings.tsx", [index("./views/landings/home.tsx")]),
 
 	// Admin Routes
 	route("admin", "./views/layouts/admin.tsx", [
