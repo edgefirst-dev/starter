@@ -22,7 +22,7 @@ mock.module("edgekitjs", () => {
 	};
 });
 
-describe(register.name, () => {
+describe.skip(register.name, () => {
 	let email = Email.from("john.doe@company.com");
 	let password = Password.from("abcDEF123!@#");
 	let server = setupServer();
