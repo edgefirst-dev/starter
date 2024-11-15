@@ -22,8 +22,7 @@ mock.module("edgekitjs", () => {
 	};
 });
 
-// biome-ignore lint/suspicious/noSkippedTests: We need to skip to test something else first
-describe.skip(register.name, () => {
+describe(register.name, () => {
 	let email = Email.from("john.doe@company.com");
 	let password = Password.from("abcDEF123!@#");
 	let server = setupServer();
@@ -34,36 +33,30 @@ describe.skip(register.name, () => {
 	test("it works", async () => {
 		server.resetHandlers(pwnedPasswords.strong, emailVerifier.valid);
 
-		let users = { findByEmail: mock(), create: mock() };
-		let credentials = { create: mock() };
-		let memberships = { create: mock() };
-		let teams = { create: mock() };
+		let users = { findByEmail: mock() };
+		let auth = { register: mock() };
 		let audits = { create: mock() };
 		let gravatar = { profile: mock() };
 
 		users.findByEmail.mockResolvedValue([]);
-		users.create.mockResolvedValue({ id: "1" });
-		teams.create.mockResolvedValue({ id: "1" });
-		memberships.create.mockResolvedValue({ id: "1" });
+		auth.register.mockResolvedValue({
+			user: { id: "1" },
+			team: { id: "1" },
+			membership: { id: "1" },
+		});
 		audits.create.mockResolvedValue({ id: "1" });
 		gravatar.profile.mockResolvedValue(null);
 
 		await register(
 			{ email, password, displayName: null },
-			{ users, credentials, memberships, teams, audits, gravatar },
+			{ users, auth, audits, gravatar },
 		);
 
 		expect(users.findByEmail).toHaveBeenCalledWith(email);
-		expect(users.create).toHaveBeenCalledWith({
-			email: email.toString(),
+		expect(auth.register).toHaveBeenCalledWith({
+			email,
+			password,
 			displayName: null,
-		});
-		expect(teams.create).toHaveBeenCalled();
-		expect(memberships.create).toHaveBeenCalledWith({
-			userId: expect.any(String),
-			teamId: expect.any(String),
-			role: "owner",
-			acceptedAt: expect.any(Date),
 		});
 		expect(audits.create).toHaveBeenCalledWith(
 			expect.any(Object),
@@ -74,10 +67,8 @@ describe.skip(register.name, () => {
 	test("it throws an error if the user already exists", async () => {
 		server.resetHandlers(pwnedPasswords.strong, emailVerifier.valid);
 
-		let users = { findByEmail: mock(), create: mock() };
-		let credentials = { create: mock() };
-		let memberships = { create: mock() };
-		let teams = { create: mock() };
+		let users = { findByEmail: mock() };
+		let auth = { register: mock() };
 		let audits = { create: mock() };
 		let gravatar = { profile: mock() };
 
@@ -86,7 +77,7 @@ describe.skip(register.name, () => {
 		expect(
 			register(
 				{ email, password, displayName: null },
-				{ users, credentials, memberships, teams, audits, gravatar },
+				{ users, auth, audits, gravatar },
 			),
 		).rejects.toThrow("User already exists");
 	});
@@ -95,9 +86,7 @@ describe.skip(register.name, () => {
 		server.resetHandlers(pwnedPasswords.weak, emailVerifier.valid);
 
 		let users = { findByEmail: mock(), create: mock() };
-		let credentials = { create: mock() };
-		let memberships = { create: mock() };
-		let teams = { create: mock() };
+		let auth = { register: mock() };
 		let audits = { create: mock() };
 		let gravatar = { profile: mock() };
 
@@ -107,7 +96,7 @@ describe.skip(register.name, () => {
 		expect(
 			register(
 				{ email, password, displayName: null },
-				{ users, credentials, memberships, teams, audits, gravatar },
+				{ users, auth, audits, gravatar },
 			),
 		).rejects.toThrow("Password is included in a data breach");
 	});
@@ -116,9 +105,7 @@ describe.skip(register.name, () => {
 		server.resetHandlers(pwnedPasswords.strong, emailVerifier.invalid);
 
 		let users = { findByEmail: mock(), create: mock() };
-		let credentials = { create: mock() };
-		let memberships = { create: mock() };
-		let teams = { create: mock() };
+		let auth = { register: mock() };
 		let audits = { create: mock() };
 		let gravatar = { profile: mock() };
 
@@ -127,7 +114,7 @@ describe.skip(register.name, () => {
 		expect(
 			register(
 				{ email, password, displayName: null },
-				{ users, credentials, memberships, teams, audits, gravatar },
+				{ users, auth, audits, gravatar },
 			),
 		).rejects.toThrow("Disposable email address");
 	});
