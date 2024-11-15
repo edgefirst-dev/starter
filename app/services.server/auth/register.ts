@@ -56,7 +56,7 @@ export async function register(
 	let userId = createId();
 	let teamId = createId();
 
-	console.log({ userId, teamId });
+	console.info({ userId, teamId });
 
 	let [users, , teams, memberships] = await db.batch([
 		db

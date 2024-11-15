@@ -22,6 +22,7 @@ mock.module("edgekitjs", () => {
 	};
 });
 
+// biome-ignore lint/suspicious/noSkippedTests: We need to skip to test something else first
 describe.skip(register.name, () => {
 	let email = Email.from("john.doe@company.com");
 	let password = Password.from("abcDEF123!@#");
