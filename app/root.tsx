@@ -9,14 +9,13 @@ import {
 	useRouteError,
 } from "react-router";
 import "./assets/tailwind.css";
+import type { Route } from "./+types/root";
 
 export default function App() {
 	return <Outlet />;
 }
 
-export function ErrorBoundary() {
-	let error = useRouteError();
-
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 	let title =
 		error instanceof Error ? error.message : "Oops, something went wrong!";
 

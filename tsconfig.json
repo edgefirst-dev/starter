@@ -21,7 +21,6 @@
 		"rootDirs": [".", "./.react-router/types"],
 		"paths": {
 			"config:*": ["./config/*"],
-			"types:*": ["./.react-router/types/app/*"],
 			"db:schema": ["./db/schema.ts"],
 			"app:*": ["./app/*"]
 		}

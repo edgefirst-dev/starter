@@ -38,6 +38,5 @@ export async function rootOnly(request: Request) {
 
 /** Checks if the user is authenticated or not */
 export async function isAuthenticated(request: Request) {
-	if (await querySession(request)) return true;
-	return false;
+	return Boolean(await querySession(request));
 }

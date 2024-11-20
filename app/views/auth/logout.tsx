@@ -4,8 +4,8 @@ import { authenticate } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { ok } from "app:helpers/response";
 import { deleteSession } from "app:helpers/session";
-import type { Route } from "types:views/auth/+types.logout";
 import { Form, redirect, useNavigation } from "react-router";
+import type { Route } from "./+types/logout";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	await authenticate(request, "/register");

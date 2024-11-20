@@ -1,5 +1,5 @@
 import { AnchorButton } from "app:components/anchor-button";
-import type { Route } from "types:views/landings/+types.home";
+import type { Route } from "./+types/home";
 
 export default function Home(_: Route.ComponentProps) {
 	return (

@@ -1,6 +1,6 @@
 import { index, layout, prefix, route } from "@react-router/dev/routes";
 
-export const routes = [
+export default [
 	// Resources
 	route("files/:key", "./resources/file.ts"),
 

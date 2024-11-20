@@ -1,8 +1,8 @@
 import { isAuthenticated } from "app:helpers/auth";
 import { ok } from "app:helpers/response";
-import type { Route } from "types:views/layouts/+types.landings";
 import { Outlet } from "react-router";
 import { Link } from "react-router";
+import type { Route } from "./+types/landings";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	return ok({ isSignedIn: await isAuthenticated(request) });

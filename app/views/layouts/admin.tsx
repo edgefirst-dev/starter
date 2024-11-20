@@ -1,7 +1,7 @@
 import { rootOnly } from "app:helpers/auth";
 import { ok } from "app:helpers/response";
-import type { Route } from "types:views/layouts/+types.admin";
 import { NavLink, Outlet } from "react-router";
+import type { Route } from "./+types/admin";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	await rootOnly(request);

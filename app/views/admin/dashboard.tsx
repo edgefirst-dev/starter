@@ -2,8 +2,8 @@ import { rootOnly } from "app:helpers/auth";
 import { ok } from "app:helpers/response";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
-import type { Route } from "types:views/admin/+types.dashboard";
 import { NumberParser } from "edgekitjs";
+import type { Route } from "./+types/dashboard";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	await rootOnly(request);
@@ -19,7 +19,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 	});
 }
 
-export default function Component(props: Route.ComponentProps) {
+export default function Component({ loaderData }: Route.ComponentProps) {
 	return (
 		<div className="flex flex-col gap-8 items-start">
 			<header>
@@ -32,7 +32,7 @@ export default function Component(props: Route.ComponentProps) {
 						Total Users
 					</h3>
 					<p className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-						{props.loaderData.users}
+						{loaderData.users}
 					</p>
 				</section>
 
@@ -41,7 +41,7 @@ export default function Component(props: Route.ComponentProps) {
 						Total Teams
 					</h3>
 					<p className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-						{props.loaderData.teams}
+						{loaderData.teams}
 					</p>
 				</section>
 			</div>

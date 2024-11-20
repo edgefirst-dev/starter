@@ -9,7 +9,6 @@ import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
 import { createSession } from "app:helpers/session";
 import { UsersRepository } from "app:repositories.server/users";
 import { login } from "app:services.server/auth/login";
-import type { Route } from "types:views/auth/+types.login";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
 import {
@@ -20,6 +19,7 @@ import {
 	geo,
 } from "edgekitjs";
 import { Form, Link, redirect, useNavigation } from "react-router";
+import type { Route } from "./+types/login";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	await anonymous(request, "/profile");
