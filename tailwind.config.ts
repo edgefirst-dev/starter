@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 import colors from "tailwindcss/colors";
 
 export default {
-	content: ["./app/**/*.{ts,tsx}"],
+	content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
 	darkMode: "media",
 	theme: {
 		colors: {
