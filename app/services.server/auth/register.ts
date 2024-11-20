@@ -1,5 +1,4 @@
 import { Gravatar } from "app:clients/gravatar";
-import type { Credential } from "app:entities/credential";
 import type { GravatarProfile } from "app:entities/gravatar-profile";
 import { Membership } from "app:entities/membership";
 import { Team } from "app:entities/team";
@@ -7,13 +6,8 @@ import { User } from "app:entities/user";
 import { SyncUserWithGravatarJob } from "app:jobs/sync-user-with-gravatar";
 import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { AuthRepository } from "app:repositories.server/auth";
-import { CredentialsRepository } from "app:repositories.server/credentials";
-import { MembershipsRepository } from "app:repositories.server/memberships";
-import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
-import schema from "db:schema";
-import { createId } from "@paralleldrive/cuid2";
-import { Email, orm } from "edgekitjs";
+import { Email } from "edgekitjs";
 import { Entity, Password, waitUntil } from "edgekitjs";
 
 /**
