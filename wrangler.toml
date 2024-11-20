@@ -6,7 +6,7 @@ main = "./worker.ts"
 compatibility_date = "2024-10-11"
 
 # This is needed for AsyncLocalStorage to work
-compatibility_flags = ["nodejs_compat"]
+compatibility_flags = ["nodejs_compat_v2"]
 
 # Set the development port to be 3000
 dev.port = 3000
