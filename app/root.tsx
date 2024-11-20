@@ -1,15 +1,12 @@
 import { AnchorButton } from "app:components/anchor-button";
 import type { ReactNode } from "react";
-import {
-	Links,
-	Meta,
-	Outlet,
-	Scripts,
-	ScrollRestoration,
-	useRouteError,
-} from "react-router";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import "./assets/tailwind.css";
 import type { Route } from "./+types/root";
+
+export const meta: Route.MetaFunction = () => [
+	{ title: "Edge-first Starter Kit for React" },
+];
 
 export default function App() {
 	return <Outlet />;
