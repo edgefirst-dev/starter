@@ -11,13 +11,7 @@ import { UsersRepository } from "app:repositories.server/users";
 import { login } from "app:services.server/auth/login";
 import { Data } from "@edgefirst-dev/data";
 import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
-import {
-	Email,
-	type IPAddress,
-	Password,
-	type UserAgent,
-	geo,
-} from "edgekitjs";
+import { Email, Password, geo } from "edgekitjs";
 import { Form, Link, redirect, useNavigation } from "react-router";
 import type { Route } from "./+types/login";
 
@@ -51,8 +45,8 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 		let headers = await createSession({
 			user: user,
-			ip: context?.ip as IPAddress | null,
-			ua: context?.ua as UserAgent | null,
+			ip: context?.ip,
+			ua: context?.ua,
 			payload: {
 				teamId: team.id,
 				teams: memberships.map((m) => m.teamId),
