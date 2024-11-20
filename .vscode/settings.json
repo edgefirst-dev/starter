@@ -34,5 +34,6 @@
 	},
 	"tailwindCSS.classAttributes": ["class", "className", "cn", "tv"],
 	"typescript.tsdk": "node_modules/typescript/lib",
-	"typescript.enablePromptUseWorkspaceTsdk": true
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"typescript.preferences.preferTypeOnlyAutoImports": true
 }
