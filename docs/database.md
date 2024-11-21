@@ -8,6 +8,12 @@ To run any pending migration against your local database you have to use `bun ru
 
 To generate any new migration file you need to do changes to the `db/schema.ts` file, then run the same command as above and this will generate the migration file in the `db/migrations` folder, and run them.
 
+As a general recommendation, since the migrations will run before the app is deployed, there will be a moment where your old app will live with the new schema, so you should always make your changes backwards compatible.
+
+If you need to rename or remove a column or table, first deploy the app change that stop using that column or table, and then deploy the change that adds the migration that removes the column or table.
+
+This way you can avoid any downtime or data loss caused by users potentially using a version of the application that is not compatible with the new schema.
+
 ## Seed data
 
 To define the seed data we use the file `db/seed.sql`, we use plain SQL as this is simpler, faster and more reliable than using an ORM.
