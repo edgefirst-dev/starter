@@ -17,5 +17,6 @@ export type AuditAction =
 	| "user_login"
 	| "invalid_credentials_attempt"
 	| "accepts_membership"
-	| "generate_recovery_code"
+	| "generate_account_recovery_code"
+	| "use_account_recovery_code"
 	| "verified_email";

@@ -1,5 +1,6 @@
 import schema from "db:schema";
 
+import { EmailAccountRecoveryCodeJob } from "app:jobs/email-account-recovery-code.js";
 import { SyncUserWithGravatarJob } from "app:jobs/sync-user-with-gravatar.js";
 import { CleanupSessionsTask } from "app:tasks/cleanup-sessions.js";
 import type { Request, Response } from "@cloudflare/workers-types";
@@ -13,7 +14,7 @@ export default bootstrap({
 	rateLimit: { limit: 1000, period: 60 },
 
 	jobs() {
-		return [new SyncUserWithGravatarJob()];
+		return [new SyncUserWithGravatarJob(), new EmailAccountRecoveryCodeJob()];
 	},
 
 	tasks() {

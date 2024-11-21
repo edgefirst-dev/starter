@@ -27,6 +27,7 @@ export default [
 		route("logout", "./views/auth/logout.tsx"),
 		route("register", "./views/auth/register.tsx"),
 		route("login", "./views/auth/login.tsx"),
+		route("recover", "./views/auth/recover.tsx"),
 	]),
 
 	// Catch-all Route

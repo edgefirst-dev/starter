@@ -1,11 +1,14 @@
-import type { Credential } from "app:entities/credential";
 import type { User } from "app:entities/user";
-import { AuditLogsRepository } from "app:repositories.server/audit-logs";
+import { EmailAccountRecoveryCodeJob } from "app:jobs/email-account-recovery-code";
+import {
+	type AuditAction,
+	AuditLogsRepository,
+} from "app:repositories.server/audit-logs";
 import { CredentialsRepository } from "app:repositories.server/credentials";
 import { UsersRepository } from "app:repositories.server/users";
 import { encodeBase32 } from "@oslojs/encoding";
-import type { Email } from "edgekitjs";
-import { type Entity, waitUntil } from "edgekitjs";
+import type { Email, Password } from "edgekitjs";
+import { type Entity, kv, waitUntil } from "edgekitjs";
 
 /**
  * Initiates a password recovery process by generating a one-time password (OTP).
@@ -17,25 +20,43 @@ import { type Entity, waitUntil } from "edgekitjs";
  */
 export async function recover(
 	input: recover.Input,
+	baseURL: URL,
 	deps: recover.Dependencies = {
 		audits: new AuditLogsRepository(),
 		users: new UsersRepository(),
 		credentials: new CredentialsRepository(),
 	},
-): Promise<recover.Output> {
+) {
 	let [user] = await deps.users.findByEmail(input.email);
 	if (!user) throw new Error("User not found");
 
-	let [credential] = await deps.credentials.findByUser(user);
-	if (!credential) throw new Error("User has no associated credentials");
+	if (input.intent === "start") {
+		let token = generateRandomOTP();
 
-	let token = generateRandomOTP();
+		await kv().set(`recoveryCode:${token}`, input.email.toString(), {
+			ttl: 60 * 15, // 15 minutes
+		});
 
-	await deps.credentials.createResetToken(credential, token);
+		let url = new URL("/recover", baseURL);
+		url.searchParams.set("token", token);
 
-	waitUntil(deps.audits.create(user, "generate_recovery_code"));
+		EmailAccountRecoveryCodeJob.enqueue({
+			email: input.email.toString(),
+			url: url.toString(),
+		});
 
-	return { token };
+		waitUntil(deps.audits.create(user, "generate_account_recovery_code"));
+	}
+
+	if (input.intent === "finish") {
+		if (!(await kv().has(`recoveryCode:${input.token}`))) {
+			throw new Error("Invalid recovery token");
+		}
+
+		waitUntil(kv().remove(`recoveryCode:${input.token}`));
+		await deps.credentials.upsertByUser(user, input.password);
+		waitUntil(deps.audits.create(user, "use_account_recovery_code"));
+	}
 }
 
 /**
@@ -54,33 +75,24 @@ export namespace recover {
 	 * Input data for the `recover` method.
 	 * Contains the email required to initiate password recovery.
 	 */
-	export interface Input {
-		/** The user's email address. */
-		readonly email: Email;
-	}
-
-	/**
-	 * Output data returned by the `recover` method.
-	 * Contains the generated one-time password (OTP).
-	 */
-	export interface Output {
-		/** The generated OTP (one-time password) for recovery. */
-		token: string;
-	}
+	export type Input =
+		| { readonly intent: "start"; readonly email: Email }
+		| {
+				readonly intent: "finish";
+				readonly email: Email;
+				readonly password: Password;
+				readonly token: string;
+		  };
 
 	export interface Dependencies {
 		audits: {
-			create(user: User, action: string, entity?: Entity): Promise<void>;
+			create(user: User, action: AuditAction, entity?: Entity): Promise<void>;
 		};
 		users: {
 			findByEmail: (email: Email) => Promise<User[]>;
 		};
 		credentials: {
-			findByUser: (user: User) => Promise<Credential[]>;
-			createResetToken: (
-				credential: Credential,
-				token: string,
-			) => Promise<void>;
+			upsertByUser(user: User, password: Password): Promise<void>;
 		};
 	}
 }

@@ -2,7 +2,7 @@ import { Credential } from "app:entities/credential";
 import type { User } from "app:entities/user";
 import { credentials } from "db:schema";
 import { eq } from "drizzle-orm";
-import { orm } from "edgekitjs";
+import { type Password, orm } from "edgekitjs";
 
 export class CredentialsRepository {
 	async create(
@@ -28,19 +28,14 @@ export class CredentialsRepository {
 		return Credential.fromMany(list);
 	}
 
-	async createResetToken(credential: Credential, token: string) {
+	async upsertByUser(user: User, password: Password) {
+		let passwordHash = await password.hash();
 		await orm()
-			.update(credentials)
-			.set({ resetToken: token })
-			.where(eq(credentials.id, credential.id))
-			.execute();
-	}
-
-	async revokeResetToken(credential: Credential) {
-		await orm()
-			.update(credentials)
-			.set({ resetToken: null })
-			.where(eq(credentials.id, credential.id))
-			.execute();
+			.insert(credentials)
+			.values({ userId: user.id, passwordHash })
+			.onConflictDoUpdate({
+				target: credentials.userId,
+				set: { passwordHash },
+			});
 	}
 }

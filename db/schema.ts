@@ -104,18 +104,15 @@ export const credentials = sqliteTable(
 		updatedAt,
 		// Attributes
 		passwordHash: text("password_hash", { mode: "text" }).notNull(),
-		resetToken: text("reset_token", { mode: "text" }).unique(),
 		// Relationships
 		userId: text("user_id", { mode: "text" })
 			.notNull()
+			.unique()
 			.references(() => users.id, { onDelete: "cascade" }),
 	},
 	(t) => {
 		return {
 			userIdIndex: index("users_credentials_user_id_idx").on(t.userId),
-			resetTokenIndex: index("users_credentials_reset_token_idx").on(
-				t.resetToken,
-			),
 		};
 	},
 );
