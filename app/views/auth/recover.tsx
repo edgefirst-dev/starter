@@ -115,7 +115,7 @@ export default function Component({
 					defaultValue={loaderData.intent === "finish" ? loaderData.email : ""}
 					readOnly={loaderData.intent === "finish"}
 					autoCapitalize="off"
-					className="w-full rounded-md border border-neutral-700 px-5 py-2 dark:bg-neutral-800 dark:text-white dark:placeholder:text-neutral-300 read-only:dark:bg-neutral-900 read-only:dark:text-neutral-200 read-onky:dark:border-neutral-800"
+					className="w-full rounded-md border border-neutral-700 px-5 py-2 dark:bg-neutral-800 dark:text-white dark:placeholder:text-neutral-300 dark:read-only:bg-neutral-900 dark:read-only:text-neutral-200 read-onky:dark:border-neutral-800"
 				/>
 			</label>
 

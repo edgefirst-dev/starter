@@ -46,7 +46,7 @@ export default function Component({ loaderData }: Route.ComponentProps) {
 			</aside>
 
 			<div className="w-full max-w-sm flex flex-col gap-3">
-				<div className="flex flex-col gap-6 rounded-xl bg-neutral-50 dark:bg-neutral-900 p-10 shadow items-center justify-center aspect-square">
+				<div className="flex flex-col gap-6 rounded-xl bg-neutral-50 dark:bg-neutral-900 p-10 shadow-sm items-center justify-center aspect-square">
 					<img
 						src={loaderData.user.avatar}
 						alt=""
@@ -68,7 +68,7 @@ export default function Component({ loaderData }: Route.ComponentProps) {
 				)}
 			</div>
 
-			<section className="w-full max-w-screen-xl mx-auto border dark:border-l-neutral-700 p-6 rounded-xl">
+			<section className="w-full max-w-(--breakpoint-xl) mx-auto border dark:border-l-neutral-700 p-6 rounded-xl">
 				<header>
 					<h2 className="text-xl/none font-semibold">Session</h2>
 					<hr />

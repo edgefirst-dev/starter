@@ -27,7 +27,7 @@ export default function Component({ loaderData }: Route.ComponentProps) {
 			</header>
 
 			<div className="grid grid-cols-5 w-full gap-8">
-				<section className="overflow-hidden rounded-lg bg-neutral-50 dark:bg-neutral-900 px-4 py-5 shadow sm:p-6">
+				<section className="overflow-hidden rounded-lg bg-neutral-50 dark:bg-neutral-900 px-4 py-5 shadow-sm sm:p-6">
 					<h3 className="truncate text-sm font-medium text-gray-500">
 						Total Users
 					</h3>
@@ -36,7 +36,7 @@ export default function Component({ loaderData }: Route.ComponentProps) {
 					</p>
 				</section>
 
-				<section className="overflow-hidden rounded-lg bg-neutral-50 dark:bg-neutral-900 px-4 py-5 shadow sm:p-6">
+				<section className="overflow-hidden rounded-lg bg-neutral-50 dark:bg-neutral-900 px-4 py-5 shadow-sm sm:p-6">
 					<h3 className="truncate text-sm font-medium text-gray-500">
 						Total Teams
 					</h3>

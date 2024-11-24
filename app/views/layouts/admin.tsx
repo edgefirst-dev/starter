@@ -14,7 +14,7 @@ export default function Component() {
 	return (
 		<>
 			<header className="border-b border-neutral-200 dark:border-neutral-500">
-				<nav className="flex flex-row gap-8 max-w-screen-xl mx-auto items-center py-2">
+				<nav className="flex flex-row gap-8 max-w-(--breakpoint-xl) mx-auto items-center py-2">
 					<ul className="flex flex-row">
 						{links.map((link) => {
 							return (
@@ -32,7 +32,7 @@ export default function Component() {
 				</nav>
 			</header>
 
-			<main className="max-w-screen-lg mx-auto py-24 max-lg:px-5 w-full">
+			<main className="max-w-(--breakpoint-lg) mx-auto py-24 max-lg:px-5 w-full">
 				<Outlet />
 			</main>
 		</>
