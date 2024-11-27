@@ -1,6 +1,6 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
-import { rootOnly } from "app:helpers/auth";
+import auth from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { Cookies } from "app:helpers/cookies";
 import { ok } from "app:helpers/response";
@@ -10,11 +10,13 @@ import { Form, redirect, useNavigation } from "react-router";
 import type { Route } from "./+types/purge";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	await rootOnly(request);
+	await auth.rootOnly(request);
 	return ok(null);
 }
 
-export async function action() {
+export async function action({ request }: Route.ActionArgs) {
+	await auth.rootOnly(request);
+
 	await orm().delete(schema.users).execute();
 	await orm().delete(schema.teams).execute();
 

@@ -41,7 +41,8 @@
 		"isbot": "^5",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"react-router": "7.0.1",
+		"react-router": "^7.0.1",
+		"remix-auth": "^4.0.0",
 		"tailwind-merge": "^2.5.4",
 		"urlpattern-polyfill": "^10.0.0"
 	},

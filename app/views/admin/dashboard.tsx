@@ -1,4 +1,4 @@
-import { rootOnly } from "app:helpers/auth";
+import auth from "app:helpers/auth";
 import { ok } from "app:helpers/response";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
@@ -6,7 +6,7 @@ import { NumberParser } from "edgekitjs";
 import type { Route } from "./+types/dashboard";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	await rootOnly(request);
+	await auth.rootOnly(request);
 
 	let [users, teams] = await Promise.all([
 		new UsersRepository().count(),

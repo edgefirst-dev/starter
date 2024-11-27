@@ -71,18 +71,25 @@ function generateRandomOTP(): string {
 }
 
 export namespace recover {
+	export namespace Input {
+		export interface Start {
+			readonly intent: "start";
+			readonly email: Email;
+		}
+
+		export interface Finish {
+			readonly intent: "finish";
+			readonly email: Email;
+			readonly password: Password;
+			readonly token: string;
+		}
+	}
+
 	/**
 	 * Input data for the `recover` method.
 	 * Contains the email required to initiate password recovery.
 	 */
-	export type Input =
-		| { readonly intent: "start"; readonly email: Email }
-		| {
-				readonly intent: "finish";
-				readonly email: Email;
-				readonly password: Password;
-				readonly token: string;
-		  };
+	export type Input = Input.Start | Input.Finish;
 
 	export interface Dependencies {
 		audits: {

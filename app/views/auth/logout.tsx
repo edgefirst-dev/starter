@@ -1,20 +1,18 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
-import { authenticate } from "app:helpers/auth";
+import auth from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { ok } from "app:helpers/response";
-import { deleteSession } from "app:helpers/session";
-import { Form, redirect, useNavigation } from "react-router";
+import { Form, useNavigation } from "react-router";
 import type { Route } from "./+types/logout";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	await authenticate(request, "/register");
+	await auth.currentUser(request, "/register");
 	return ok(null);
 }
 
 export async function action({ request }: Route.ActionArgs) {
-	let headers = await deleteSession(request);
-	return redirect("/", { headers });
+	await auth.logout(request, "/");
 }
 
 export default function Component() {

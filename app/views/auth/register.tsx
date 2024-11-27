@@ -1,20 +1,15 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
-import { anonymous } from "app:helpers/auth";
-import { parseBody } from "app:helpers/body-parser";
+import auth from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
-import { createSession } from "app:helpers/session";
-import { register } from "app:services.server/auth/register";
-import { Data } from "@edgefirst-dev/data";
-import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
-import { Email, Password, geo } from "edgekitjs";
-import { Form, Link, redirect, useNavigation } from "react-router";
+import { Parser } from "@edgefirst-dev/data/parser";
+import { Form, Link, useNavigation } from "react-router";
 import type { Route } from "./+types/register";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	await anonymous(request, "/profile");
+	await auth.anonymous(request, "/profile");
 	return ok(null);
 }
 
@@ -22,38 +17,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 	await rateLimit(request.headers);
 
 	try {
-		let data = await parseBody(
-			request,
-			class extends Data<FormParser> implements register.Input {
-				get displayName() {
-					if (!this.parser.has("displayName")) return null;
-					return this.parser.string("displayName");
-				}
-
-				get email() {
-					return Email.from(this.parser.string("email"));
-				}
-
-				get password() {
-					return Password.from(this.parser.string("password"));
-				}
-			},
-		);
-
-		let { user, team, membership } = await register(data);
-
-		let headers = await createSession({
-			user: user,
-			ip: context?.ip,
-			ua: context?.ua,
-			payload: {
-				teamId: team.id,
-				teams: [membership.teamId],
-				geo: { city: geo().city, country: geo().country },
-			},
-		});
-
-		throw redirect("/profile", { headers });
+		await auth.register(request, context);
 	} catch (error) {
 		if (error instanceof Parser.Error) {
 			return unprocessableEntity({ error: error.message });

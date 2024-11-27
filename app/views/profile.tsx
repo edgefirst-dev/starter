@@ -1,4 +1,4 @@
-import { authenticate } from "app:helpers/auth";
+import auth from "app:helpers/auth";
 import { ok } from "app:helpers/response";
 import { getSession } from "app:helpers/session";
 import { SessionsRepository } from "app:repositories.server/sessions";
@@ -6,7 +6,7 @@ import { Link } from "react-router";
 import type { Route } from "./+types/profile";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	let user = await authenticate(request, "/register");
+	let user = await auth.currentUser(request, "/register");
 
 	let [currentSession, sessions] = await Promise.all([
 		getSession(request),

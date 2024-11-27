@@ -1,22 +1,17 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
-import { anonymous } from "app:helpers/auth";
-import { parseBody } from "app:helpers/body-parser";
+import auth from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { Cookies } from "app:helpers/cookies";
 import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
-import { createSession } from "app:helpers/session";
 import { UsersRepository } from "app:repositories.server/users";
-import { login } from "app:services.server/auth/login";
-import { Data } from "@edgefirst-dev/data";
-import { type FormParser, Parser } from "@edgefirst-dev/data/parser";
-import { Email, Password, geo } from "edgekitjs";
-import { Form, Link, redirect, useNavigation } from "react-router";
+import { Parser } from "@edgefirst-dev/data/parser";
+import { Form, Link, useNavigation } from "react-router";
 import type { Route } from "./+types/login";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	await anonymous(request, "/profile");
+	await auth.anonymous(request, "/profile");
 	let userId = await Cookies.expiredSession.parse(
 		request.headers.get("cookie"),
 	);
@@ -28,33 +23,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 	await rateLimit(request.headers);
 
 	try {
-		let data = await parseBody(
-			request,
-			class extends Data<FormParser> implements login.Input {
-				get email() {
-					return Email.from(this.parser.string("email"));
-				}
-
-				get password() {
-					return Password.from(this.parser.string("password"));
-				}
-			},
-		);
-
-		let { user, team, memberships } = await login(data);
-
-		let headers = await createSession({
-			user: user,
-			ip: context?.ip,
-			ua: context?.ua,
-			payload: {
-				teamId: team.id,
-				teams: memberships.map((m) => m.teamId),
-				geo: { city: geo().city, country: geo().country },
-			},
-		});
-
-		throw redirect("/profile", { headers });
+		await auth.login(request, context);
 	} catch (error) {
 		if (error instanceof Parser.Error) {
 			return unprocessableEntity({ error: error.message });
