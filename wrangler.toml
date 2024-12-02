@@ -52,6 +52,14 @@ binding = "QUEUE"
 # Configure this worker as a queue consumer
 [[queues.consumers]]
 queue = "edgefirst-queue"
+# The maximum number of messages allowed in each batch
+max_batch_size = 10
+# The maximum number of seconds to wait until a batch is full
+max_batch_timeout = 30
+# The maximum number of retries for a message
+max_retries = 10
+# The name of another Queue to send a message if it fails processing at least max_retries times, uncomment to enable it
+# dead_letter_queue = "edgefirst-dead-letter-queue"
 
 # Enables the Workers AI service
 # Note that using AI on development can incur additional costs as it uses Worker
