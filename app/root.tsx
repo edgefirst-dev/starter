@@ -4,12 +4,13 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import "./assets/tailwind.css";
 import type { Route } from "./+types/root";
 
-export const meta: Route.MetaFunction = () => [
-	{ title: "Edge-first Starter Kit for React" },
-];
-
 export default function App() {
-	return <Outlet />;
+	return (
+		<>
+			<title>Edge-first Starter Kit for React</title>
+			<Outlet />
+		</>
+	);
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
