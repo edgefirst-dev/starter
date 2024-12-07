@@ -8,9 +8,16 @@ import { Strategy } from "remix-auth/strategy";
 export class LoginStrategy<User> extends Strategy<User, login.Output> {
 	name = "login";
 
+	constructor(
+		protected options: login.Dependencies,
+		verify: Strategy.VerifyFunction<User, login.Output>,
+	) {
+		super(verify);
+	}
+
 	override async authenticate(request: Request) {
 		let input = await parseBody(request, DTO);
-		let output = await login(input);
+		let output = await login(input, this.options);
 		return await this.verify(output);
 	}
 }

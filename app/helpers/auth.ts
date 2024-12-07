@@ -1,3 +1,4 @@
+import { Gravatar } from "app:clients/gravatar";
 import { LoginStrategy } from "app:core/strategies/login";
 import { RegisterStrategy } from "app:core/strategies/register";
 import type { Membership } from "app:entities/membership";
@@ -11,6 +12,11 @@ import {
 	getSession,
 	querySession,
 } from "app:helpers/session";
+import { AuditLogsRepository } from "app:repositories.server/audit-logs";
+import { AuthRepository } from "app:repositories.server/auth";
+import { CredentialsRepository } from "app:repositories.server/credentials";
+import { MembershipsRepository } from "app:repositories.server/memberships";
+import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
 import { geo } from "edgekitjs";
 import { type AppLoadContext, redirect } from "react-router";
@@ -27,23 +33,40 @@ class Authenticator extends BaseAuthenticator<Result> {
 		super();
 
 		this.use(
-			new RegisterStrategy(async (output) => {
-				return {
-					user: output.user,
-					team: output.team,
-					memberships: [output.membership],
-				};
-			}),
+			new RegisterStrategy(
+				{
+					audits: new AuditLogsRepository(),
+					auth: new AuthRepository(),
+					gravatar: new Gravatar(),
+					users: new UsersRepository(),
+				},
+				async (output) => {
+					return {
+						user: output.user,
+						team: output.team,
+						memberships: [output.membership],
+					};
+				},
+			),
 		);
 
 		this.use(
-			new LoginStrategy(async (output) => {
-				return {
-					user: output.user,
-					team: output.team,
-					memberships: output.memberships,
-				};
-			}),
+			new LoginStrategy(
+				{
+					audits: new AuditLogsRepository(),
+					credentials: new CredentialsRepository(),
+					memberships: new MembershipsRepository(),
+					teams: new TeamsRepository(),
+					users: new UsersRepository(),
+				},
+				async (output) => {
+					return {
+						user: output.user,
+						team: output.team,
+						memberships: output.memberships,
+					};
+				},
+			),
 		);
 	}
 

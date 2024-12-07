@@ -3,11 +3,6 @@ import type { Team } from "app:entities/team";
 import type { User } from "app:entities/user";
 
 import type { Credential } from "app:entities/credential";
-import { AuditLogsRepository } from "app:repositories.server/audit-logs";
-import { CredentialsRepository } from "app:repositories.server/credentials";
-import { MembershipsRepository } from "app:repositories.server/memberships";
-import { TeamsRepository } from "app:repositories.server/teams";
-import { UsersRepository } from "app:repositories.server/users";
 import { Email } from "edgekitjs";
 import { type Entity, type Password, waitUntil } from "edgekitjs";
 
@@ -21,13 +16,7 @@ import { type Entity, type Password, waitUntil } from "edgekitjs";
  */
 export async function login(
 	input: login.Input,
-	deps: login.Dependencies = {
-		audits: new AuditLogsRepository(),
-		users: new UsersRepository(),
-		teams: new TeamsRepository(),
-		credentials: new CredentialsRepository(),
-		memberships: new MembershipsRepository(),
-	},
+	deps: login.Dependencies,
 ): Promise<login.Output> {
 	let [user] = await deps.users.findByEmail(input.email);
 	if (!user) throw new Error("User not found");

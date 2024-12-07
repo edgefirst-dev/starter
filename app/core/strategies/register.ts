@@ -5,12 +5,19 @@ import type { FormParser } from "@edgefirst-dev/data/parser";
 import { Email, Password } from "edgekitjs";
 import { Strategy } from "remix-auth/strategy";
 
-export class RegisterStrategy<User> extends Strategy<User, register.Output> {
+export class RegisterStrategy<U> extends Strategy<U, register.Output> {
 	name = "register";
+
+	constructor(
+		protected options: register.Dependencies,
+		verify: Strategy.VerifyFunction<U, register.Output>,
+	) {
+		super(verify);
+	}
 
 	override async authenticate(request: Request) {
 		let input = await parseBody(request, DTO);
-		let output = await register(input);
+		let output = await register(input, this.options);
 		return await this.verify(output);
 	}
 }

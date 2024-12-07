@@ -1,12 +1,9 @@
-import { Gravatar } from "app:clients/gravatar";
 import type { GravatarProfile } from "app:entities/gravatar-profile";
 import { Membership } from "app:entities/membership";
 import { Team } from "app:entities/team";
 import { User } from "app:entities/user";
 import { SyncUserWithGravatarJob } from "app:jobs/sync-user-with-gravatar";
-import { AuditLogsRepository } from "app:repositories.server/audit-logs";
-import { AuthRepository } from "app:repositories.server/auth";
-import { UsersRepository } from "app:repositories.server/users";
+import type { AuthRepository } from "app:repositories.server/auth";
 import { Email } from "edgekitjs";
 import { Entity, Password, waitUntil } from "edgekitjs";
 
@@ -21,12 +18,7 @@ import { Entity, Password, waitUntil } from "edgekitjs";
  */
 export async function register(
 	input: register.Input,
-	deps: register.Dependencies = {
-		auth: new AuthRepository(),
-		audits: new AuditLogsRepository(),
-		users: new UsersRepository(),
-		gravatar: new Gravatar(),
-	},
+	deps: register.Dependencies,
 ): Promise<register.Output> {
 	await input.email.verify();
 	await input.password.isStrong();
