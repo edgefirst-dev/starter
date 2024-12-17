@@ -7,7 +7,10 @@ export function fingerprint(user?: User) {
 	let ua = UserAgent.fromRequest(request());
 	let ip = IPAddress.fromRequest(request());
 
-	let id = [ip?.toString(), ua?.toString()];
+	let id: string[] = [];
+
+	if (ip) id.push(ip.toString());
+	if (ua) id.push(ua.toString());
 	if (user) id.push(user.toString());
 
 	return encodeHexLowerCase(sha256(new TextEncoder().encode(id.join(":"))));
