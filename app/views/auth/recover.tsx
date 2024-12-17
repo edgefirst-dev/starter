@@ -1,6 +1,6 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
-import auth from "app:helpers/auth";
+import { anonymous } from "app:helpers/auth";
 import { parseBody } from "app:helpers/body-parser";
 import { cn } from "app:helpers/cn";
 import { rateLimit } from "app:helpers/rate-limit";
@@ -17,7 +17,7 @@ import { Form, redirect, useNavigation } from "react-router";
 import type { Route } from "./+types/recover";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	await auth.anonymous(request, "/profile");
+	await anonymous(request, "/profile");
 
 	let searchParams = new SearchParamsParser(request);
 	if (!searchParams.has("token")) return ok({ intent: "start" as const });
@@ -35,7 +35,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
 	await rateLimit(request.headers);
-	await auth.anonymous(request, "/profile");
+	await anonymous(request, "/profile");
 
 	let data = await parseBody(
 		request,

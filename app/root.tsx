@@ -1,8 +1,22 @@
 import { AnchorButton } from "app:components/anchor-button";
 import type { ReactNode } from "react";
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import {
+	Links,
+	Meta,
+	Outlet,
+	Scripts,
+	ScrollRestoration,
+	data,
+	useRouteLoaderData,
+} from "react-router";
 import "./assets/tailwind.css";
+import { isAuthenticated } from "app:helpers/auth";
+import { ok } from "app:helpers/response";
 import type { Route } from "./+types/root";
+
+export async function loader({ request }: Route.LoaderArgs) {
+	return ok({ isAuthenticated: await isAuthenticated(request) });
+}
 
 export default function App() {
 	return (
@@ -60,4 +74,14 @@ export function Layout({ children }: { children: ReactNode }) {
 			</body>
 		</html>
 	);
+}
+
+export function useRootLoaderData() {
+	let rootLoaderData = useRouteLoaderData<typeof loader>("root");
+	if (!rootLoaderData) throw new Error("Failed to load root loader data");
+	return rootLoaderData;
+}
+
+export function useIsAuthenticated() {
+	return useRootLoaderData().isAuthenticated;
 }

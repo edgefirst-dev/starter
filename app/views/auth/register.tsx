@@ -1,6 +1,6 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
-import auth from "app:helpers/auth";
+import { anonymous, register } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { rateLimit } from "app:helpers/rate-limit";
 import { badRequest, ok, unprocessableEntity } from "app:helpers/response";
@@ -9,7 +9,7 @@ import { Form, Link, useNavigation } from "react-router";
 import type { Route } from "./+types/register";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	await auth.anonymous(request, "/profile");
+	await anonymous(request, "/profile");
 	return ok(null);
 }
 
@@ -17,7 +17,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 	await rateLimit(request.headers);
 
 	try {
-		await auth.register(request, context);
+		await register(request, context);
 	} catch (error) {
 		if (error instanceof Parser.Error) {
 			return unprocessableEntity({ error: error.message });

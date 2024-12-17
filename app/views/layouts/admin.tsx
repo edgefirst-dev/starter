@@ -1,10 +1,10 @@
-import auth from "app:helpers/auth";
+import { rootOnly } from "app:helpers/auth";
 import { ok } from "app:helpers/response";
 import { NavLink, Outlet } from "react-router";
 import type { Route } from "./+types/admin";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	await auth.rootOnly(request);
+	await rootOnly(request);
 	return ok(null);
 }
 

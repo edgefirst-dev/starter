@@ -1,6 +1,6 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
-import auth from "app:helpers/auth";
+import { anonymous, login } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { Cookies } from "app:helpers/cookies";
 import { rateLimit } from "app:helpers/rate-limit";
@@ -11,7 +11,7 @@ import { Form, Link, useNavigation } from "react-router";
 import type { Route } from "./+types/login";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	await auth.anonymous(request, "/profile");
+	await anonymous(request, "/profile");
 	let userId = await Cookies.expiredSession.parse(
 		request.headers.get("cookie"),
 	);
@@ -23,7 +23,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 	await rateLimit(request.headers);
 
 	try {
-		await auth.login(request, context);
+		await login(request, context);
 	} catch (error) {
 		if (error instanceof Parser.Error) {
 			return unprocessableEntity({ error: error.message });

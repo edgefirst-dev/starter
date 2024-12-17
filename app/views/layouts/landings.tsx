@@ -1,18 +1,14 @@
-import auth from "app:helpers/auth";
-import { ok } from "app:helpers/response";
+import { useIsAuthenticated } from "app:root";
 import { Outlet } from "react-router";
 import { Link } from "react-router";
 import type { Route } from "./+types/landings";
 
-export async function loader({ request }: Route.LoaderArgs) {
-	return ok({ isSignedIn: await auth.isAuthenticated(request) });
-}
-
-export default function Component({ loaderData }: Route.ComponentProps) {
+export default function Component(_: Route.ComponentProps) {
+	let isAuthenticated = useIsAuthenticated();
 	return (
 		<main className="min-h-dvh w-full flex flex-col justify-center items-center">
 			<aside className="flex gap-2 absolute top-0 right-0 pt-4 pr-4">
-				{loaderData.isSignedIn ? (
+				{isAuthenticated ? (
 					<Link to="/profile" className="hover:underline">
 						Profile
 					</Link>

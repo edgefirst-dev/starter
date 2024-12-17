@@ -6,21 +6,17 @@ import type { Team } from "app:entities/team";
 import type { User } from "app:entities/user";
 import { Cookies } from "app:helpers/cookies";
 import { unauthorized } from "app:helpers/response";
-import {
-	createSession,
-	deleteSession,
-	getSession,
-	querySession,
-} from "app:helpers/session";
+import { createSession, getSession } from "app:helpers/session";
 import { AuditLogsRepository } from "app:repositories.server/audit-logs";
 import { AuthRepository } from "app:repositories.server/auth";
 import { CredentialsRepository } from "app:repositories.server/credentials";
 import { MembershipsRepository } from "app:repositories.server/memberships";
+import { SessionsRepository } from "app:repositories.server/sessions";
 import { TeamsRepository } from "app:repositories.server/teams";
 import { UsersRepository } from "app:repositories.server/users";
-import { geo } from "edgekitjs";
+import { geo, waitUntil } from "edgekitjs";
 import { type AppLoadContext, redirect } from "react-router";
-import { Authenticator as BaseAuthenticator } from "remix-auth";
+import { Authenticator } from "remix-auth";
 
 interface Result {
 	user: User;
@@ -28,121 +24,164 @@ interface Result {
 	memberships: Membership[];
 }
 
-class Authenticator extends BaseAuthenticator<Result> {
-	constructor() {
-		super();
+const authenticator = new Authenticator<Result>();
+const sessions = new SessionsRepository();
 
-		this.use(
-			new RegisterStrategy(
-				{
-					audits: new AuditLogsRepository(),
-					auth: new AuthRepository(),
-					gravatar: new Gravatar(),
-					users: new UsersRepository(),
-				},
-				async (output) => {
-					return {
-						user: output.user,
-						team: output.team,
-						memberships: [output.membership],
-					};
-				},
-			),
-		);
+authenticator.use(
+	new RegisterStrategy(
+		{
+			audits: new AuditLogsRepository(),
+			auth: new AuthRepository(),
+			gravatar: new Gravatar(),
+			users: new UsersRepository(),
+		},
+		async (output) => {
+			return {
+				user: output.user,
+				team: output.team,
+				memberships: [output.membership],
+			};
+		},
+	),
+);
 
-		this.use(
-			new LoginStrategy(
-				{
-					audits: new AuditLogsRepository(),
-					credentials: new CredentialsRepository(),
-					memberships: new MembershipsRepository(),
-					teams: new TeamsRepository(),
-					users: new UsersRepository(),
-				},
-				async (output) => {
-					return {
-						user: output.user,
-						team: output.team,
-						memberships: output.memberships,
-					};
-				},
-			),
-		);
-	}
+authenticator.use(
+	new LoginStrategy(
+		{
+			audits: new AuditLogsRepository(),
+			credentials: new CredentialsRepository(),
+			memberships: new MembershipsRepository(),
+			teams: new TeamsRepository(),
+			users: new UsersRepository(),
+		},
+		async (output) => {
+			return {
+				user: output.user,
+				team: output.team,
+				memberships: output.memberships,
+			};
+		},
+	),
+);
 
-	/** Perform the register process */
-	async register(request: Request, context?: AppLoadContext) {
-		let output = await this.authenticate("register", request);
-
-		let headers = await createSession({
-			user: output.user,
-			ip: context?.ip,
-			ua: context?.ua,
-			payload: {
-				teamId: output.team.id,
-				teams: output.memberships.map((m) => m.teamId),
-				geo: { city: geo().city, country: geo().country },
-			},
-		});
-
-		throw redirect("/profile", { headers });
-	}
-
-	/** Perform the login process */
-	async login(request: Request, context?: AppLoadContext) {
-		let output = await this.authenticate("login", request);
-
-		let headers = await createSession({
-			user: output.user,
-			ip: context?.ip,
-			ua: context?.ua,
-			payload: {
-				teamId: output.team.id,
-				teams: output.memberships.map((m) => m.teamId),
-			},
-		});
-
-		throw redirect("/profile", { headers });
-	}
-
-	/** Only allow access to a route to authenticated users */
-	async currentUser(request: Request, returnTo?: string): Promise<User> {
-		let session = await getSession(request);
-		let [user] = await new UsersRepository().findById(session.userId);
-		if (!user && returnTo) {
-			throw redirect(returnTo, {
-				headers: {
-					"Set-Cookie": await Cookies.returnTo.serialize(request.url),
-				},
-			});
-		}
-		if (!user) throw unauthorized({ message: "Unauthorized" });
-		return user;
-	}
-
-	/** Only allow access to a route to anonymous visitors */
-	async anonymous(request: Request, returnTo: string) {
-		let session = await querySession(request);
-		if (session) throw redirect(returnTo);
-	}
-
-	/** Only allow access to a route to authenticated root users */
-	async rootOnly(request: Request) {
-		let user = await this.currentUser(request);
-		if (user.isRoot) return user;
-		throw unauthorized({ message: "Unauthorized" });
-	}
-
-	/** Checks if the user is authenticated or not */
-	async isAuthenticated(request: Request) {
-		return Boolean(await querySession(request));
-	}
-
-	/** Logout the user by deleting the session, and clearing the cookie */
-	async logout(request: Request, returnTo = "/") {
-		let headers = await deleteSession(request);
-		throw redirect(returnTo, { headers });
-	}
+/** Checks if the user is authenticated or not */
+export async function isAuthenticated(request: Request) {
+	return Boolean(await querySession(request));
 }
 
-export default new Authenticator();
+/** Perform the register process */
+export async function register(request: Request, context?: AppLoadContext) {
+	let output = await authenticator.authenticate("register", request);
+
+	let headers = await createSession({
+		user: output.user,
+		ip: context?.ip,
+		ua: context?.ua,
+		payload: {
+			teamId: output.team.id,
+			teams: output.memberships.map((m) => m.teamId),
+			geo: { city: geo().city, country: geo().country },
+		},
+	});
+
+	throw redirect("/profile", { headers });
+}
+
+/** Perform the login process */
+export async function login(request: Request, context?: AppLoadContext) {
+	let output = await authenticator.authenticate("login", request);
+
+	let headers = await createSession({
+		user: output.user,
+		ip: context?.ip,
+		ua: context?.ua,
+		payload: {
+			teamId: output.team.id,
+			teams: output.memberships.map((m) => m.teamId),
+		},
+	});
+
+	throw redirect("/profile", { headers });
+}
+
+/** Only allow access to a route to authenticated users */
+export async function currentUser(request: Request): Promise<User> {
+	let session = await getSession(request);
+	if (!session) throw await requestAuthentication(request);
+
+	let [user] = await new UsersRepository().findById(session.userId);
+	if (!user) throw await requestAuthentication(request);
+
+	return user;
+}
+
+/** Only allow access to a route to anonymous visitors */
+export async function anonymous(request: Request, returnTo: string) {
+	let session = await querySession(request);
+	if (session) throw redirect(returnTo);
+}
+
+/** Only allow access to a route to authenticated root users */
+export async function rootOnly(request: Request) {
+	let user = await currentUser(request);
+	if (user.isRoot) return user;
+	throw unauthorized({ message: "Unauthorized" });
+}
+
+/** Logout the user by deleting the session, and clearing the cookie */
+export async function logout(request: Request, returnTo = "/") {
+	let headers = await terminateSession(request);
+	throw redirect(returnTo, { headers });
+}
+
+// Private
+
+async function terminateSession(
+	request: Request,
+	responseHeaders = new Headers(),
+) {
+	let id = await Cookies.session.parse(request.headers.get("cookie"));
+	await new SessionsRepository().destroy(id);
+	responseHeaders.append(
+		"Set-Cookie",
+		await Cookies.session.serialize(null, { maxAge: 0 }),
+	);
+	responseHeaders.append(
+		"Set-Cookie",
+		await Cookies.expiredSession.serialize(null, { maxAge: 0 }),
+	);
+	return responseHeaders;
+}
+
+async function requestAuthentication(request: Request) {
+	let cookie = await Cookies.returnTo.serialize(request.url);
+	return redirect("/login", { headers: { "Set-Cookie": cookie } });
+}
+
+async function querySession(request: Request) {
+	let session = await findSessionByCookie(request);
+
+	if (!session) return null;
+
+	if (session.hasExpired) {
+		let headers = await terminateSession(request);
+		headers.append(
+			"Set-Cookie",
+			await Cookies.expiredSession.serialize(session.userId),
+		);
+		throw redirect("/login", { headers });
+	}
+
+	waitUntil(sessions.recordActivity(session.id));
+	return session;
+}
+
+async function findSessionByCookie(request: Request) {
+	let sessionId = await Cookies.session.parse(request.headers.get("cookie"));
+	if (!sessionId) return null;
+
+	let [session] = await sessions.findById(sessionId);
+	if (!session) return null;
+
+	return session;
+}

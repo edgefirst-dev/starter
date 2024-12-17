@@ -1,18 +1,18 @@
 import { Button } from "app:components/button";
 import { Spinner } from "app:components/spinner";
-import auth from "app:helpers/auth";
+import { currentUser, logout } from "app:helpers/auth";
 import { cn } from "app:helpers/cn";
 import { ok } from "app:helpers/response";
 import { Form, useNavigation } from "react-router";
 import type { Route } from "./+types/logout";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	await auth.currentUser(request, "/register");
+	await currentUser(request);
 	return ok(null);
 }
 
 export async function action({ request }: Route.ActionArgs) {
-	await auth.logout(request, "/");
+	await logout(request, "/");
 }
 
 export default function Component() {
