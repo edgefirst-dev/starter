@@ -10,6 +10,8 @@ import { Database } from "./setup/d1-database";
 import { KVNamespace } from "./setup/kv-namespace";
 import { Queue } from "./setup/queue";
 import { R2Bucket } from "./setup/r2-bucket";
+import { Secret } from "./setup/secret";
+import { Worker } from "./setup/worker";
 
 config({ path: "./.dev.vars" });
 
@@ -58,6 +60,12 @@ try {
 	let verifier = await rl.question(
 		"Do you have a Verifier API key? (press enter to continue) ",
 	);
+
+	// We need to create a worker if it doesn't exist to associate the secrets
+	let worker = await Worker.upsert(cf, account, projectName);
+
+	await Secret.create(cf, account, worker, "GRAVATAR_API_KEY", gravatar);
+	await Secret.create(cf, account, worker, "VERIFIER_API_KEY", verifier);
 
 	consola.info("Creating .dev.vars file with the app environment variables.");
 

@@ -10,7 +10,7 @@ export class R2Bucket extends Data<ObjectParser> {
 	}
 
 	static async create(cf: Cloudflare, account: Account, name: string) {
-		consola.info("Creating queue...");
+		consola.info(`Creating R2 bucket ${name}.`);
 
 		let result = await cf.r2.buckets.create({ account_id: account.id, name });
 

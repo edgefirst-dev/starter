@@ -14,7 +14,7 @@ export class Queue extends Data<ObjectParser> {
 	}
 
 	static async create(cf: Cloudflare, account: Account, name: string) {
-		consola.info("Creating queue...");
+		consola.info(`Creating queue ${name}.`);
 
 		let result = await cf.queues.create({
 			account_id: account.id,

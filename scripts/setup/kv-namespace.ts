@@ -14,7 +14,7 @@ export class KVNamespace extends Data<ObjectParser> {
 	}
 
 	static async create(cf: Cloudflare, account: Account, title: string) {
-		consola.info("Creating KV namespace...");
+		consola.info(`Creating KV namespace ${title}.`);
 
 		let result = await cf.kv.namespaces.create({
 			account_id: account.id,
