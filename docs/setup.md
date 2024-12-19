@@ -12,18 +12,15 @@ bun run setup
 
 This will ask for a project name, and for a Cloudflare API token with the required permissions.
 
-> [!TIP]
-> If you set `CLOUDFLARE_API_TOKEN` environment variable then the setup script won't ask for the token and use that.
->
-> ```bash
-> CLOUDFLARE_API_TOKEN=token bun run setup
-> ```
-
 It will also ask if you have a `GRAVATAR_API_TOKEN` and `VERIFIER_API_KEY` to use in `.dev.vars`.
 
 You can get a new Verifier API key at [verifier.meetchopra.com](https://verifier.meetchopra.com) completely free.
 
 You can get a new Gravatar API token at [gravatar.com/developers](https://gravatar.com/developers/applications) completely free.
+
+> [!TIP]
+> If already have `CLOUDFLARE_API_TOKEN`, `GRAVATAR_API_TOKEN` and `VERIFIER_API_KEY` as an environment variable then the setup script won't ask for them and use the already set value.
+> The setup script also loads your `.dev.vars` file if it exists as environment variables.
 
 After that it will create the required bindings (D1, KV, R2 and queue), run the migrations and seed against the local database.
 

@@ -41,31 +41,44 @@ try {
 		process.exit(1);
 	}
 
+	/** Check if we can get the CF API token from env or ask the user */
 	let apiToken = process.env.CLOUDFLARE_API_TOKEN;
 	apiToken ??= await rl.question("What's your Cloudflare API token? ");
 
+	/** Check if we can get the Gravatar API token from env or ask the user */
+	let gravatar = process.env.GRAVATAR_API_TOKEN;
+	gravatar ??= await rl.question("Do you have a Gravatar API token? ");
+	gravatar = gravatar.trim();
+
+	/** Check if we can get the Verifier API key from env or ask the user */
+	let verifier = process.env.VERIFIER_API_KEY;
+	verifier ??= await rl.question("Do you have a Verifier API key? ");
+	verifier = verifier.trim();
+
+	/** Create a CF API client instance */
 	let cf = new Cloudflare({ apiToken });
 
+	/** Look up for the CF account to use */
 	let account = await Account.find(cf);
 
+	/** Find or create the resources of the app (DB, KV, FS and Queue) */
 	let db = await Database.upsert(cf, account, projectName);
 	let kv = await KVNamespace.upsert(cf, account, projectName);
 	let r2 = await R2Bucket.upsert(cf, account, projectName);
 	let queue = await Queue.upsert(cf, account, projectName);
 
-	let gravatar = await rl.question(
-		"Do you have a Gravatar API token? (press enter to continue) ",
-	);
-
-	let verifier = await rl.question(
-		"Do you have a Verifier API key? (press enter to continue) ",
-	);
-
-	// We need to create a worker if it doesn't exist to associate the secrets
+	/** To set the secrets, we will first find a Worker instance or create one */
 	let worker = await Worker.upsert(cf, account, projectName);
 
-	await Secret.create(cf, account, worker, "GRAVATAR_API_KEY", gravatar);
-	await Secret.create(cf, account, worker, "VERIFIER_API_KEY", verifier);
+	/** If the app has a Gravatar API token, create a secret */
+	if (gravatar) {
+		await Secret.create(cf, account, worker, "GRAVATAR_API_TOKEN", gravatar);
+	}
+
+	/** If the app has a Verifier API key, create a secret */
+	if (verifier) {
+		await Secret.create(cf, account, worker, "VERIFIER_API_KEY", verifier);
+	}
 
 	consola.info("Creating .dev.vars file with the app environment variables.");
 
@@ -164,11 +177,11 @@ crons = ["* * * * *"]
 
 	consola.info("Running the local database migrations.");
 
-	await $`bun run db:migrate:local ${db.name}`.quiet();
+	await $`bun run db:migrate:local ${db.name}`.quiet().nothrow();
 
-	consola.success("Running seed data against local database.");
+	consola.info("Running seed data against local database.");
 
-	await $`bun run db:seed ${db.name}`.quiet();
+	await $`bun run db:seed ${db.name}`.quiet().nothrow();
 
 	consola.success("Setup completed successfully.");
 
