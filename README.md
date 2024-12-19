@@ -33,9 +33,14 @@ Create a new React application using the Edge-first Starter Kit:
 
 ```sh
 npx degit edgefirst-dev/starter-worker my-app
+cd my-app
+bun install
+bun run setup
 ```
 
-Once you're inside the repo follow the instructions in the [setup docs](docs/setup.md) file.
+The `setup` script will ask for your project name, and other information to configure the project locally and on Cloudflare.
+
+Check the [setup docs](./docs/setup.md) for more information.
 
 ## Author
 
