@@ -41,7 +41,7 @@ You will need to create the following bindings:
 bunx wrangler d1 create <db-name>
 bunx wrangler kv namespace create <kv-name>
 bunx wrangler r2 bucket create <r2-name>
-bunx wrangler queues create
+bunx wrangler queues create <queue-name>
 ```
 
 Replace the values between `<>` with your desired names, then update the IDs in your wrangler.toml file for the D1 and KV, and the name for the D1 and R2 and queue.
