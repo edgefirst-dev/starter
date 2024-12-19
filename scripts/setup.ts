@@ -91,6 +91,9 @@ try {
 		await Secret.create(cf, account, worker, "VERIFIER_API_KEY", verifier);
 	}
 
+	/** We want to set the APP_ENV to production in the Worker */
+	await Secret.create(cf, account, worker, "APP_ENV", "production");
+
 	consola.info("Creating .dev.vars file with the app environment variables.");
 
 	await write(
@@ -193,6 +196,20 @@ crons = ["* * * * *"]
 	consola.info("Running seed data against local database.");
 
 	await $`bun run db:seed ${db.name}`.quiet().nothrow();
+
+	if (
+		await consola.prompt("Do you want to deploy the worker now?", {
+			type: "confirm",
+		})
+	) {
+		consola.info("Running migrations against the production database.");
+		await $`bun run db:migrate --remote ${db.name}`.quiet().nothrow();
+		consola.info("Building the application.");
+		await $`bun run build`.quiet().nothrow();
+		consola.info("Deploying the worker.");
+		await $`bun run deploy`.quiet().nothrow();
+		consola.success("Worker deployed successfully.");
+	}
 
 	consola.success("Setup completed successfully.");
 

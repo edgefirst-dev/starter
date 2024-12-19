@@ -2,7 +2,7 @@ import { Data } from "@edgefirst-dev/data";
 import { ObjectParser } from "@edgefirst-dev/data/parser";
 import type { Cloudflare } from "cloudflare";
 import consola from "consola";
-import { generatePath, resolvePath } from "react-router";
+import { generatePath } from "react-router";
 import type { Account } from "./account";
 
 export class Worker extends Data<ObjectParser> {
