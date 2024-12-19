@@ -1,6 +1,22 @@
 # Setup
 
-## Environment Variables
+You can setup the project using the provided `bun run setup` command or manually.
+
+## Automated Setup
+
+To setup the project automatically you can run the following command:
+
+```bash
+bun run setup
+```
+
+This will ask for a project name, and for a Cloudflare API token with the required permissions.
+
+After that it will create the required bindings (D1, KV, R2 and queue), run the database migrations and seed locally, and setup the GitHub Action secrets.
+
+## Manual Setup
+
+### Environment Variables
 
 Create a `.dev.vars` file with the following content:
 
@@ -25,7 +41,7 @@ You can get a new Gravatar API token at [gravatar.com/developers](https://gravat
 > [!TIP]
 > On your Cloudflare Workers environment you will only need `GRAVATAR_API_TOKEN` and `VERIFIER_API_KEY` environment variables.
 
-## The Cloudflare API token should have the following permissions:
+### The Cloudflare API token should have the following permissions:
 
 - Workers AI:Edit
 - D1:Edit
@@ -33,7 +49,7 @@ You can get a new Gravatar API token at [gravatar.com/developers](https://gravat
 - Workers KV Storage:Edit
 - Workers Scripts:Edit
 
-## Create required bindings
+### Create required bindings
 
 You will need to create the following bindings:
 
@@ -49,7 +65,7 @@ Replace the values between `<>` with your desired names, then update the IDs in 
 > [!IMPORTANT]
 > Don't change the binding names, they must be DB, KV and FS as that's what EdgeKit.js expects.
 
-## Run migrations
+### Run migrations
 
 You will need to run the database migrations, you can do it with
 
@@ -59,7 +75,7 @@ bun run db:migrate:local db-name
 
 Replace `db-name` with your database name configured in `wrangler.toml`.
 
-## Setup GitHub Action Secrets
+### Setup GitHub Action Secrets
 
 To deploy using the GitHub Action workflow you will need to setup the following secrets:
 
@@ -69,7 +85,7 @@ To deploy using the GitHub Action workflow you will need to setup the following 
 
 These can be the sames that you used in your `.dev.vars` file.
 
-## Create Cloudflare Secrets
+### Create Cloudflare Secrets
 
 Inside your Cloudflare Workers environment you will need to create the following secrets
 

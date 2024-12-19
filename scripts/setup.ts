@@ -38,6 +38,7 @@ try {
 		consola.error("Project name is required.");
 		process.exit(1);
 	}
+
 	let apiToken = process.env.CLOUDFLARE_API_TOKEN;
 	apiToken ??= await rl.question("What's your Cloudflare API token? ");
 
@@ -50,6 +51,14 @@ try {
 	let r2 = await R2Bucket.upsert(cf, account, projectName);
 	let queue = await Queue.upsert(cf, account, projectName);
 
+	let gravatar = await rl.question(
+		"Do you have a Gravatar API token? (press enter to continue) ",
+	);
+
+	let verifier = await rl.question(
+		"Do you have a Verifier API key? (press enter to continue) ",
+	);
+
 	consola.info("Creating .dev.vars file with the app environment variables.");
 
 	await write(
@@ -60,9 +69,9 @@ CLOUDFLARE_ACCOUNT_ID=${account.id}
 CLOUDFLARE_DATABASE_ID=${db.name}
 CLOUDFLARE_API_TOKEN=${apiToken}
 
-GRAVATAR_API_TOKEN=""
+GRAVATAR_API_TOKEN="${gravatar}"
 
-VERIFIER_API_KEY=""`,
+VERIFIER_API_KEY="${verifier}"`,
 	);
 
 	consola.info("Updating wrangler.toml file with the worker setup.");
@@ -144,6 +153,16 @@ binding = "AI"
 crons = ["* * * * *"]
 `,
 	);
+
+	consola.info("Running the local database migrations.");
+
+	await $`bun run db:migrate:local ${db.name}`.quiet();
+
+	consola.success("Running seed data against local database.");
+
+	await $`bun run db:seed ${db.name}`.quiet();
+
+	consola.success("Setup completed successfully.");
 
 	process.exit(0);
 } catch (error) {
