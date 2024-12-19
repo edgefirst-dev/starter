@@ -1,5 +1,5 @@
 import * as Path from "node:path";
-import * as Readline from "node:readline/promises";
+import * as Util from "node:util";
 import { $, write } from "bun";
 import { Cloudflare } from "cloudflare";
 import consola from "consola";
@@ -22,16 +22,18 @@ try {
 		wrangler: Path.resolve("./wrangler.toml"),
 	};
 
-	/** Readline instance used to ask user questions */
-	let rl = Readline.createInterface({
-		input: process.stdin,
-		output: process.stdout,
-	});
-
 	/** The project name from the use */
-	let projectName = await rl.question(
-		"What is your project name? (all lowercase and with dashes to separate words) ",
-	);
+	let {
+		positionals: [, , projectName],
+	} = Util.parseArgs({ args: Bun.argv, allowPositionals: true });
+
+	/** If it was not a positional argument, ask for it to the user */
+	projectName ??= await consola.prompt("What is your project name?", {
+		default: projectName,
+		initial: projectName,
+		required: true,
+		type: "text",
+	});
 
 	projectName = projectName.trim();
 	projectName = parameterize(projectName);
@@ -43,16 +45,25 @@ try {
 
 	/** Check if we can get the CF API token from env or ask the user */
 	let apiToken = process.env.CLOUDFLARE_API_TOKEN;
-	apiToken ??= await rl.question("What's your Cloudflare API token? ");
+	apiToken ??= await consola.prompt("What's your Cloudflare API token?", {
+		required: true,
+		type: "text",
+	});
 
 	/** Check if we can get the Gravatar API token from env or ask the user */
 	let gravatar = process.env.GRAVATAR_API_TOKEN;
-	gravatar ??= await rl.question("Do you have a Gravatar API token? ");
+	gravatar ??= await consola.prompt("Do you have a Gravatar API token?", {
+		required: true,
+		type: "text",
+	});
 	gravatar = gravatar.trim();
 
 	/** Check if we can get the Verifier API key from env or ask the user */
 	let verifier = process.env.VERIFIER_API_KEY;
-	verifier ??= await rl.question("Do you have a Verifier API key? ");
+	verifier ??= await consola.prompt("Do you have a Verifier API key?", {
+		required: true,
+		type: "text",
+	});
 	verifier = verifier.trim();
 
 	/** Create a CF API client instance */
