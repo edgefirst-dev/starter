@@ -12,7 +12,22 @@ bun run setup
 
 This will ask for a project name, and for a Cloudflare API token with the required permissions.
 
-After that it will create the required bindings (D1, KV, R2 and queue), run the database migrations and seed locally, and setup the GitHub Action secrets.
+> [!TIP]
+> If you set `CLOUDFLARE_API_TOKEN` environment variable then the setup script won't ask for the token and use that.
+>
+> ```bash
+> CLOUDFLARE_API_TOKEN=token bun run setup
+> ```
+
+It will also ask if you have a `GRAVATAR_API_TOKEN` and `VERIFIER_API_KEY` to use in `.dev.vars`.
+
+You can get a new Verifier API key at [verifier.meetchopra.com](https://verifier.meetchopra.com) completely free.
+
+You can get a new Gravatar API token at [gravatar.com/developers](https://gravatar.com/developers/applications) completely free.
+
+After that it will create the required bindings (D1, KV, R2 and queue), run the migrations and seed against the local database.
+
+Finally it will create a `.dev.vars` file and update the `wrangler.toml` file with the correct values from the created variables.
 
 ## Manual Setup
 
