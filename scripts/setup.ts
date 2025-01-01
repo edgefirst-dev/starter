@@ -51,6 +51,7 @@ try {
 	}
 
 	pkg.name = projectName;
+	pkg.description = "A Cloudflare Worker project.";
 
 	/** Check if we can get the CF API token from env or ask the user */
 	let apiToken = await ask(

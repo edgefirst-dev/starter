@@ -9,8 +9,16 @@ export class Package extends Data<ObjectParser> {
 		return this.parser.string("name");
 	}
 
-	set name(newName: string) {
-		this.parser = new ObjectParser({ ...this.parser.valueOf(), name: newName });
+	set name(name: string) {
+		this.parser = new ObjectParser({ ...this.parser.valueOf(), name });
+	}
+
+	get description() {
+		return this.parser.string("description");
+	}
+
+	set description(description: string) {
+		this.parser = new ObjectParser({ ...this.parser.valueOf(), description });
 	}
 
 	set repository(repo: Repository) {
