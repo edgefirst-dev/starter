@@ -76,7 +76,7 @@
 	},
 	"trustedDependencies": ["@biomejs/biome"],
 	"bun-create": {
-		"postinstall": ["bun run ./scripts/setup."],
+		"postinstall": ["bun run ./scripts/setup.ts"],
 		"start": "bun run dev"
 	}
 }
