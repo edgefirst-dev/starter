@@ -74,5 +74,8 @@
 		"vite-tsconfig-paths": "^5.1.4",
 		"wrangler": "^3.99.0"
 	},
-	"trustedDependencies": ["@biomejs/biome"]
+	"trustedDependencies": ["@biomejs/biome"],
+	"bun-create": {
+		"postinstall": "bun run setup"
+	}
 }
