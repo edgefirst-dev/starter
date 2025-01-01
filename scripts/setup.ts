@@ -222,10 +222,7 @@ crons = ["* * * * *"]
 	}
 
 	if (await confirm("Do you want to configure your GitHub repository?")) {
-		let auth = await ask(
-			"What's your GitHub API token?",
-			Bun.env.GITHUB_API_TOKEN,
-		);
+		let auth = await ask("What's your GitHub API token?", Bun.env.GITHUB_TOKEN);
 
 		let gh = new Octokit({ auth });
 
