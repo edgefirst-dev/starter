@@ -32,9 +32,8 @@ A full-stack starter kit for Edge-first applications built with React on top of 
 Create a new React application using the Edge-first Starter Kit:
 
 ```sh
-npx degit edgefirst-dev/starter-worker my-app
+bun create edgefirst-dev/starter my-app
 cd my-app
-bun install
 bun run setup
 ```
 
