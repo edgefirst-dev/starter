@@ -1,21 +1,28 @@
 import * as Path from "node:path";
 import * as Util from "node:util";
+import { Octokit } from "@octokit/core";
 import { $, write } from "bun";
 import { Cloudflare } from "cloudflare";
 import consola from "consola";
 import { config } from "dotenv";
 import { parameterize } from "inflected";
-import { Account } from "./setup/account";
-import { Database } from "./setup/d1-database";
-import { KVNamespace } from "./setup/kv-namespace";
-import { Queue } from "./setup/queue";
-import { R2Bucket } from "./setup/r2-bucket";
-import { Secret } from "./setup/secret";
-import { Worker } from "./setup/worker";
+import { Account } from "./setup/cf/account";
+import { Database } from "./setup/cf/d1-database";
+import { KVNamespace } from "./setup/cf/kv-namespace";
+import { Queue } from "./setup/cf/queue";
+import { R2Bucket } from "./setup/cf/r2-bucket";
+import { Secret } from "./setup/cf/secret";
+import { Worker } from "./setup/cf/worker";
+import { ActionSecret } from "./setup/gh/action-secret";
+import { Repository } from "./setup/gh/repository";
+import { ask, confirm, createTokenURL } from "./setup/helpers";
+import { Package } from "./setup/package";
 
 config({ path: "./.dev.vars" });
 
 try {
+	let pkg = await Package.read(); // Read package.json
+
 	/** The paths the setup will use to create new files */
 	let paths = {
 		vars: Path.resolve("./.dev.vars"),
@@ -42,6 +49,8 @@ try {
 		consola.error("Project name is required.");
 		process.exit(1);
 	}
+
+	pkg.name = projectName;
 
 	/** Check if we can get the CF API token from env or ask the user */
 	let apiToken = await ask(
@@ -211,11 +220,59 @@ crons = ["* * * * *"]
 		consola.success("Worker deployed successfully.");
 	}
 
+	if (await confirm("Do you want to configure your GitHub repository?")) {
+		let auth = await ask(
+			"What's your GitHub API token?",
+			Bun.env.GITHUB_API_TOKEN,
+		);
+
+		let gh = new Octokit({ auth });
+
+		let [owner, repo] = (
+			await ask("What's your GitHub repository? (write owner/repo)")
+		).split("/");
+
+		if (!owner || !repo) throw new Error("Owner and repo are required.");
+
+		let repository = await Repository.upsert(gh, owner, repo);
+		pkg.repository = repository;
+
+		consola.info(`Configuring action secrets for ${owner}/${repo}.`);
+
+		await ActionSecret.create(
+			gh,
+			owner,
+			repo,
+			"CLOUDFLARE_ACCOUNT_ID",
+			account.id,
+		);
+
+		await ActionSecret.create(
+			gh,
+			owner,
+			repo,
+			"CLOUDFLARE_API_TOKEN",
+			apiToken,
+		);
+
+		await ActionSecret.create(
+			gh,
+			owner,
+			repo,
+			"CLOUDFLARE_DATABASE_NAME",
+			db.name,
+		);
+	}
+
+	await pkg.write(); // Save package.json
+
 	if (await confirm("Do you want to clean up the setup files?")) {
 		consola.info("Cleaning up the setup files.");
-		await $`rm ./scripts/setup.ts`.quiet().nothrow();
-		await $`rm -rf ./scripts/setup`.quiet().nothrow();
-		await $`bun rm cloudflare consola`.quiet().nothrow();
+		await $`rm ./scripts/setup.ts`.quiet().nothrow(); // Delete setup script
+		await $`rm -rf ./scripts/setup`.quiet().nothrow(); // Delete setup folder
+		await $`bun rm cloudflare consola @types/libsodium-wrappers libsodium-wrappers`
+			.quiet()
+			.nothrow(); // Remove setup-only dependencies
 	}
 
 	consola.success("Setup completed successfully.");
@@ -224,32 +281,4 @@ crons = ["* * * * *"]
 } catch (error) {
 	if (error instanceof Error) console.error(error.message);
 	process.exit(1);
-}
-
-function confirm(message: string) {
-	return consola.prompt(message, { type: "confirm" });
-}
-
-async function ask(message: string, fallback?: string) {
-	if (fallback) return fallback;
-	let result = await consola.prompt(message, { required: true, type: "text" });
-	return result?.trim();
-}
-
-function createTokenURL() {
-	let permissions = [
-		{ key: "d1", type: "edit" },
-		{ key: "workers_r2", type: "edit" },
-		{ key: "workers_kv_storage", type: "edit" },
-		{ key: "ai", type: "edit" },
-		{ key: "workers_scripts", type: "edit" },
-		{ key: "queues", type: "edit" },
-		{ key: "browser_rendering", type: "edit" },
-	];
-
-	let url = new URL("https://dash.cloudflare.com/profile/api-tokens");
-	url.searchParams.set("permissionGroupKeys", JSON.stringify(permissions));
-	url.searchParams.set("name", "Edge-first API Token");
-
-	return url;
 }
