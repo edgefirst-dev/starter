@@ -197,11 +197,7 @@ crons = ["* * * * *"]
 
 	await $`bun run db:seed ${db.name}`.quiet().nothrow();
 
-	if (
-		await consola.prompt("Do you want to deploy the worker now?", {
-			type: "confirm",
-		})
-	) {
+	if (await confirm("Do you want to deploy the worker now?")) {
 		consola.info("Running migrations against the production database.");
 		await $`bun run db:migrate --remote ${db.name}`.quiet().nothrow();
 		consola.info("Building the application.");
@@ -211,12 +207,12 @@ crons = ["* * * * *"]
 		consola.success("Worker deployed successfully.");
 	}
 
-	consola.info("Cleaning up the setup files.");
-
-	await $`rm ./scripts/setup.ts`.quiet().nothrow();
-	await $`rm -rf ./scripts/setup`.quiet().nothrow();
-
-	await $`bun rm cloudflare consola`;
+	if (await confirm("Do you want to clean up the setup files?")) {
+		consola.info("Cleaning up the setup files.");
+		await $`rm ./scripts/setup.ts`.quiet().nothrow();
+		await $`rm -rf ./scripts/setup`.quiet().nothrow();
+		await $`bun rm cloudflare consola`.quiet().nothrow();
+	}
 
 	consola.success("Setup completed successfully.");
 
@@ -224,4 +220,8 @@ crons = ["* * * * *"]
 } catch (error) {
 	if (error instanceof Error) console.error(error.message);
 	process.exit(1);
+}
+
+function confirm(message: string) {
+	return consola.prompt(message, { type: "confirm" });
 }
