@@ -44,27 +44,27 @@ try {
 	}
 
 	/** Check if we can get the CF API token from env or ask the user */
-	let apiToken = process.env.CLOUDFLARE_API_TOKEN;
+	let apiToken = Bun.env.CLOUDFLARE_API_TOKEN;
 	apiToken ??= await consola.prompt("What's your Cloudflare API token?", {
 		required: true,
 		type: "text",
 	});
 
 	/** Check if we can get the Gravatar API token from env or ask the user */
-	let gravatar = process.env.GRAVATAR_API_TOKEN;
+	let gravatar = Bun.env.GRAVATAR_API_TOKEN;
 	gravatar ??= await consola.prompt("Do you have a Gravatar API token?", {
 		required: true,
 		type: "text",
 	});
-	gravatar = gravatar.trim();
+	gravatar = gravatar?.trim();
 
 	/** Check if we can get the Verifier API key from env or ask the user */
-	let verifier = process.env.VERIFIER_API_KEY;
+	let verifier = Bun.env.VERIFIER_API_KEY;
 	verifier ??= await consola.prompt("Do you have a Verifier API key?", {
 		required: true,
 		type: "text",
 	});
-	verifier = verifier.trim();
+	verifier = verifier?.trim();
 
 	/** Create a CF API client instance */
 	let cf = new Cloudflare({ apiToken });
@@ -210,6 +210,13 @@ crons = ["* * * * *"]
 		await $`bun run deploy`.quiet().nothrow();
 		consola.success("Worker deployed successfully.");
 	}
+
+	consola.info("Cleaning up the setup files.");
+
+	await $`rm ./scripts/setup.ts`.quiet().nothrow();
+	await $`rm -rf ./scripts/setup`.quiet().nothrow();
+
+	await $`bun rm cloudflare consola`;
 
 	consola.success("Setup completed successfully.");
 
