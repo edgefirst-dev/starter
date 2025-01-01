@@ -34,6 +34,8 @@ export class Worker extends Data<ObjectParser> {
 			headers: { Authorization: `Bearer ${cf.apiToken}` },
 		});
 
+		if (!response.ok) throw new Error("Failed to create worker.");
+
 		let result = await response.json();
 
 		let parser = new ObjectParser(result);

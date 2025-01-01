@@ -25,8 +25,8 @@ export class Secret extends Data<ObjectParser> {
 		consola.info(`Creating secret ${name}.`);
 
 		let path = generatePath(
-			"/client/v4/accounts/:accountId/workers/services/:name/environments/production/secrets",
-			{ accountId: account.id, name: worker.name },
+			"client/v4/accounts/:accountId/workers/scripts/:workerName/secrets",
+			{ accountId: account.id, workerName: worker.name },
 		);
 
 		let response = await fetch(new URL(path, "https://api.cloudflare.com"), {
@@ -38,9 +38,7 @@ export class Secret extends Data<ObjectParser> {
 			},
 		});
 
-		if (!response.ok) {
-			throw new Error(`Failed to create secret ${name}.`);
-		}
+		if (!response.ok) throw new Error(`Failed to create secret ${name}.`);
 
 		let result = await response.json();
 		let parser = new ObjectParser(result);

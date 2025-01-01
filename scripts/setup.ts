@@ -50,8 +50,11 @@ try {
 	);
 
 	if (!apiToken) {
-		consola.error("Cloudflare API token is required.");
-		consola.info(`Create one going to ${createTokenURL()} and try again.`);
+		consola.warn("Cloudflare API token is required.");
+		consola.info(
+			"Create one with the required permissions going to:\n\t",
+			createTokenURL().toString(),
+		);
 		process.exit(1);
 	}
 
