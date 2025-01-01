@@ -44,27 +44,28 @@ try {
 	}
 
 	/** Check if we can get the CF API token from env or ask the user */
-	let apiToken = Bun.env.CLOUDFLARE_API_TOKEN;
-	apiToken ??= await consola.prompt("What's your Cloudflare API token?", {
-		required: true,
-		type: "text",
-	});
+	let apiToken = await ask(
+		"Enter your Cloudflare API token if you have one.",
+		Bun.env.CLOUDFLARE_API_TOKEN,
+	);
+
+	if (!apiToken) {
+		consola.error("Cloudflare API token is required.");
+		consola.info(`Create one going to ${createTokenURL()} and try again.`);
+		process.exit(1);
+	}
 
 	/** Check if we can get the Gravatar API token from env or ask the user */
-	let gravatar = Bun.env.GRAVATAR_API_TOKEN;
-	gravatar ??= await consola.prompt("Do you have a Gravatar API token?", {
-		required: true,
-		type: "text",
-	});
-	gravatar = gravatar?.trim();
+	let gravatar = await ask(
+		"Do you have a Gravatar API token?",
+		Bun.env.GRAVATAR_API_TOKEN,
+	);
 
 	/** Check if we can get the Verifier API key from env or ask the user */
-	let verifier = Bun.env.VERIFIER_API_KEY;
-	verifier ??= await consola.prompt("Do you have a Verifier API key?", {
-		required: true,
-		type: "text",
-	});
-	verifier = verifier?.trim();
+	let verifier = await ask(
+		"Do you have a Verifier API key?",
+		Bun.env.VERIFIER_API_KEY,
+	);
 
 	/** Create a CF API client instance */
 	let cf = new Cloudflare({ apiToken });
@@ -224,4 +225,28 @@ crons = ["* * * * *"]
 
 function confirm(message: string) {
 	return consola.prompt(message, { type: "confirm" });
+}
+
+async function ask(message: string, fallback?: string) {
+	if (fallback) return fallback;
+	let result = await consola.prompt(message, { required: true, type: "text" });
+	return result?.trim();
+}
+
+function createTokenURL() {
+	let permissions = [
+		{ key: "d1", type: "edit" },
+		{ key: "workers_r2", type: "edit" },
+		{ key: "workers_kv_storage", type: "edit" },
+		{ key: "ai", type: "edit" },
+		{ key: "workers_scripts", type: "edit" },
+		{ key: "queues", type: "edit" },
+		{ key: "browser_rendering", type: "edit" },
+	];
+
+	let url = new URL("https://dash.cloudflare.com/profile/api-tokens");
+	url.searchParams.set("permissionGroupKeys", JSON.stringify(permissions));
+	url.searchParams.set("name", "Edge-first API Token");
+
+	return url;
 }
