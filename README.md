@@ -32,9 +32,9 @@ A full-stack starter kit for Edge-first applications built with React on top of 
 Create a new React application using the Edge-first Starter Kit:
 
 ```sh
-bun create edgefirst-dev/starter my-app
+bun create edgefirst-dev/starter <my-app>
 cd my-app
-bun run setup
+bun run setup [app-name]
 ```
 
 The `setup` script will ask for your project name, and other information to configure the project locally and on Cloudflare.
