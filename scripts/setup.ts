@@ -22,6 +22,7 @@ import { Package } from "./setup/package";
 config({ path: "./.dev.vars" });
 
 try {
+	consola.box("Starting the setup process for your Edge-first App.");
 	let pkg = await Package.read();
 
 	/** The paths the setup will use to create new files */
@@ -225,52 +226,59 @@ crons = ["* * * * *"]
 	if (await confirm("Do you want to configure your GitHub repository?")) {
 		let auth = await ask("What's your GitHub API token?", Bun.env.GITHUB_TOKEN);
 
-		let gh = new Octokit({ auth });
+		try {
+			let gh = new Octokit({ auth });
 
-		let path = await ask(
-			"What's your GitHub repository? (e.g. edgefirst-dev/my-app or my-app)",
-		);
+			let path = await ask(
+				"What's your GitHub repository? (e.g. edgefirst-dev/my-app or my-app)",
+			);
 
-		let isOrg = path.includes("/");
+			let isOrg = path.includes("/");
 
-		let [owner, repo]: [string | null, string] = isOrg
-			? (path.split("/") as [string, string])
-			: ([null, path] as const);
+			let [owner, repo]: [string | null, string] = isOrg
+				? (path.split("/") as [string, string])
+				: ([null, path] as const);
 
-		if (!owner) {
-			let user = await User.viewer(gh);
-			owner = user.login;
+			if (!owner) {
+				let user = await User.viewer(gh);
+				owner = user.login;
+			}
+
+			let repository = await Repository.upsert(gh, owner, repo, isOrg);
+
+			pkg.repository = repository;
+
+			consola.info(`Configuring action secrets for ${owner}/${repo}.`);
+
+			await ActionSecret.create(
+				gh,
+				owner,
+				repo,
+				"CLOUDFLARE_ACCOUNT_ID",
+				account.id,
+			);
+
+			await ActionSecret.create(
+				gh,
+				owner,
+				repo,
+				"CLOUDFLARE_API_TOKEN",
+				apiToken,
+			);
+
+			await ActionSecret.create(
+				gh,
+				owner,
+				repo,
+				"CLOUDFLARE_DATABASE_NAME",
+				db.name,
+			);
+		} catch {
+			consola.error(
+				"Something failed when trying to setup GitHub, ensure the token in still valid and has the correct permissions `repo` and `read:user`.",
+			);
+			process.exit(1);
 		}
-
-		let repository = await Repository.upsert(gh, owner, repo, isOrg);
-
-		pkg.repository = repository;
-
-		consola.info(`Configuring action secrets for ${owner}/${repo}.`);
-
-		await ActionSecret.create(
-			gh,
-			owner,
-			repo,
-			"CLOUDFLARE_ACCOUNT_ID",
-			account.id,
-		);
-
-		await ActionSecret.create(
-			gh,
-			owner,
-			repo,
-			"CLOUDFLARE_API_TOKEN",
-			apiToken,
-		);
-
-		await ActionSecret.create(
-			gh,
-			owner,
-			repo,
-			"CLOUDFLARE_DATABASE_NAME",
-			db.name,
-		);
 	}
 
 	await pkg.write(); // Save package.json
@@ -289,5 +297,13 @@ crons = ["* * * * *"]
 	process.exit(0);
 } catch (error) {
 	if (error instanceof Error) console.error(error.message);
+	consola.info(
+		"If you need help, please open an issue at github.com/edgefirst-dev/starter",
+	);
+
+	consola.info(
+		"If you want to start over, run `bun run setup` again, already created resources will be reused.",
+	);
+
 	process.exit(1);
 }
