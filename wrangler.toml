@@ -71,3 +71,9 @@ binding = "AI"
 # count and potentially incurring additional costs
 [triggers]
 crons = ["* * * * *"]
+
+[vars]
+APP_ENV = "development"
+
+[env.production.vars]
+APP_ENV = "production"

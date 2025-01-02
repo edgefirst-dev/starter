@@ -114,9 +114,7 @@ try {
 
 	await write(
 		paths.vars,
-		`APP_ENV="development"
-
-CLOUDFLARE_ACCOUNT_ID=${account.id}
+		`CLOUDFLARE_ACCOUNT_ID=${account.id}
 CLOUDFLARE_DATABASE_ID=${db.name}
 CLOUDFLARE_API_TOKEN=${apiToken}
 
@@ -202,6 +200,12 @@ binding = "AI"
 # count and potentially incurring additional costs
 [triggers]
 crons = ["* * * * *"]
+
+[vars]
+APP_ENV = "development"
+
+[env.production.vars]
+APP_ENV = "production"
 `,
 	);
 
