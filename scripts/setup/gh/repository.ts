@@ -20,34 +20,56 @@ export class Repository extends Data<ObjectParser> {
 		return new URL(this.parser.string("html_url"));
 	}
 
-	static async create(gh: Octokit, owner: string, repo: string) {
+	static async create(
+		gh: Octokit,
+		owner: string,
+		repo: string,
+		isOrg: boolean,
+	) {
 		consola.info(`Creating repository ${owner}/${repo}`);
-		let result = await gh.request("POST /orgs/{org}/repos", {
+
+		if (isOrg) {
+			consola.debug("Creating repository for organization");
+			let result = await gh.request("POST /orgs/{org}/repos", {
+				name: repo,
+				org: owner,
+			});
+			consola.success(`Created repository ${owner}/${repo}`);
+			return new Repository(new ObjectParser(result.data));
+		}
+
+		consola.debug("Creating repository for user");
+		let result = await gh.request("POST /user/repos", {
 			name: repo,
-			org: owner,
-			private: true,
 		});
+
 		consola.success(`Created repository ${owner}/${repo}`);
+
 		return new Repository(new ObjectParser(result.data));
 	}
 
 	static async find(gh: Octokit, owner: string, repo: string) {
 		consola.info(`Looking up for repository ${owner}/${repo}...`);
 
-		let { data } = await gh.request("GET /repos/{owner}/{repo}", {
-			owner,
-			repo,
-		});
+		try {
+			let { data } = await gh.request("GET /repos/{owner}/{repo}", {
+				owner,
+				repo,
+			});
 
-		if (!data) {
+			return new Repository(new ObjectParser(data));
+		} catch {
 			consola.info(`No repository found with the name ${owner}/${repo}.`);
 			return null;
 		}
-
-		return new Repository(new ObjectParser(data));
 	}
 
-	static async upsert(gh: Octokit, owner: string, repo: string) {
+	static async upsert(
+		gh: Octokit,
+		owner: string,
+		repo: string,
+		isOrg: boolean,
+	) {
 		let repository = await Repository.find(gh, owner, repo);
 
 		if (repository) {
@@ -55,6 +77,6 @@ export class Repository extends Data<ObjectParser> {
 			return repository;
 		}
 
-		return Repository.create(gh, owner, repo);
+		return Repository.create(gh, owner, repo, isOrg);
 	}
 }

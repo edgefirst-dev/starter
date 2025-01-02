@@ -15,13 +15,14 @@ import { Secret } from "./setup/cf/secret";
 import { Worker } from "./setup/cf/worker";
 import { ActionSecret } from "./setup/gh/action-secret";
 import { Repository } from "./setup/gh/repository";
+import { User } from "./setup/gh/user";
 import { ask, confirm, createTokenURL } from "./setup/helpers";
 import { Package } from "./setup/package";
 
 config({ path: "./.dev.vars" });
 
 try {
-	let pkg = await Package.read(); // Read package.json
+	let pkg = await Package.read();
 
 	/** The paths the setup will use to create new files */
 	let paths = {
@@ -226,13 +227,23 @@ crons = ["* * * * *"]
 
 		let gh = new Octokit({ auth });
 
-		let [owner, repo] = (
-			await ask("What's your GitHub repository? (write owner/repo)")
-		).split("/");
+		let path = await ask(
+			"What's your GitHub repository? (e.g. edgefirst-dev/my-app or my-app)",
+		);
 
-		if (!owner || !repo) throw new Error("Owner and repo are required.");
+		let isOrg = path.includes("/");
 
-		let repository = await Repository.upsert(gh, owner, repo);
+		let [owner, repo]: [string | null, string] = isOrg
+			? (path.split("/") as [string, string])
+			: ([null, path] as const);
+
+		if (!owner) {
+			let user = await User.viewer(gh);
+			owner = user.login;
+		}
+
+		let repository = await Repository.upsert(gh, owner, repo, isOrg);
+
 		pkg.repository = repository;
 
 		consola.info(`Configuring action secrets for ${owner}/${repo}.`);
