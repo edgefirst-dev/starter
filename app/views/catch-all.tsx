@@ -1,13 +1,13 @@
 import { AnchorButton } from "app:components/anchor-button";
 import { notFound } from "app:helpers/response";
-import redirects from "config:redirects";
+import redirects from "app:redirects";
 import { generatePath, redirectDocument } from "react-router";
 import type { Route } from "./+types/catch-all";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	let url = new URL(request.url);
 
-	for (const redirect of redirects(url)) {
+	for (let redirect of redirects(url)) {
 		let match = redirect.source.exec(url);
 		if (!match) continue;
 		let location = generatePath(redirect.destination, match.pathname.groups);
