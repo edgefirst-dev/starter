@@ -1,14 +1,17 @@
-import { index, layout, prefix, route } from "@react-router/dev/routes";
+import {
+	type RouteConfig,
+	index,
+	layout,
+	prefix,
+	route,
+} from "@react-router/dev/routes";
+import { flatRoutes } from "@react-router/fs-routes";
+
+const resources = await flatRoutes({ rootDirectory: "./resources" });
 
 export default [
 	// Resources
-	route("files/:key", "./resources/file.ts"),
-
-	// API Routes
-	...prefix("api", []),
-
-	// Webhook Routes
-	...prefix("webhooks", []),
+	...resources,
 
 	// Views
 	route("profile", "./views/profile.tsx"),
@@ -32,4 +35,4 @@ export default [
 
 	// Catch-all Route
 	route("*", "./views/catch-all.tsx"),
-];
+] satisfies RouteConfig;
