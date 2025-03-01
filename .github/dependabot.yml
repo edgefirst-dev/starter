@@ -1,0 +1,21 @@
+version: 2
+enable-beta-ecosystems: true
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    reviewers:
+      - "sergiodxa"
+    assignees:
+      - "sergiodxa"
+
+  - package-ecosystem: bun
+    directory: /
+    schedule:
+      interval: "weekly"
+    reviewers:
+      - "sergiodxa"
+    assignees:
+      - "sergiodxa"
