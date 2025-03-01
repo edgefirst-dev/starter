@@ -36,11 +36,11 @@ export const pwnedPasswords = {
 };
 
 export const emailVerifier = {
-	valid: http.get("https://verifier.meetchopra.com/verify/:value", () => {
+	valid: http.get("https://verifyright.co/verify/:value", () => {
 		return HttpResponse.json({ status: true });
 	}),
 
-	invalid: http.get("https://verifier.meetchopra.com/verify/:value", () => {
+	invalid: http.get("https://verifyright.co/verify/:value", () => {
 		return HttpResponse.json({
 			status: false,
 			error: { code: 2, message: "Disposable email address" },
