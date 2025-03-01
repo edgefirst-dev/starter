@@ -24,10 +24,14 @@ export class R2Bucket extends Data<ObjectParser> {
 	static async find(cf: Cloudflare, account: Account, name: string) {
 		consola.info(`Looking up for R2 bucket named ${name}...`);
 
-		let { result } = await cf.r2.buckets.list({ account_id: account.id });
+		let { buckets } = await cf.r2.buckets.list({ account_id: account.id });
 
-		// @ts-expect-error The types from Cloudflare are wrong.
-		let r2Buckets = result.buckets
+		if (!buckets) {
+			consola.info(`No R2 bucket found named ${name}.`);
+			return null;
+		}
+
+		let r2Buckets = buckets
 			.map((r: object) => new R2Bucket(new ObjectParser(r)))
 			.filter((r2: R2Bucket) => r2.name === name);
 

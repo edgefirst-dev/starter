@@ -27,13 +27,13 @@ export class Gravatar extends APIClient {
 		return new GravatarProfile(new ObjectParser(await response.json()));
 	}
 
-	protected override async before(request: Request): Promise<Request> {
+	protected override async before(request: Request) {
 		let token = env().fetch("GRAVATAR_API_TOKEN");
 		request.headers.set("Authorization", `Bearer ${token}`);
 		return request;
 	}
 
-	protected override async after(response: Response): Promise<Response> {
+	protected override async after(_: Request, response: Response) {
 		if (response.status === 429) throw new Gravatar.RateLimitError();
 		return response;
 	}

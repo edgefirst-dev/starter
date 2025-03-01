@@ -18,7 +18,7 @@ export class Queue extends Data<ObjectParser> {
 
 		let result = await cf.queues.create({
 			account_id: account.id,
-			body: { queue_name: name },
+			queue_name: name,
 		});
 
 		let queue = new Queue(new ObjectParser(result));
