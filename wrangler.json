@@ -1,0 +1,40 @@
+{
+	"$schema": "https://unpkg.com/wrangler@latest/config-schema.json",
+	"name": "edgefirst-dev-starter",
+	"main": "./app/entry.worker.ts",
+	"compatibility_date": "2025-02-20",
+	"compatibility_flags": ["nodejs_compat"],
+	"workers_dev": true,
+	"dev": { "port": 3000 },
+	"placement": { "mode": "off" },
+	"observability": { "enabled": true },
+	"assets": { "directory": "./build/client" },
+	"browser": { "binding": "BROWSER" },
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "starter-db",
+			"database_id": "548e1d13-bc2b-4113-b179-717e7808e4d4",
+			"migrations_dir": "./db/migrations"
+		}
+	],
+	"kv_namespaces": [
+		{ "binding": "KV", "id": "186c61a8603a44a3bd0dded4aa290204" }
+	],
+	"r2_buckets": [{ "binding": "FS", "bucket_name": "starter-bucket" }],
+	"queues": {
+		"consumers": [
+			{
+				"queue": "starter-queue",
+				"max_batch_size": 10,
+				"max_batch_timeout": 30,
+				"max_retries": 10
+			}
+		],
+		"producers": [{ "binding": "QUEUE", "queue": "starter-queue" }]
+	},
+	"ai": { "binding": "AI" },
+	"triggers": { "crons": ["* * * * *"] },
+	"vars": { "APP_ENV": "development" },
+	"env": { "production": { "vars": { "APP_ENV": "production" } } }
+}

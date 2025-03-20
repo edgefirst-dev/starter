@@ -28,7 +28,7 @@ try {
 	/** The paths the setup will use to create new files */
 	let paths = {
 		vars: Path.resolve("./.dev.vars"),
-		wrangler: Path.resolve("./wrangler.toml"),
+		wrangler: Path.resolve("./wrangler.json"),
 	};
 
 	/** The project name from the use */
@@ -107,9 +107,6 @@ try {
 		await Secret.create(cf, account, worker, "VERIFIER_API_KEY", verifier);
 	}
 
-	/** We want to set the APP_ENV to production in the Worker */
-	await Secret.create(cf, account, worker, "APP_ENV", "production");
-
 	consola.info("Creating .dev.vars file with the app environment variables.");
 
 	await write(
@@ -125,88 +122,56 @@ VERIFIER_API_KEY="${verifier}"`,
 
 	consola.info("Updating wrangler.toml file with the worker setup.");
 
+	let today = new Date();
+
 	await write(
 		paths.wrangler,
-		`name = "${projectName}"
-
-main = "./worker.ts"
-
-# Update the compatibility date to the date you want to lock to
-compatibility_date = "2024-10-11"
-
-# This is needed for AsyncLocalStorage to work
-compatibility_flags = ["nodejs_compat_v2"]
-
-# Set the development port to be 3000
-dev.port = 3000
-
-# Enable serving static assets from the \`./build/client\` directory
-assets = { directory = "./build/client" }
-
-# Enables the Browser Rendering service
-# To use it locally, update the ./scripts/dev.ts file and add \`--remote\` after 
-# the \`bun start\` command
-browser = { binding = "BROWSER" }
-
-# To be able to use assets in your Worker, Smart placement needs to be off
-[placement]
-mode = "off"
-
-# Enable Observability to get logs of your Worker
-[observability]
-enabled = true
-
-# Configure your D1 database
-[[d1_databases]]
-binding = "DB"
-database_name = "${db.name}"
-database_id = "${db.id}"
-migrations_dir = "./db/migrations"
-
-# Configure your KV namespace
-[[kv_namespaces]]
-binding = "KV"
-id = "${kv.id}"
-
-# Configure your R2 bucket
-[[r2_buckets]]
-binding = "FS"
-bucket_name = "${r2.name}"
-
-# Configure this worker as a queue producer
-[[queues.producers]]
-queue = "${queue.name}"
-binding = "QUEUE"
-
-# Configure this worker as a queue consumer
-[[queues.consumers]]
-queue = "${queue.name}"
-# The maximum number of messages allowed in each batch
-max_batch_size = 10
-# The maximum number of seconds to wait until a batch is full
-max_batch_timeout = 30
-# The maximum number of retries for a message
-max_retries = 10
-# The name of another Queue to send a message if it fails processing at least max_retries times, uncomment to enable it
-# dead_letter_queue = "NAME_OF_DEAD_LETTER_QUEUE"
-
-# Enables the Workers AI service
-# Note that using AI on development can incur additional costs as it uses Worker
-# cloud resources and not your local machine
-[ai]
-binding = "AI"
-
-# Note that this will trigger your Worker every minute, increasing your request
-# count and potentially incurring additional costs
-[triggers]
-crons = ["* * * * *"]
-
-[vars]
-APP_ENV = "development"
-
-[env.production.vars]
-APP_ENV = "production"
-`,
+		JSON.stringify(
+			{
+				$schema: "https://unpkg.com/wrangler@latest/config-schema.json",
+				name: projectName,
+				main: "./app/entry.worker.ts",
+				compatibility_date: [
+					today.getFullYear(),
+					today.getMonth() + 1,
+					today.getDate(),
+				].join("-"),
+				compatibility_flags: ["nodejs_compat"],
+				workers_dev: true,
+				dev: { port: 3000 },
+				placement: { mode: "off" },
+				observability: { enabled: true },
+				assets: { directory: "./build/client" },
+				browser: { binding: "BROWSER" },
+				d1_databases: [
+					{
+						binding: "DB",
+						database_name: db.name,
+						database_id: db.id,
+						migrations_dir: "./db/migrations",
+					},
+				],
+				kv_namespaces: [{ binding: "KV", id: kv.id }],
+				r2_buckets: [{ binding: "FS", bucket_name: r2.name }],
+				queues: {
+					consumers: [
+						{
+							queue: queue.name,
+							max_batch_size: 10,
+							max_batch_timeout: 30,
+							max_retries: 10,
+						},
+					],
+					producers: [{ binding: "QUEUE", queue: queue.name }],
+				},
+				ai: { binding: "AI" },
+				triggers: { crons: ["* * * * *"] },
+				vars: { APP_ENV: "development" },
+				env: { production: { vars: { APP_ENV: "production" } } },
+			},
+			null,
+			"\t",
+		),
 	);
 
 	consola.info("Running the local database migrations.");
