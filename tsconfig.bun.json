@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.json",
+	"include": ["./scripts/**/*.ts"],
+	"compilerOptions": {
+		"composite": true,
+		"jsx": "react-jsx",
+		"types": ["@total-typescript/ts-reset", "@types/bun"],
+		"rootDirs": ["./scripts"]
+	}
+}

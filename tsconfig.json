@@ -1,26 +1,9 @@
 {
 	"extends": "@total-typescript/tsconfig/bundler/dom/app",
-	"include": [
-		".react-router/types/**/*",
-		"worker.ts",
-		"./scripts/**/*.ts",
-		"./app/**/*.tsx",
-		"./app/**/*.ts",
-		"./db/**/*.ts"
+	"files": [],
+	"references": [
+		{ "path": "./tsconfig.bun.json" },
+		{ "path": "./tsconfig.cloudflare.json" }
 	],
-	"compilerOptions": {
-		"jsx": "react-jsx",
-		"types": [
-			"@total-typescript/ts-reset",
-			"@cloudflare/workers-types",
-			"@types/bun",
-			"vite/client",
-			"@react-router/cloudflare"
-		],
-		"rootDirs": [".", "./.react-router/types"],
-		"paths": {
-			"db:schema": ["./db/schema.ts"],
-			"app:*": ["./app/*"]
-		}
-	}
+	"compilerOptions": {}
 }

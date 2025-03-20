@@ -1,0 +1,25 @@
+{
+	"extends": "./tsconfig.json",
+	"include": [
+		".react-router/types/**/*",
+		"app/**/*",
+		"app/**/.server/**/*",
+		"app/**/.client/**/*",
+		"db/**/*",
+		"react-router.config.ts"
+	],
+	"compilerOptions": {
+		"composite": true,
+		"jsx": "react-jsx",
+		"types": [
+			"@total-typescript/ts-reset",
+			"@cloudflare/workers-types",
+			"vite/client"
+		],
+		"rootDirs": [".", "./.react-router/types"],
+		"paths": {
+			"db:schema": ["./db/schema.ts"],
+			"app:*": ["./app/*"]
+		}
+	}
+}
