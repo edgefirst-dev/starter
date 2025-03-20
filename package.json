@@ -75,7 +75,7 @@
 		"vite-env-only": "^3.0.3",
 		"vite-plugin-cjs-interop": "^2.2.0",
 		"vite-tsconfig-paths": "^5.1.4",
-		"wrangler": "3.114.2"
+		"wrangler": "4.3.0"
 	},
 	"trustedDependencies": ["@biomejs/biome"],
 	"bun-create": {
