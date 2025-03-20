@@ -8,6 +8,22 @@ import { IPAddress, UserAgent } from "edgekitjs";
 import { bootstrap } from "edgekitjs/worker";
 import { createRequestHandler } from "react-router";
 
+// @ts-expect-error - no types
+import * as build from "virtual:react-router/server-build";
+
+const handler = createRequestHandler(build);
+
+export interface Env {
+	// 👇 Env variables
+	GRAVATAR_API_TOKEN: string;
+	SESSION_SECRET: string;
+	APP_ENV: "development" | "production";
+
+	GH_CLIENT_ID: string;
+	GH_CLIENT_SECRET: string;
+	GH_REDIRECT_PATHNAME: string;
+}
+
 export default bootstrap({
 	orm: { schema },
 
@@ -22,14 +38,7 @@ export default bootstrap({
 	},
 
 	async onRequest(request) {
-		let handler = createRequestHandler(
-			// @ts-expect-error The file may not exists in dev, or the type will be different
-			() => import("./build/server/index.js"),
-			"production",
-		);
-
 		let context = await getLoadContext(request);
-
 		// @ts-expect-error The RR handler expects a Request with a different type
 		return (await handler(request, context)) as Response;
 	},
@@ -42,13 +51,7 @@ async function getLoadContext(request: Request) {
 }
 
 declare module "edgekitjs" {
-	export interface Environment {
-		// 👇 Env variables
-		GRAVATAR_API_TOKEN: string;
-		SESSION_SECRET: string;
-		APP_ENV: "development" | "production";
-	}
-
+	export interface Environment extends Cloudflare.Env {}
 	type Schema = typeof schema;
 	export interface DatabaseSchema extends Schema {}
 }
@@ -56,4 +59,19 @@ declare module "edgekitjs" {
 declare module "react-router" {
 	export interface AppLoadContext
 		extends Awaited<ReturnType<typeof getLoadContext>> {}
+}
+
+declare module "cloudflare:workers" {
+	export namespace Cloudflare {
+		export interface Env {
+			// 👇 Env variables
+			GRAVATAR_API_TOKEN: string;
+			SESSION_SECRET: string;
+			APP_ENV: "development" | "production";
+
+			GH_CLIENT_ID: string;
+			GH_CLIENT_SECRET: string;
+			GH_REDIRECT_PATHNAME: string;
+		}
+	}
 }
