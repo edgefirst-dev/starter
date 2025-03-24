@@ -27,7 +27,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "^1.9.4",
-        "@cloudflare/workers-types": "^4.20250319.0",
+        "@cloudflare/workers-types": "^4.20250321.0",
         "@octokit/core": "^6.1.4",
         "@react-router/dev": "^7.4.0",
         "@tailwindcss/vite": "^4.0.15",
@@ -158,7 +158,7 @@
 
     "@cloudflare/workerd-windows-64": ["@cloudflare/workerd-windows-64@1.20250310.0", "", { "os": "win32", "cpu": "x64" }, "sha512-04OgaDzm8/8nkjF3tovB+WywZLjSdAHCQT2omXKCwH3EDd1kpd8vvzE1pErtdIyKCOf9/sArY4BhPdxRj7ijlg=="],
 
-    "@cloudflare/workers-types": ["@cloudflare/workers-types@4.20250319.0", "", {}, "sha512-TTg1WZZuWJomzU3g1TvqE/WWI3zpTu1K+RsJvk6zxEgjhONN2PzqUUqKVYOQBk4/p7d+v7h6wz2gX3Ke7Arm7g=="],
+    "@cloudflare/workers-types": ["@cloudflare/workers-types@4.20250321.0", "", {}, "sha512-jPwtZJC7tVFOwFazuwq96be8haTnY9qik8hJ+oLFi50d9LTWPPrnrNHC4OxZmJTEcPIAy0y1WFZHe8C/b7xFXQ=="],
 
     "@cspotcode/source-map-support": ["@cspotcode/source-map-support@0.8.1", "", { "dependencies": { "@jridgewell/trace-mapping": "0.3.9" } }, "sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw=="],
 
@@ -1143,6 +1143,8 @@
     "@cloudflare/puppeteer/ws": ["ws@8.13.0", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA=="],
 
     "@cspotcode/source-map-support/@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.9", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.0.3", "@jridgewell/sourcemap-codec": "^1.4.10" } }, "sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ=="],
+
+    "@edgefirst-dev/worker-kv-rate-limit/@cloudflare/workers-types": ["@cloudflare/workers-types@4.20250319.0", "", {}, "sha512-TTg1WZZuWJomzU3g1TvqE/WWI3zpTu1K+RsJvk6zxEgjhONN2PzqUUqKVYOQBk4/p7d+v7h6wz2gX3Ke7Arm7g=="],
 
     "@esbuild-kit/core-utils/esbuild": ["esbuild@0.18.20", "", { "optionalDependencies": { "@esbuild/android-arm": "0.18.20", "@esbuild/android-arm64": "0.18.20", "@esbuild/android-x64": "0.18.20", "@esbuild/darwin-arm64": "0.18.20", "@esbuild/darwin-x64": "0.18.20", "@esbuild/freebsd-arm64": "0.18.20", "@esbuild/freebsd-x64": "0.18.20", "@esbuild/linux-arm": "0.18.20", "@esbuild/linux-arm64": "0.18.20", "@esbuild/linux-ia32": "0.18.20", "@esbuild/linux-loong64": "0.18.20", "@esbuild/linux-mips64el": "0.18.20", "@esbuild/linux-ppc64": "0.18.20", "@esbuild/linux-riscv64": "0.18.20", "@esbuild/linux-s390x": "0.18.20", "@esbuild/linux-x64": "0.18.20", "@esbuild/netbsd-x64": "0.18.20", "@esbuild/openbsd-x64": "0.18.20", "@esbuild/sunos-x64": "0.18.20", "@esbuild/win32-arm64": "0.18.20", "@esbuild/win32-ia32": "0.18.20", "@esbuild/win32-x64": "0.18.20" }, "bin": { "esbuild": "bin/esbuild" } }, "sha512-ceqxoedUrcayh7Y7ZX6NdbbDzGROiyVBgC4PriJThBKSVPWnnFHZAkfI1lJT8QFkOwH4qOS2SJkS4wvpGl8BpA=="],
 

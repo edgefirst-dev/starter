@@ -50,7 +50,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
-		"@cloudflare/workers-types": "^4.20250319.0",
+		"@cloudflare/workers-types": "^4.20250321.0",
 		"@octokit/core": "^6.1.4",
 		"@react-router/dev": "^7.4.0",
 		"@tailwindcss/vite": "^4.0.15",
